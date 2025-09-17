@@ -17,11 +17,11 @@ public class Animal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
-    private Parceiro parceiro;
+    @JoinColumn(name = "id_parceiro", nullable = false)
+    private Usuario parceiro;
 
     private String especie;
 

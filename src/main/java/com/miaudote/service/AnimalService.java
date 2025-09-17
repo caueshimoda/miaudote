@@ -1,6 +1,7 @@
 package com.miaudote.service;
 
 import com.miaudote.model.Animal;
+import com.miaudote.model.Parceiro;
 import com.miaudote.repository.AnimalRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -27,6 +28,9 @@ public class AnimalService {
     }
 
     public Animal updateAnimal(Long id, Animal novosDados) {
+        if (!(novosDados.getParceiro() instanceof Parceiro)) {
+            throw new IllegalArgumentException("Somente parceiros podem cadastrar animais");
+        }
         return animalRepository.findById(id)
             .map(animalExistente -> {
                 animalExistente.setEspecie(novosDados.getEspecie());

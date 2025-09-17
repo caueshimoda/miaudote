@@ -8,13 +8,16 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="Parceiros")
+@DiscriminatorValue("Parceiros")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class Parceiro extends Usuario {
 
+    /* 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;*/
+
+    private int documento;
 }

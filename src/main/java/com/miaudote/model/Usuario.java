@@ -11,6 +11,7 @@ import java.time.format.ResolverStyle;
 import java.util.regex.Pattern;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="Usuarios")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +19,9 @@ import java.util.regex.Pattern;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
+
     private String nome;
     private String email; // regex
 
