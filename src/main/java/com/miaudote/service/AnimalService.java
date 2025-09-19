@@ -38,9 +38,8 @@ public class AnimalService {
                 animalExistente.setSexo(novosDados.getSexo());
                 animalExistente.setPorte(novosDados.getPorte());
                 animalExistente.setParceiro(novosDados.getParceiro());
-                animalExistente.setStatus(novosDados.getStatus());
-                animalExistente.setDataCad(novosDados.getDataCad());
-                animalExistente.setIdadeInicial(novosDados.getIdadeInicial());
+                animalExistente.setStatus_ani(novosDados.getStatus_ani());
+                animalExistente.setIdade_inicial(novosDados.getIdade_inicial());
                 animalExistente.setObs(novosDados.getObs());
                 animalExistente.setDescricao(novosDados.getDescricao());
                 return animalRepository.save(animalExistente);

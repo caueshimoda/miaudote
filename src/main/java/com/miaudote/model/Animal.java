@@ -20,7 +20,7 @@ public class Animal {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_parceiro", nullable = false)
+    @JoinColumn(name = "id_parceiro", nullable = true)
     private Usuario parceiro;
 
     private String especie;
@@ -45,7 +45,7 @@ public class Animal {
     }
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status_ani;
 
     public enum Status {
         Adotado,
@@ -53,13 +53,11 @@ public class Animal {
         Indisponível
     }
     
-    private int idadeInicial;
+    private int idade_inicial;
 
     private String obs;
 
     private String descricao;
-
-    private LocalDate dataCad;
 
     public boolean isValidEspecie() {
         try {
@@ -96,6 +94,6 @@ public class Animal {
     }
 
     public boolean isValidIdade() {
-        return getIdadeInicial() >= 0;
+        return getIdade_inicial() >= 0;
     }
 }

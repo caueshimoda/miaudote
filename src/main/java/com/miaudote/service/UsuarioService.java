@@ -18,12 +18,20 @@ public class UsuarioService {
     //todo: adicionar classe DTO
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    //@Autowired
+   //private PasswordEncoder passwordEncoder;
+
+    //public UsuarioService(UsuarioRepository usuarioRepository) {
+        //this.usuarioRepository = usuarioRepository;
+    //}
+    
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
