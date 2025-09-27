@@ -20,14 +20,6 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    //@Autowired
-   //private PasswordEncoder passwordEncoder;
-
-    //public UsuarioService(UsuarioRepository usuarioRepository) {
-        //this.usuarioRepository = usuarioRepository;
-    //}
-    
-
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
@@ -83,7 +75,6 @@ public class UsuarioService {
             usuarioRepository.save(usuarioExistente);
 
         return usuarioExistente;
-        
     }
 
     public void deletarUsuario(Long id){

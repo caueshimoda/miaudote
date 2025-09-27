@@ -17,10 +17,10 @@ public class Animal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_parceiro", nullable = true)
+    @JoinColumn(name = "id_parceiro", nullable = false)
     private Usuario parceiro;
 
     private String especie;
@@ -95,5 +95,6 @@ public class Animal {
 
     public boolean isValidIdade() {
         return getIdade_inicial() >= 0;
+
     }
 }

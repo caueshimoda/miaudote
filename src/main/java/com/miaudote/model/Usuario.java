@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Entity
@@ -20,7 +22,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String nome;
     private String email; // regex
@@ -32,6 +34,10 @@ public class Usuario {
     private String complEndereco;
     private String telefone; // regex
     private LocalDate dataCadastro;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Animal> animais = new ArrayList<>();
+
 
     //vai gerar a data de cadastro pra agora automaticamente, antes de salvar no banco de dados
     @PrePersist

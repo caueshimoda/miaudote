@@ -53,12 +53,7 @@ public class UsuarioController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
             Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuario);
-
-            /*
-            if(usuarioAtualizado == null)
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-             */
+            //todo: e se o usuário retornar com os mesmos dados?
 
             return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
 

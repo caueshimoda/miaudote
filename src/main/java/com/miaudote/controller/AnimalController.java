@@ -18,9 +18,49 @@ public class AnimalController {
 
     private final AnimalService animalService;
 
-    public AnimalController(AnimalService animalService) {
+    public AnimalController(AnimalService animalService, UsuarioService usuarioService) {
         this.animalService = animalService;
     }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<Animal> cadastrarAnimal(@PathVariable Long id, @RequestBody Animal animal) {
+        try{
+            Animal novoAnimal = animalService.cadastrarAnimal(id, animal);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/{animalId}/usuario/{usuarioId}")
+    public ResponseEntity<Animal> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long usuarioId,
+                                                  @RequestBody Animal novosDados) {
+        try {
+            Animal animalAtualizado = animalService.atualizarAnimal(animalId, usuarioId, novosDados);
+            return new ResponseEntity<>(animalAtualizado, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{animalId}/usuario/{usuarioId}")
+    public ResponseEntity<Void> deletarAnimal(@PathVariable Long animalId, @PathVariable Long usuarioId) {
+        try {
+            animalService.deletarAnimal(animalId, usuarioId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
+
+
+    // USADOS PARA TESTE ----------------------------------------------------
 
 
     @PostMapping("/cadastrar")
