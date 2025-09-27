@@ -29,25 +29,33 @@ public class Usuario {
 
     @Transient //o campo 'senha' ficará somente na memória para validação, depois é transformada em hash
     private String senha; // regex aqui, autenticação/criptografia em Service
-    private String senhaHash; // vai para o banco
-    private int numEndereco;
-    private String complEndereco;
+    private String senha_hash; // vai para o banco
+    private int numero;
+    private String complemento;
     private String telefone; // regex
-    private LocalDate dataCadastro;
+    
+    @Enumerated(EnumType.STRING)
+    private StatusUsuario status_usr;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Animal> animais = new ArrayList<>();
+    public enum StatusUsuario {
+        Ativo,
+        Inativo,
+    }
+    //private LocalDate dataCadastro;
+
+    //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Animal> animais = new ArrayList<>();
 
 
     //vai gerar a data de cadastro pra agora automaticamente, antes de salvar no banco de dados
-    @PrePersist
+    /*@PrePersist
     protected void onCreate() {
         this.dataCadastro = LocalDate.now();
-    }
+    }*/
 
     public boolean isValidUsuario(){
         return isValidNome() && isValidEmail() && isValidSenha()
-                && isValidNumEndereco() && isValidComplEndereco() && isValidTelefone();
+                && isValidNumero() && isValidComplemento() && isValidTelefone();
     }
 
 
@@ -99,9 +107,9 @@ public class Usuario {
 
     }
 
-    public boolean isValidNumEndereco(){
+    public boolean isValidNumero(){
         try {
-            if (getNumEndereco() <= 0)
+            if (getNumero() <= 0)
                 return false;
         } catch (Exception e) {
             return false;
@@ -109,9 +117,9 @@ public class Usuario {
         return true;
     }
 
-    public boolean isValidComplEndereco(){
+    public boolean isValidComplemento(){
         try {
-            if (getComplEndereco() == null || getComplEndereco().isEmpty())
+            if (getComplemento() == null || getComplemento().isEmpty())
                 return false;
         } catch (Exception e) {
             return false;

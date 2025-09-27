@@ -23,7 +23,7 @@ public class UsuarioController {
     public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario){
         try {
             usuarioService.cadastrarUsuario(usuario);
-            return new ResponseEntity<>(usuario, HttpStatus.OK);
+            return new ResponseEntity<>(usuario, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

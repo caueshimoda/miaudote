@@ -8,16 +8,30 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@DiscriminatorValue("Parceiros")
+@Table(name="Parceiros")
+//@DiscriminatorValue("Parceiros")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class Parceiro extends Usuario {
 
-    /* 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;*/
 
-    private int documento;
+    @Id
+    private Long id;
+    @OneToOne
+    @MapsId   // <-- garante que o ID vem de Usuario
+    @JoinColumn(name = "id") // FK para usuarios.id
+    private Usuario usuario;
+
+    private String documento;
+
+    @Enumerated(EnumType.STRING)
+    private Tipo tipo;
+
+    public enum Tipo {
+        ONG,
+        Protetor,
+    }
+
+    private String site;
 }

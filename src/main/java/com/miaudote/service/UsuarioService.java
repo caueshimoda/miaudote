@@ -32,7 +32,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Senha inválida! Ela deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e caractere especial.");
         }
         // seta a 'senhaHash' com a criptografia de 'senha'
-        usuario.setSenhaHash(passwordEncoder.encode(usuario.getSenha()));
+        usuario.setSenha_hash(passwordEncoder.encode(usuario.getSenha()));
         usuario.setSenha(null); // seta a senha de texto puro como nula
         return usuarioRepository.save(usuario);
     }
@@ -43,7 +43,7 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (!passwordEncoder.matches(senhaDigitada, usuario.getSenhaHash())) {
+        if (!passwordEncoder.matches(senhaDigitada, usuario.getSenha_hash())) {
             throw new RuntimeException("Senha inválida");
         }
 
@@ -57,16 +57,17 @@ public class UsuarioService {
         //todo: criar método separado para o merge de dados novos com os existentes
         Optional.ofNullable(novosDados.getNome()).ifPresent(usuarioExistente::setNome);
         Optional.ofNullable(novosDados.getEmail()).ifPresent(usuarioExistente::setEmail);
-        Optional.of(novosDados.getNumEndereco()).ifPresent(usuarioExistente::setNumEndereco);
-        Optional.ofNullable(novosDados.getComplEndereco()).ifPresent(usuarioExistente::setComplEndereco);
+        Optional.of(novosDados.getNumero()).ifPresent(usuarioExistente::setNumero);
+        Optional.ofNullable(novosDados.getComplemento()).ifPresent(usuarioExistente::setComplemento);
         Optional.ofNullable(novosDados.getTelefone()).ifPresent(usuarioExistente::setTelefone);
+        Optional.ofNullable(novosDados.getStatus_usr()).ifPresent(usuarioExistente::setStatus_usr);
 
         // atualizar a senha é opcional, mas se uma nova senha for informada:
         if(novosDados.getSenha() != null && !novosDados.getSenha().isEmpty()){
             if (!novosDados.isValidSenha())
                 throw new IllegalArgumentException("Senha inválida");
             
-            usuarioExistente.setSenhaHash(passwordEncoder.encode(novosDados.getSenha()));
+            usuarioExistente.setSenha_hash(passwordEncoder.encode(novosDados.getSenha()));
             
         }
 
@@ -122,9 +123,10 @@ public class UsuarioService {
         Optional.ofNullable(oldUsuario.getNome()).ifPresent(updatedUsuario::setNome);
         Optional.ofNullable(oldUsuario.getEmail()).ifPresent(updatedUsuario::setEmail);
         Optional.ofNullable(oldUsuario.getSenha()).ifPresent(updatedUsuario::setSenha);
-        Optional.of(oldUsuario.getNumEndereco()).ifPresent(updatedUsuario::setNumEndereco);
-        Optional.ofNullable(oldUsuario.getComplEndereco()).ifPresent(updatedUsuario::setComplEndereco);
+        Optional.of(oldUsuario.getNumero()).ifPresent(updatedUsuario::setNumero);
+        Optional.ofNullable(oldUsuario.getComplemento()).ifPresent(updatedUsuario::setComplemento);
         Optional.ofNullable(oldUsuario.getTelefone()).ifPresent(updatedUsuario::setTelefone);
+        
 
         if (updatedUsuario.isValidUsuario()){
             usuarioRepository.save(updatedUsuario);
