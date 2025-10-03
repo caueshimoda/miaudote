@@ -34,3 +34,4 @@ build/
 
 .env
 /src/main/resources/ca.pem
+/src/main/resources/resources/application.properties

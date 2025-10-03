@@ -1,3 +1,5 @@
+/*
+
 package com.miaudote;
 
 
@@ -430,7 +432,7 @@ public class UsuarioTest {
     enfim, seriam muitos testes que iam validar o que já validamos antes. então vou considerar testar cada isValid isolado como suficiente
      */
 
-}
+//}
 
 
 

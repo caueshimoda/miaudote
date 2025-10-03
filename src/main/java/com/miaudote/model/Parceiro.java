@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Parceiro extends Usuario {
+public class Parceiro {
 
 
     @Id
