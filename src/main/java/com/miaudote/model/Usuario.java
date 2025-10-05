@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="Usuarios")
@@ -19,11 +20,9 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 @Data
 public class Usuario {
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
     private String email; // regex
 
@@ -33,25 +32,17 @@ public class Usuario {
     private int numero;
     private String complemento;
     private String telefone; // regex
-    
+    private String cpf;
+    private String cnpj;
+
     @Enumerated(EnumType.STRING)
-    private StatusUsuario status_usr;
+    private TipoUsuario tipo;
 
-    public enum StatusUsuario {
-        Ativo,
-        Inativo,
+    public enum TipoUsuario {
+        PESSOA_FISICA,
+        ONG
     }
-    //private LocalDate dataCadastro;
 
-    //@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<Animal> animais = new ArrayList<>();
-
-
-    //vai gerar a data de cadastro pra agora automaticamente, antes de salvar no banco de dados
-    /*@PrePersist
-    protected void onCreate() {
-        this.dataCadastro = LocalDate.now();
-    }*/
 
     public boolean isValidUsuario(){
         return isValidNome() && isValidEmail() && isValidSenha()
@@ -93,12 +84,10 @@ public class Usuario {
     só vai validar a força da senha, a criptografia e autenticação será feita no Service
     ela precisa ter mais de 8 caracteres (devo colocar um limite tbm?), letras maiusculas, caracteres especiais e numeros
      */
-    public boolean isValidSenha(){
+    public boolean isValidSenha(String senha){
         final String PASSWORD_REGEX =
                 "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
         final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
-
-        String senha = getSenha();
 
         if (senha == null || senha.isEmpty())
             return false;

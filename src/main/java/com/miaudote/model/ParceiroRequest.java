@@ -1,5 +1,6 @@
 package com.miaudote.model;
 
+import com.miaudote.dto.UsuarioDTO;
 import lombok.Getter;
 
 @Getter

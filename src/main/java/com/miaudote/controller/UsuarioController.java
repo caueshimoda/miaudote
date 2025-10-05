@@ -1,5 +1,8 @@
 package com.miaudote.controller;
 
+import com.miaudote.dto.UsuarioCadastroDTO;
+import com.miaudote.dto.UsuarioDTO;
+import com.miaudote.dto.UsuarioMapper;
 import com.miaudote.model.Usuario;
 import com.miaudote.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,7 @@ import java.util.Optional;
 @RequestMapping("/usuarios")
 public class UsuarioController {
     private final UsuarioService usuarioService;
+    private final UsuarioMapper usuarioMapper;
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
@@ -20,10 +24,11 @@ public class UsuarioController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioCadastroDTO dto){
         try {
-            usuarioService.cadastrarUsuario(usuario);
-            return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+            Usuario usuario = usuarioService.cadastrarUsuario(dto);
+            UsuarioDTO respostaDTO = usuarioMapper.toDTO(usuario);
+            return new ResponseEntity<>(respostaDTO, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

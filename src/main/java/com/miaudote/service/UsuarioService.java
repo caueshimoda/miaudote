@@ -1,5 +1,7 @@
 package com.miaudote.service;
 
+import com.miaudote.dto.UsuarioCadastroDTO;
+import com.miaudote.dto.UsuarioMapper;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +21,23 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UsuarioMapper usuarioMapper;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.usuarioMapper = usuarioMapper;
     }
 
 
-    public Usuario cadastrarUsuario(Usuario usuario){
-        if (!usuario.isValidSenha()) {
+    public Usuario cadastrarUsuario(UsuarioCadastroDTO dto){
+        Usuario usuario = new Usuario();
+        if (!usuario.isValidSenha(dto.getSenha())) {
             throw new IllegalArgumentException("Senha inválida! Ela deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e caractere especial.");
         }
         // seta a 'senhaHash' com a criptografia de 'senha'
+        usuario = usuarioMapper.toEntity(dto);
         usuario.setSenha_hash(passwordEncoder.encode(usuario.getSenha()));
         usuario.setSenha(null); // seta a senha de texto puro como nula
         return usuarioRepository.save(usuario);
@@ -60,7 +66,6 @@ public class UsuarioService {
         Optional.of(novosDados.getNumero()).ifPresent(usuarioExistente::setNumero);
         Optional.ofNullable(novosDados.getComplemento()).ifPresent(usuarioExistente::setComplemento);
         Optional.ofNullable(novosDados.getTelefone()).ifPresent(usuarioExistente::setTelefone);
-        Optional.ofNullable(novosDados.getStatus_usr()).ifPresent(usuarioExistente::setStatus_usr);
 
         // atualizar a senha é opcional, mas se uma nova senha for informada:
         if(novosDados.getSenha() != null && !novosDados.getSenha().isEmpty()){
