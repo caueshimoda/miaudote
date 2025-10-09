@@ -36,9 +36,9 @@ public class UsuarioService {
         if (!usuario.isValidSenha(dto.getSenha())) {
             throw new IllegalArgumentException("Senha inválida! Ela deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e caractere especial.");
         }
-        // seta a 'senhaHash' com a criptografia de 'senha'
         usuario = usuarioMapper.toEntity(dto);
-        usuario.setSenha_hash(passwordEncoder.encode(usuario.getSenha()));
+         // seta a 'senhaHash' com a criptografia de 'senha'
+        usuario.setSenha_hash(passwordEncoder.encode(dto.getSenha()));
         usuario.setSenha(null); // seta a senha de texto puro como nula
         return usuarioRepository.save(usuario);
     }
@@ -69,7 +69,7 @@ public class UsuarioService {
 
         // atualizar a senha é opcional, mas se uma nova senha for informada:
         if(novosDados.getSenha() != null && !novosDados.getSenha().isEmpty()){
-            if (!novosDados.isValidSenha())
+            if (!novosDados.isValidSenha(novosDados.getSenha()))
                 throw new IllegalArgumentException("Senha inválida");
             
             usuarioExistente.setSenha_hash(passwordEncoder.encode(novosDados.getSenha()));

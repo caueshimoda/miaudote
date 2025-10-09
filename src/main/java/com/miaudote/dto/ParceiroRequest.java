@@ -1,11 +1,11 @@
-package com.miaudote.model;
+package com.miaudote.dto;
 
-import com.miaudote.dto.UsuarioDTO;
+import com.miaudote.model.Parceiro;
 import lombok.Getter;
 
 @Getter
 public class ParceiroRequest {
-    private UsuarioDTO usuario;
+    private UsuarioCadastroDTO usuario;
     private String documento;
     private Parceiro.Tipo tipo;
     private String site;

@@ -1,7 +1,9 @@
 package com.miaudote.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import com.miaudote.model.Parceiro;
-import com.miaudote.model.ParceiroRequest;
+import com.miaudote.dto.ParceiroRequest;
+import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.UsuarioRepository;
 import com.miaudote.repository.AnimalRepository;
@@ -22,30 +24,36 @@ public class ParceiroService {
         this.parceiroRepository = parceiroRepository;
     }
 
+    @Transactional
     public Parceiro cadastrarParceiro(ParceiroRequest request) {
-        // 1. Monta o objeto Usuario a partir do DTO
-        Usuario usuario = new Usuario();
-        usuario.setNome(request.getUsuario().getNome());
-        usuario.setEmail(request.getUsuario().getEmail());
-        System.out.println(usuario.getEmail());
-        usuario.setSenha(request.getUsuario().getSenha()); // será tratada no UsuarioService
-        usuario.setNumero(request.getUsuario().getNumero());
-        usuario.setComplemento(request.getUsuario().getComplemento());
-        usuario.setTelefone(request.getUsuario().getTelefone());
-        usuario.setStatus_usr(request.getUsuario().getStatus_usr());
+        Usuario savedUsuario = null;
+        try {
+            // Cadastra o usuário (isso insere na tabela usuarios)
+            savedUsuario = usuarioService.cadastrarUsuario(request.getUsuario());
 
-        // 2. Usa o UsuarioService (validação + hash de senha + salvar)
-        Usuario savedUsuario = usuarioService.cadastrarUsuario(usuario);
+            // Cria e associa o parceiro
+            Parceiro parceiro = new Parceiro();
+            parceiro.setUsuario(savedUsuario);
+            //parceiro.setId(savedUsuario.getId());
+            parceiro.setDocumento(request.getDocumento());
+            parceiro.setTipo(request.getTipo());
+            parceiro.setSite(request.getSite());
+            System.out.println("DEBUG -> Parceiro mapeado: " + parceiro);
 
-        // 3. Monta o Parceiro vinculado ao mesmo id
-        Parceiro parceiro = new Parceiro();
-        parceiro.setUsuario(savedUsuario);
-        parceiro.setDocumento(request.getDocumento());
-        parceiro.setTipo(request.getTipo());
-        parceiro.setSite(request.getSite());
 
-        // 4. Salva e retorna
-        return parceiroRepository.save(parceiro);
-    } 
+            // Salva o parceiro
+            return parceiroRepository.save(parceiro);
+
+        } catch (Exception e) {
+            System.err.println("Erro ao cadastrar parceiro: " + e.getMessage());
+            e.printStackTrace(); // <-- mostra o stack trace completo no console
+
+            if (savedUsuario != null && savedUsuario.getId() != null) {
+                usuarioService.deletarUsuario(savedUsuario.getId());
+            }
+
+            throw new RuntimeException("Erro ao cadastrar parceiro: " + e.getMessage(), e);
+        }
+    }
 
 }

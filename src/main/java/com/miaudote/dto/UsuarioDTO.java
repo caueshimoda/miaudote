@@ -13,7 +13,7 @@ public class UsuarioDTO {
     private String nome;
     private String email;
     private String telefone;
-    private Usuario.TipoUsuario tipoUsuario;
+    //private Usuario.TipoUsuario tipoUsuario;
 
     /* Por que a classe não retorna os dados do endereço e cpf/cnpj?
        Eu vi que essa classe serve como resposta ao front, e que podemos escolher quais são os dados mais adequados de enviar

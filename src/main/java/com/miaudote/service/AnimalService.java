@@ -2,8 +2,7 @@ package com.miaudote.service;
 
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
-import com.miaudote.model.Usuario;
-import com.miaudote.repository.UsuarioRepository;
+import com.miaudote.repository.ParceiroRepository;
 import com.miaudote.repository.AnimalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,27 +13,27 @@ import java.util.Optional;
 public class AnimalService {
 
     private final AnimalRepository animalRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final ParceiroRepository parceiroRepository;
 
-    public AnimalService(AnimalRepository animalRepository, UsuarioRepository usuarioRepository) {
+    public AnimalService(AnimalRepository animalRepository, ParceiroRepository parceiroRepository) {
         this.animalRepository = animalRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.parceiroRepository = parceiroRepository;
     }
 
 
-    public Animal cadastrarAnimal(Long usuarioId, Animal animal) {
-        Usuario parceiro = usuarioRepository.findById(usuarioId)
+    public Animal cadastrarAnimal(Long parceiroId, Animal animal) {
+        Parceiro parceiro = parceiroRepository.findById(parceiroId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         animal.setParceiro(parceiro);
         return animalRepository.save(animal);
     }
 
-    public Animal atualizarAnimal(Long animalId, Long usuarioId, Animal novosDados) {
+    public Animal atualizarAnimal(Long animalId, Long parceiroId, Animal novosDados) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
-        if (!animal.getParceiro().getId().equals(usuarioId)) {
+        if (!animal.getParceiro().getId().equals(parceiroId)) {
             throw new RuntimeException("Usuário não autorizado a atualizar esse animal");
         }
 
@@ -48,11 +47,11 @@ public class AnimalService {
         return animalRepository.save(animal);
     }
 
-    public void deletarAnimal(Long animalId, Long usuarioId) {
+    public void deletarAnimal(Long animalId, Long parceiroId) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
-        if (!animal.getParceiro().getId().equals(usuarioId)) {
+        if (!animal.getParceiro().getId().equals(parceiroId)) {
             throw new RuntimeException("Usuário não autorizado a excluir esse animal");
         }
 

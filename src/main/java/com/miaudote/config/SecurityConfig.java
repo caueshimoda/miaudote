@@ -23,7 +23,7 @@ public class SecurityConfig {
         http
             .csrf(CsrfConfigurer::disable) // <-- Desabilita o CSRF aqui
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/animais/*").permitAll()
+                .requestMatchers("/animais/cadastrar/*").permitAll()
                 .requestMatchers("/usuarios/*").permitAll()
                 .requestMatchers("/parceiros/*").permitAll()
                 .anyRequest().authenticated()

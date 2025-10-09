@@ -1,7 +1,7 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.Parceiro;
-import com.miaudote.model.ParceiroRequest;
+import com.miaudote.dto.ParceiroRequest;
 import com.miaudote.service.ParceiroService;
 
 import org.springframework.http.HttpStatus;

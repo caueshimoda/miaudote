@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/*
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;*/
 import java.util.regex.Pattern;
 
 
@@ -28,13 +29,16 @@ public class Usuario {
 
     @Transient //o campo 'senha' ficará somente na memória para validação, depois é transformada em hash
     private String senha; // regex aqui, autenticação/criptografia em Service
+    
+    @Column(name = "senha")
     private String senha_hash; // vai para o banco
     private int numero;
     private String complemento;
     private String telefone; // regex
-    private String cpf;
-    private String cnpj;
+    //private String cpf;
+    //private String cnpj;
 
+    /* 
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipo;
 
@@ -42,10 +46,10 @@ public class Usuario {
         PESSOA_FISICA,
         ONG
     }
-
+    */
 
     public boolean isValidUsuario(){
-        return isValidNome() && isValidEmail() && isValidSenha()
+        return isValidNome() && isValidEmail() && isValidSenha(senha)
                 && isValidNumero() && isValidComplemento() && isValidTelefone();
     }
 

@@ -18,9 +18,9 @@ public class Parceiro {
 
     @Id
     private Long id;
-    @OneToOne
-    @MapsId   // <-- garante que o ID vem de Usuario
-    @JoinColumn(name = "id") // FK para usuarios.id
+    @MapsId
+    @OneToOne(optional = false)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private Usuario usuario;
 
     private String documento;

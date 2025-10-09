@@ -1,7 +1,9 @@
 package com.miaudote.dto;
 
 // gente, eu juro que essa anotação existe, o IntelliJ que não ta aceitando minha dependência
+// Tudo certo Bruna, só faltou importar o Mapper KKKK
 
+import org.mapstruct.Mapper;
 import com.miaudote.model.Usuario;
 
 @Mapper(componentModel = "spring")

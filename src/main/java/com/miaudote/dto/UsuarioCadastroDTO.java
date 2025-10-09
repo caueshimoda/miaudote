@@ -1,11 +1,12 @@
 package com.miaudote.dto;
 
-import com.miaudote.model.Usuario;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioCadastroDTO {
     private String nome;
     private String email;
@@ -13,10 +14,9 @@ public class UsuarioCadastroDTO {
     private int numero;
     private String complemento;
     private String telefone;
-    private Usuario.TipoUsuario tipoUsuario;
-    private String cpf;
-    private String cnpj;
+    // private Usuario.TipoUsuario tipoUsuario; - Será que precisa do tipo do usuário? Depois podemos falar sobre
 
+    // Tirei os atributos cpf e cnpj pra ficar consistente com o BD, onde os documentos estão nas classes parceiros e adotantes.
     /*
 
     Aqui vão os atributos essenciais quando o usuário cria uma conta

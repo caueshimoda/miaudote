@@ -18,11 +18,11 @@ public class AnimalController {
 
     private final AnimalService animalService;
 
-    public AnimalController(AnimalService animalService, UsuarioService usuarioService) {
+    public AnimalController(AnimalService animalService) {
         this.animalService = animalService;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/cadastrar/{id}")
     public ResponseEntity<Animal> cadastrarAnimal(@PathVariable Long id, @RequestBody Animal animal) {
         try{
             Animal novoAnimal = animalService.cadastrarAnimal(id, animal);
@@ -33,7 +33,7 @@ public class AnimalController {
         }
     }
 
-    @PatchMapping("/{animalId}/usuario/{usuarioId}")
+    @PatchMapping("/atualizar/{animalId}/usuario/{usuarioId}")
     public ResponseEntity<Animal> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long usuarioId,
                                                   @RequestBody Animal novosDados) {
         try {
