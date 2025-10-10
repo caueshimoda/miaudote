@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .requestMatchers("/usuarios/*").permitAll()
                 .requestMatchers("/parceiros/*").permitAll()
                 .requestMatchers("/adotantes/*").permitAll()
+                .requestMatchers("/adocoes/*").permitAll()
                 .anyRequest().authenticated()
             );
 
