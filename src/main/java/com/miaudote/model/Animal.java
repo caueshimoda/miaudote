@@ -21,7 +21,7 @@ public class Animal {
 
     @ManyToOne
     @JoinColumn(name = "id_parceiro", nullable = false)
-    private Usuario parceiro;
+    private Parceiro parceiro;
 
     private String especie;
 

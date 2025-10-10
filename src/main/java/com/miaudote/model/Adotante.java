@@ -1,17 +1,20 @@
 package com.miaudote.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+
 
 @Entity
-@Table(name="Parceiros")
-//@DiscriminatorValue("Parceiros")
+@Table(name="Adotantes")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Parceiro {
+public class Adotante {
 
 
     @Id
@@ -21,15 +24,8 @@ public class Parceiro {
     @JoinColumn(name = "id", referencedColumnName = "id")
     private Usuario usuario;
 
-    private String documento;
+    private String cpf;
 
-    @Enumerated(EnumType.STRING)
-    private Tipo tipo;
-
-    public enum Tipo {
-        ONG,
-        Protetor,
-    }
-
-    private String site;
+    @Column(name = "data_nasc")
+    private LocalDate dataNascimento;
 }

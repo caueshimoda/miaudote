@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .requestMatchers("/animais/cadastrar/*").permitAll()
                 .requestMatchers("/usuarios/*").permitAll()
                 .requestMatchers("/parceiros/*").permitAll()
+                .requestMatchers("/adotantes/*").permitAll()
                 .anyRequest().authenticated()
             );
 
