@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsuarioCadastroDTO {
+    private long cepId;
     private String nome;
     private String email;
     private String senha;

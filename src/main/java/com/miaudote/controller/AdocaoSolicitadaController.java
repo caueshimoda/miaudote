@@ -2,8 +2,8 @@ package com.miaudote.controller;
 
 import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.AdocaoSolicitada;
-import com.miaudote.dto.AdocaoSolicitadaRequest;
-import com.miaudote.dto.AdocaoSolicitadaRequest;
+import com.miaudote.dto.AdocaoSolicitadaCadastroDTO;
+import com.miaudote.dto.AdocaoSolicitadaCadastroDTO;
 import com.miaudote.service.AdocaoSolicitadaService;
 import com.miaudote.service.AdocaoSolicitadaService;
 
@@ -26,7 +26,7 @@ public class AdocaoSolicitadaController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<AdocaoSolicitada> cadastrarAdocaoSolicitada(@RequestBody AdocaoSolicitadaRequest request){
+    public ResponseEntity<AdocaoSolicitada> cadastrarAdocaoSolicitada(@RequestBody AdocaoSolicitadaCadastroDTO request){
         try {
             AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaService.cadastrarAdocaoSolicitada(request);
             return new ResponseEntity<>(adocaoSolicitada, HttpStatus.CREATED);

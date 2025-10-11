@@ -1,7 +1,7 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.Adotante;
-import com.miaudote.dto.AdotanteRequest;
+import com.miaudote.dto.AdotanteCadastroDTO;
 import com.miaudote.service.AdotanteService;
 
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class AdotanteController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Adotante> cadastrarAdotante(@RequestBody AdotanteRequest request){
+    public ResponseEntity<Adotante> cadastrarAdotante(@RequestBody AdotanteCadastroDTO request){
         try {
             Adotante Adotante = adotanteService.cadastrarAdotante(request);
             return new ResponseEntity<>(Adotante, HttpStatus.CREATED);

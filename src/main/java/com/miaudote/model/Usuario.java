@@ -24,6 +24,11 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cep", nullable = false)
+    private Cep cep;
+
     private String nome;
     private String email; // regex
 

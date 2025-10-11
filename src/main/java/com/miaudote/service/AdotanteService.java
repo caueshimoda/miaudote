@@ -2,7 +2,7 @@ package com.miaudote.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import com.miaudote.model.Adotante;
-import com.miaudote.dto.AdotanteRequest;
+import com.miaudote.dto.AdotanteCadastroDTO;
 import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.UsuarioRepository;
@@ -25,7 +25,7 @@ public class AdotanteService {
     }
 
     @Transactional
-    public Adotante cadastrarAdotante(AdotanteRequest request) {
+    public Adotante cadastrarAdotante(AdotanteCadastroDTO request) {
         Usuario savedUsuario = null;
         try {
             // Cadastra o usuário (isso insere na tabela usuarios)

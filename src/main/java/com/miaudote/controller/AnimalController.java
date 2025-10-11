@@ -1,5 +1,6 @@
 package com.miaudote.controller;
 
+import com.miaudote.dto.AnimalCadastroDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Usuario;
 import com.miaudote.service.AnimalService;
@@ -22,10 +23,10 @@ public class AnimalController {
         this.animalService = animalService;
     }
 
-    @PostMapping("/cadastrar/{id}")
-    public ResponseEntity<Animal> cadastrarAnimal(@PathVariable Long id, @RequestBody Animal animal) {
+    @PostMapping("/cadastrar")
+    public ResponseEntity<Animal> cadastrarAnimal(@RequestBody AnimalCadastroDTO request) {
         try{
-            Animal novoAnimal = animalService.cadastrarAnimal(id, animal);
+            Animal novoAnimal = animalService.cadastrarAnimal(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
 
         } catch (Exception e) {
@@ -61,7 +62,7 @@ public class AnimalController {
 
 
     // USADOS PARA TESTE ----------------------------------------------------
-
+    /*
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal){
@@ -73,5 +74,5 @@ public class AnimalController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
+    */
 }

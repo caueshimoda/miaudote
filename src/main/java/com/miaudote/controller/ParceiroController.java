@@ -1,7 +1,7 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.Parceiro;
-import com.miaudote.dto.ParceiroRequest;
+import com.miaudote.dto.ParceiroCadastroDTO;
 import com.miaudote.service.ParceiroService;
 
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class ParceiroController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Parceiro> cadastrarParceiro(@RequestBody ParceiroRequest request){
+    public ResponseEntity<Parceiro> cadastrarParceiro(@RequestBody ParceiroCadastroDTO request){
         try {
             Parceiro parceiro = parceiroService.cadastrarParceiro(request);
             return new ResponseEntity<>(parceiro, HttpStatus.CREATED);

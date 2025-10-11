@@ -2,8 +2,10 @@ package com.miaudote.service;
 
 import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.dto.UsuarioMapper;
+import com.miaudote.model.Cep;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.UsuarioRepository;
+import com.miaudote.repository.CepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,23 +22,28 @@ public class UsuarioService {
     //todo: adicionar classe DTO
 
     private final UsuarioRepository usuarioRepository;
+    private final CepRepository cepRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper) {
+    public UsuarioService(UsuarioRepository usuarioRepository, CepRepository cepRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
+        this.cepRepository = cepRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioMapper = usuarioMapper;
     }
 
 
     public Usuario cadastrarUsuario(UsuarioCadastroDTO dto){
+        Cep cep = cepRepository.findById(dto.getCepId())
+                .orElseThrow(() -> new RuntimeException("CEP não encontrado"));
         Usuario usuario = new Usuario();
         if (!usuario.isValidSenha(dto.getSenha())) {
             throw new IllegalArgumentException("Senha inválida! Ela deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e caractere especial.");
         }
         usuario = usuarioMapper.toEntity(dto);
+        usuario.setCep(cep);
          // seta a 'senhaHash' com a criptografia de 'senha'
         usuario.setSenha_hash(passwordEncoder.encode(dto.getSenha()));
         usuario.setSenha(null); // seta a senha de texto puro como nula

@@ -1,5 +1,6 @@
 package com.miaudote.service;
 
+import com.miaudote.dto.AnimalCadastroDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
 import com.miaudote.repository.ParceiroRepository;
@@ -21,11 +22,20 @@ public class AnimalService {
     }
 
 
-    public Animal cadastrarAnimal(Long parceiroId, Animal animal) {
-        Parceiro parceiro = parceiroRepository.findById(parceiroId)
+    public Animal cadastrarAnimal(AnimalCadastroDTO request) {
+        Parceiro parceiro = parceiroRepository.findById(request.getParceiroId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+        Animal animal = new Animal();        
         animal.setParceiro(parceiro);
+        animal.setEspecie(request.getEspecie());
+        animal.setNome(request.getNome());
+        animal.setSexo(request.getSexo());
+        animal.setPorte(request.getPorte());
+        animal.setIdade_inicial(request.getIdade_inicial());
+        animal.setStatus_ani(request.getStatus_ani());
+        animal.setObs(request.getObs());
+        animal.setDescricao(request.getDescricao());
         return animalRepository.save(animal);
     }
 
