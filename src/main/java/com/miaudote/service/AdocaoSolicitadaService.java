@@ -2,7 +2,7 @@ package com.miaudote.service;
 
 import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.model.AdocaoSolicitada;
-import com.miaudote.model.AdocaoSolicitada.StatusSolicitacao;
+//import com.miaudote.model.AdocaoSolicitada.StatusSolicitacao;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Adotante;
 import com.miaudote.repository.AdotanteRepository;
