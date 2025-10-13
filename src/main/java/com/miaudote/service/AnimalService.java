@@ -1,6 +1,8 @@
 package com.miaudote.service;
 
-import com.miaudote.dto.AnimalCadastroDTO;
+import com.miaudote.dto.AnimalRequest;
+import com.miaudote.dto.AnimalResponseDTO;
+import com.miaudote.dto.ParceiroResponseDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
 import com.miaudote.repository.ParceiroRepository;
@@ -22,7 +24,7 @@ public class AnimalService {
     }
 
 
-    public Animal cadastrarAnimal(AnimalCadastroDTO request) {
+    public Animal cadastrarAnimal(AnimalRequest request) {
         Parceiro parceiro = parceiroRepository.findById(request.getParceiroId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -39,6 +41,26 @@ public class AnimalService {
         return animalRepository.save(animal);
     }
 
+    public AnimalResponseDTO getAnimal(Long id, Long parceiroId) {
+        Animal animal = animalRepository.findByIdAndParceiroId(id, parceiroId)
+            // Lança uma exceção se o animal não for encontrado ou
+            // se o animal não pertencer ao parceiroId fornecido.
+            .orElseThrow(() -> new RuntimeException("Animal não encontrado ou não pertence a este parceiro."));
+
+            return new AnimalResponseDTO(animal);
+    }
+
+    
+
+    public List<AnimalResponseDTO> getAnimaisPorParceiro(Long parceiroId) {
+        
+        List<Animal> animais = animalRepository.findAnimaisByParceiroId(parceiroId);
+
+        return animais.stream()
+                .map(AnimalResponseDTO::new) 
+                .toList(); 
+    }
+
     public Animal atualizarAnimal(Long animalId, Long parceiroId, Animal novosDados) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
@@ -51,7 +73,9 @@ public class AnimalService {
         Optional.ofNullable(novosDados.getEspecie()).ifPresent(animal::setEspecie);
         Optional.ofNullable(novosDados.getSexo()).ifPresent(animal::setSexo);
         Optional.ofNullable(novosDados.getPorte()).ifPresent(animal::setPorte);
+        Optional.ofNullable(novosDados.getStatus_ani()).ifPresent(animal::setStatus_ani);
         Optional.of(novosDados.getIdade_inicial()).ifPresent(animal::setIdade_inicial);
+        Optional.ofNullable(novosDados.getDescricao()).ifPresent(animal::setDescricao);
         Optional.ofNullable(novosDados.getObs()).ifPresent(animal::setObs);
 
         return animalRepository.save(animal);
@@ -107,9 +131,9 @@ public class AnimalService {
     }
 
     public void deleteAnimal(Long id) {
-    Animal animal = animalRepository.findById(id)
+        Animal animal = animalRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Animal não encontrado com id: " + id));
-    animalRepository.delete(animal);
-}
+        animalRepository.delete(animal);
+    }
 
 }

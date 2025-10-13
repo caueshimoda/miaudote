@@ -32,4 +32,8 @@ public class Parceiro {
     }
 
     private String site;
+
+    public boolean isValidParceiro() {
+        return true;
+    }
 }

@@ -1,6 +1,6 @@
 package com.miaudote.service;
 
-import com.miaudote.dto.FotoCadastroDTO;
+import com.miaudote.dto.FotoRequest;
 import com.miaudote.model.Foto;
 import com.miaudote.model.Animal;
 import com.miaudote.repository.FotoRepository;
@@ -24,7 +24,7 @@ public class FotoService {
     }
 
 
-    public Foto cadastrarFoto(FotoCadastroDTO request) throws IOException {
+    public Foto cadastrarFoto(FotoRequest request) throws IOException {
         Animal animal = animalRepository.findById(request.getAnimalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 

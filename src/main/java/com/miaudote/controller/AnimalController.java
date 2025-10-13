@@ -1,17 +1,22 @@
 package com.miaudote.controller;
 
-import com.miaudote.dto.AnimalCadastroDTO;
-import com.miaudote.model.Animal;
-import com.miaudote.model.Usuario;
-import com.miaudote.service.AnimalService;
-import com.miaudote.service.UsuarioService;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.miaudote.dto.AnimalRequest;
+import com.miaudote.dto.AnimalResponseDTO;
+import com.miaudote.model.Animal;
+import com.miaudote.service.AnimalService;
 
 @RestController
 @RequestMapping("/animais")
@@ -24,7 +29,7 @@ public class AnimalController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Animal> cadastrarAnimal(@RequestBody AnimalCadastroDTO request) {
+    public ResponseEntity<Animal> cadastrarAnimal(@RequestBody AnimalRequest request) {
         try{
             Animal novoAnimal = animalService.cadastrarAnimal(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
@@ -34,11 +39,40 @@ public class AnimalController {
         }
     }
 
-    @PatchMapping("/atualizar/{animalId}/usuario/{usuarioId}")
-    public ResponseEntity<Animal> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long usuarioId,
+    /* 
+    Sei que o DTO parece inútil, e pro nosso caso talvez seja, mas sem ele a gente mandaria os dados do parceiro também,
+    e no futuro poderia dar problema de acoplamento (se precisar mudar algo na entidade Animal, 
+    adicionar um campo por exemplo, isso pode afetar diretamente o contrato da API e quebrar clientes)
+    Quebrar cliente é coisa de agiota, o que é meio badass, mas a gente não tá nesse nível de SIGMA :/
+    */
+
+    @GetMapping("teste/{id}/parceiro/{parceiroId}")
+    public ResponseEntity<AnimalResponseDTO> getAnimal(@PathVariable Long id, @PathVariable Long parceiroId) {
+        try {
+            AnimalResponseDTO animal = animalService.getAnimal(id, parceiroId);
+            return ResponseEntity.ok(animal);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/parceiro/{parceiroId}")
+    public ResponseEntity<List<AnimalResponseDTO>> getAnimaisPorParceiro(@PathVariable Long parceiroId) {
+        try {
+            List<AnimalResponseDTO> animais = animalService.getAnimaisPorParceiro(parceiroId);
+            return ResponseEntity.ok(animais);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/{animalId}/parceiro/{parceiroId}")
+    public ResponseEntity<Animal> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId,
                                                   @RequestBody Animal novosDados) {
         try {
-            Animal animalAtualizado = animalService.atualizarAnimal(animalId, usuarioId, novosDados);
+            Animal animalAtualizado = animalService.atualizarAnimal(animalId, parceiroId, novosDados);
             return new ResponseEntity<>(animalAtualizado, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -46,10 +80,10 @@ public class AnimalController {
         }
     }
 
-    @DeleteMapping("/{animalId}/usuario/{usuarioId}")
-    public ResponseEntity<Void> deletarAnimal(@PathVariable Long animalId, @PathVariable Long usuarioId) {
+    @DeleteMapping("/{animalId}/parceiro/{parceiroId}")
+    public ResponseEntity<Void> deletarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId) {
         try {
-            animalService.deletarAnimal(animalId, usuarioId);
+            animalService.deletarAnimal(animalId, parceiroId);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {

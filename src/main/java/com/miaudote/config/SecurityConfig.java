@@ -23,14 +23,16 @@ public class SecurityConfig {
         http
             .csrf(CsrfConfigurer::disable) // <-- Desabilita o CSRF aqui
             .authorizeHttpRequests(authz -> authz
+                /* 
                 .requestMatchers("/animais/*").permitAll()
                 .requestMatchers("/usuarios/*").permitAll()
                 .requestMatchers("/parceiros/*").permitAll()
                 .requestMatchers("/adotantes/*").permitAll()
                 .requestMatchers("/adocoes/*").permitAll()
                 .requestMatchers("/favoritos/*").permitAll()
-                .requestMatchers("/ceps/*").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/ceps/*").permitAll()*/
+                //.anyRequest().authenticated()
+                .anyRequest().permitAll()
             );
 
         return http.build();

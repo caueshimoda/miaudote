@@ -1,7 +1,7 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.Foto;
-import com.miaudote.dto.FotoCadastroDTO;
+import com.miaudote.dto.FotoRequest;
 import com.miaudote.service.FotoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class FotoController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Foto> cadastrarFoto(@RequestBody FotoCadastroDTO request){
+    public ResponseEntity<Foto> cadastrarFoto(@RequestBody FotoRequest request){
         try {
             Foto Foto = fotoService.cadastrarFoto(request);
             return new ResponseEntity<>(Foto, HttpStatus.CREATED);

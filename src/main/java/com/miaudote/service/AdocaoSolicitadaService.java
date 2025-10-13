@@ -1,6 +1,6 @@
 package com.miaudote.service;
 
-import com.miaudote.dto.AdocaoSolicitadaCadastroDTO;
+import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Adotante;
@@ -26,7 +26,7 @@ public class AdocaoSolicitadaService {
     }
 
 
-    public AdocaoSolicitada cadastrarAdocaoSolicitada(AdocaoSolicitadaCadastroDTO request) {
+    public AdocaoSolicitada cadastrarAdocaoSolicitada(AdocaoSolicitadaRequest request) {
         Adotante adotante = adotanteRepository.findById(request.getAdotanteId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         Animal animal = animalRepository.findById(request.getAnimalId())

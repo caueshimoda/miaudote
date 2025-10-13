@@ -94,11 +94,16 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+        usuarioRepository.delete(usuario);
+        
+        /* Ms Ogura, tomei a liberdade de tirar esse try catch porque vamos fazer essa verificação em Parceiro e Adotante,
+        veja se concorda.
         try {
             usuarioRepository.delete(usuario);
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Não é possível excluir: usuário vinculado a outros registros", e);
         }
+        */
     }
 
 

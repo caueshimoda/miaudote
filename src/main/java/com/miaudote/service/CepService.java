@@ -1,6 +1,5 @@
 package com.miaudote.service;
 
-import com.miaudote.dto.CepCadastroDTO;
 import com.miaudote.model.Cep;
 import com.miaudote.repository.CepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +17,7 @@ public class CepService {
     }
 
 
-    public Cep cadastrarCep(CepCadastroDTO request) {
-
-        Cep cep = new Cep();
-        cep.setNumero(request.getNumero());
-        cep.setLogradouro(request.getLogradouro());
-        cep.setBairro(request.getBairro());
-        cep.setCidade(request.getCidade());
-        cep.setEstado(request.getEstado());
+    public Cep cadastrarCep(Cep cep) {
 
         return cepRepository.save(cep);
     }

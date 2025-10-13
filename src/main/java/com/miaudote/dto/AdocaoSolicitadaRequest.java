@@ -3,7 +3,7 @@ package com.miaudote.dto;
 import lombok.Getter;
 
 @Getter
-public class FavoritoCadastroDTO {
+public class AdocaoSolicitadaRequest {
 
     private Long adotanteId;
     private Long animalId;

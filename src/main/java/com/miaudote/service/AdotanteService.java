@@ -3,12 +3,14 @@ package com.miaudote.service;
 import org.springframework.transaction.annotation.Transactional;
 import com.miaudote.model.Adotante;
 import com.miaudote.dto.AdotanteCadastroDTO;
+import com.miaudote.dto.AdotanteResponseDTO;
 import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.UsuarioRepository;
 import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.AdotanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +52,44 @@ public class AdotanteService {
             }
 
             throw new RuntimeException("Erro ao cadastrar Adotante: " + e.getMessage(), e);
+        }
+    }
+
+    public AdotanteResponseDTO getAdotante(Long id) {
+        Adotante adotante = adotanteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("adotante não encontrado com id: " + id));
+
+        return new AdotanteResponseDTO(adotante);
+    }
+
+    public Adotante atualizarAdotante(Long id, Adotante novosDados){
+        Adotante adotanteExistente = adotanteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("adotante não encontrado"));
+
+        Usuario novoUsuario = novosDados.getUsuario();
+        Optional.ofNullable(novoUsuario)
+            .ifPresent(usuario -> {
+                usuarioService.atualizarUsuario(id, usuario); 
+            });
+        Optional.ofNullable(novosDados.getCpf()).ifPresent(adotanteExistente::setCpf);
+
+        // validação dos novos dados
+        if(adotanteExistente.isValidAdotante())
+            adotanteRepository.save(adotanteExistente);
+
+        return adotanteExistente;
+    }
+
+    @Transactional 
+    public void deletarAdotante(Long id){
+        Adotante adotante = adotanteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Adotante não encontrado"));
+
+        try {
+            adotanteRepository.delete(adotante);
+            usuarioService.deletarUsuario(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Não é possível excluir: adotante vinculado a outros registros", e);
         }
     }
 

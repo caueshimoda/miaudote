@@ -28,4 +28,8 @@ public class Adotante {
 
     @Column(name = "data_nasc")
     private LocalDate dataNascimento;
+
+    public boolean isValidAdotante() {
+        return true;
+    }
 }

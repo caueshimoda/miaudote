@@ -1,7 +1,6 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.Cep;
-import com.miaudote.dto.CepCadastroDTO;
 import com.miaudote.service.CepService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class CepController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Cep> cadastrarCep(@RequestBody CepCadastroDTO request){
+    public ResponseEntity<Cep> cadastrarCep(@RequestBody Cep request){
         try {
             Cep cep = cepService.cadastrarCep(request);
             return new ResponseEntity<>(cep, HttpStatus.CREATED);
