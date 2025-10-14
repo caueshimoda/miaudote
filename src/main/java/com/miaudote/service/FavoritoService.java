@@ -1,5 +1,6 @@
 package com.miaudote.service;
 
+import com.miaudote.dto.FavoritoResponseDTO;
 import com.miaudote.dto.FavoritoRequest;
 import com.miaudote.model.Favorito;
 import com.miaudote.model.Animal;
@@ -8,6 +9,7 @@ import com.miaudote.repository.FavoritoRepository;
 import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -26,17 +28,37 @@ public class FavoritoService {
     }
 
 
-    public Favorito cadastrarFavorito(FavoritoRequest request) {
+    public FavoritoResponseDTO cadastrarFavorito(FavoritoRequest request) {
         Adotante adotante = adotanteRepository.findById(request.getAdotanteId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        Animal animal = animalRepository.findById(request.getAnimalId())
+        Animal animal = animalRepository.findByIdAndParceiroId(request.getAnimalId(), request.getParceiroId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
         Favorito favorito = new Favorito();
         favorito.setAdotante(adotante);
         favorito.setAnimal(animal);
 
-        return favoritoRepository.save(favorito);
+        favoritoRepository.save(favorito);
+
+        return new FavoritoResponseDTO(favorito);
+    }
+
+     public FavoritoResponseDTO getFavorito(Long id) {
+        Favorito favorito = favoritoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Favorito não encontrado com id: " + id));
+        return new FavoritoResponseDTO(favorito);
+    }
+
+    public void deletarFavorito(Long id){
+        Favorito favorito = favoritoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Favorito não encontrado"));
+
+        // Acho que pra essa classe não precisaria disso, mas deixei por precaução
+        try {
+            favoritoRepository.delete(favorito);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Não é possível excluir: favorito vinculado a outros registros", e);
+        }
     }
 
 }

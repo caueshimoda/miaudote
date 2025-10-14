@@ -7,5 +7,5 @@ public class FavoritoRequest {
 
     private Long adotanteId;
     private Long animalId;
-
+    private Long parceiroId;
 }

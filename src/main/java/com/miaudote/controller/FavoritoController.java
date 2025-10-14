@@ -1,7 +1,10 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.Favorito;
+import com.miaudote.model.Favorito;
+import com.miaudote.dto.FavoritoResponseDTO;
 import com.miaudote.dto.FavoritoRequest;
+import com.miaudote.dto.FavoritoResponseDTO;
 import com.miaudote.service.FavoritoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +25,35 @@ public class FavoritoController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Favorito> cadastrarFavorito(@RequestBody FavoritoRequest request){
+    public ResponseEntity<FavoritoResponseDTO> cadastrarFavorito(@RequestBody FavoritoRequest request){
         try {
-            Favorito favorito = favoritoService.cadastrarFavorito(request);
+            FavoritoResponseDTO favorito = favoritoService.cadastrarFavorito(request);
             return new ResponseEntity<>(favorito, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+     @GetMapping("/{id}")
+    public ResponseEntity<FavoritoResponseDTO> getFavoritoById(@PathVariable Long id) {
+        FavoritoResponseDTO favoritoDTO = favoritoService.getFavorito(id);
+        
+        try {
+            return ResponseEntity.ok(favoritoDTO);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deletarFavorito(@PathVariable Long id){
+        try{
+            favoritoService.deletarFavorito(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
