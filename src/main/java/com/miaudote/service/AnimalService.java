@@ -74,7 +74,7 @@ public class AnimalService {
         Optional.ofNullable(novosDados.getSexo()).ifPresent(animal::setSexo);
         Optional.ofNullable(novosDados.getPorte()).ifPresent(animal::setPorte);
         Optional.ofNullable(novosDados.getStatus_ani()).ifPresent(animal::setStatus_ani);
-        Optional.of(novosDados.getIdade_inicial()).ifPresent(animal::setIdade_inicial);
+        Optional.ofNullable(novosDados.getIdade_inicial()).ifPresent(animal::setIdade_inicial);
         Optional.ofNullable(novosDados.getDescricao()).ifPresent(animal::setDescricao);
         Optional.ofNullable(novosDados.getObs()).ifPresent(animal::setObs);
 

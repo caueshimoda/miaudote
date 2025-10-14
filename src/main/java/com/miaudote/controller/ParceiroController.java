@@ -45,8 +45,9 @@ public class ParceiroController {
         }
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Parceiro> atualizarParceiro(@PathVariable Long id, @RequestBody Parceiro parceiro){
+
         try {
             if(!parceiro.isValidParceiro())
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -60,15 +61,15 @@ public class ParceiroController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletarParceiro(@PathVariable Long id){
         try{
             parceiroService.deletarParceiro(id);
             return new ResponseEntity<>(HttpStatus.OK);
 
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
-    }
 
 }

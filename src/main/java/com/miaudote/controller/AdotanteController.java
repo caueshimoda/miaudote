@@ -44,7 +44,7 @@ public class AdotanteController {
         }
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Adotante> atualizarAdotante(@PathVariable Long id, @RequestBody Adotante adotante){
         try {
             if(!adotante.isValidAdotante())
@@ -59,7 +59,7 @@ public class AdotanteController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletarAdotante(@PathVariable Long id){
         try{
             adotanteService.deletarAdotante(id);

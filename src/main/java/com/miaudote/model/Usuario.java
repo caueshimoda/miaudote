@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
+import java.util.Arrays;
 
 /*
 import java.time.LocalDate;
@@ -25,10 +27,6 @@ public class Usuario {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_cep", nullable = false)
-    private Cep cep;
-
     private String nome;
     private String email; // regex
 
@@ -37,8 +35,8 @@ public class Usuario {
     
     @Column(name = "senha")
     private String senha_hash; // vai para o banco
-    private int numero;
-    private String complemento;
+    private String cidade;
+    private String estado;
     private String telefone; // regex
     //private String cpf;
     //private String cnpj;
@@ -55,25 +53,12 @@ public class Usuario {
 
     public boolean isValidUsuario(){
         return isValidNome() && isValidEmail() && isValidSenha(senha)
-                && isValidNumero() && isValidComplemento() && isValidTelefone();
+                && isValidCidade() && isValidEstado() && isValidTelefone();
     }
 
 
     public boolean isValidNome(){
-        try {
-            String nome = getNome();
-            if (nome == null || nome.trim().isEmpty())
-                return false;
-
-            if (nome.trim().length() < 2 || nome.trim().length() > 60)
-                return false;
-
-            // Apenas letras e espaços
-            return nome.matches("^[\\p{L} ]+$");
-
-        } catch (Exception e){
-            return false;
-        }
+        return ValidacaoNome.isValidNome(getNome());
     }
 
     public boolean isValidEmail(){
@@ -105,24 +90,24 @@ public class Usuario {
 
     }
 
-    public boolean isValidNumero(){
-        try {
-            if (getNumero() <= 0)
-                return false;
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+    public boolean isValidCidade(){
+        return ValidacaoNome.isValidNome(getCidade());
     }
 
-    public boolean isValidComplemento(){
+    public boolean isValidEstado(){
         try {
-            if (getComplemento() == null || getComplemento().isEmpty())
+            if (estado == null || estado.isEmpty())
                 return false;
+
+            List<String> estados = Arrays.asList("AC", "AL", "AP", "AM", "BA", "CE", 
+                                                "DF", "ES", "GO", "MA", "MT", "MS", "MG",
+                                                "PA", "PB", "PR", "PE", "PI", "RJ", "RN", 
+                                                "RS", "RO", "RR", "SC", "SP", "SE", "TO");
+            return estados.contains(estado);
+
         } catch (Exception e) {
             return false;
         }
-        return true;
     }
 
     public boolean isValidTelefone(){

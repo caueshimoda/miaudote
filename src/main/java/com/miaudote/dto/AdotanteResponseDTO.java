@@ -25,10 +25,8 @@ public class AdotanteResponseDTO {
             this.nome = adotante.getUsuario().getNome();
             this.email = adotante.getUsuario().getEmail();
             this.telefone = adotante.getUsuario().getTelefone();
-            if (adotante.getUsuario().getCep() != null){
-                this.cidade = adotante.getUsuario().getCep().getCidade();
-                this.estado = adotante.getUsuario().getCep().getEstado();
-            }
+            this.cidade = adotante.getUsuario().getCidade();
+            this.estado = adotante.getUsuario().getEstado();
         }
     }
 

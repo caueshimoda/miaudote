@@ -31,10 +31,8 @@ public class ParceiroResponseDTO {
             this.nome = parceiro.getUsuario().getNome();
             this.email = parceiro.getUsuario().getEmail();
             this.telefone = parceiro.getUsuario().getTelefone();
-            if (parceiro.getUsuario().getCep() != null){
-                this.cidade = parceiro.getUsuario().getCep().getCidade();
-                this.estado = parceiro.getUsuario().getCep().getEstado();
-            }
+            this.cidade = parceiro.getUsuario().getCidade();
+            this.estado = parceiro.getUsuario().getEstado();
         }
     }
 

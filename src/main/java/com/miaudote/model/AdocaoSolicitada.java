@@ -31,4 +31,8 @@ public class AdocaoSolicitada {
     @Column(name = "data_finalizacao")
     private LocalDate dataFinalizacao;
 
+    public boolean isValidAdocaoSolicitada() {
+        return true;
+    }
+
 }

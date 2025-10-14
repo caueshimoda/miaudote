@@ -7,5 +7,6 @@ public class AdocaoSolicitadaRequest {
 
     private Long adotanteId;
     private Long animalId;
+    private Long parceiroId;
 
 }

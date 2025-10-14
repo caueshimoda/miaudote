@@ -1,8 +1,9 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.AdocaoSolicitada;
-import com.miaudote.model.AdocaoSolicitada;
+import com.miaudote.model.Adotante;
 import com.miaudote.dto.AdocaoSolicitadaRequest;
+import com.miaudote.dto.AdocaoSolicitadaResponseDTO;
 import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.service.AdocaoSolicitadaService;
 import com.miaudote.service.AdocaoSolicitadaService;
@@ -26,13 +27,50 @@ public class AdocaoSolicitadaController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<AdocaoSolicitada> cadastrarAdocaoSolicitada(@RequestBody AdocaoSolicitadaRequest request){
+    public ResponseEntity<AdocaoSolicitadaResponseDTO> cadastrarAdocaoSolicitada(@RequestBody AdocaoSolicitadaRequest request){
         try {
-            AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaService.cadastrarAdocaoSolicitada(request);
+            AdocaoSolicitadaResponseDTO adocaoSolicitada = adocaoSolicitadaService.cadastrarAdocaoSolicitada(request);
             return new ResponseEntity<>(adocaoSolicitada, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AdocaoSolicitadaResponseDTO> getAdocaoSolicitadaById(@PathVariable Long id) {
+        AdocaoSolicitadaResponseDTO adocaoSolicitadaDTO = adocaoSolicitadaService.getAdocaoSolicitada(id);
+        
+        try {
+            return ResponseEntity.ok(adocaoSolicitadaDTO);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AdocaoSolicitadaResponseDTO> atualizarAdocaoSolicitada(@PathVariable Long id, @RequestBody AdocaoSolicitada adocaoSolicitada){
+        try {
+            if(!adocaoSolicitada.isValidAdocaoSolicitada())
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+            AdocaoSolicitadaResponseDTO adocaoSolicitadaAtualizada = adocaoSolicitadaService.atualizarAdocaoSolicitada(id, adocaoSolicitada);
+
+            return new ResponseEntity<>(adocaoSolicitadaAtualizada, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deletarAdocaoSolicitada(@PathVariable Long id){
+        try{
+            adocaoSolicitadaService.deletarAdocaoSolicitada(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

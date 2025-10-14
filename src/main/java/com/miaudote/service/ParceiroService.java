@@ -75,7 +75,7 @@ public class ParceiroService {
                 usuarioService.atualizarUsuario(id, usuario); 
             });
         Optional.ofNullable(novosDados.getDocumento()).ifPresent(parceiroExistente::setDocumento);
-        Optional.of(novosDados.getTipo()).ifPresent(parceiroExistente::setTipo);
+        Optional.ofNullable(novosDados.getTipo()).ifPresent(parceiroExistente::setTipo);
         Optional.ofNullable(novosDados.getSite()).ifPresent(parceiroExistente::setSite);
 
         // validação dos novos dados
@@ -91,7 +91,7 @@ public class ParceiroService {
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado"));
 
         try {
-            parceiroRepository.delete(parceiro);
+            parceiroRepository.delete(parceiro); 
             usuarioService.deletarUsuario(id);
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Não é possível excluir: parceiro vinculado a outros registros", e);

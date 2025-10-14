@@ -52,7 +52,7 @@ public class UsuarioController {
     }
 
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
         try {
             if(!usuario.isValidUsuario())
@@ -68,7 +68,7 @@ public class UsuarioController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletarUsuario(@PathVariable Long id){
         try{
             usuarioService.deletarUsuario(id);
