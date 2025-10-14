@@ -11,8 +11,8 @@ public class UsuarioCadastroDTO {
     private String nome;
     private String email;
     private String senha;
-    private int numero;
-    private String complemento;
+    private String cidade;
+    private String estado;
     private String telefone;
     // private Usuario.TipoUsuario tipoUsuario; - Será que precisa do tipo do usuário? Depois podemos falar sobre
 
