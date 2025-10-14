@@ -80,7 +80,7 @@ public class Usuario {
      */
     public boolean isValidSenha(String senha){
         final String PASSWORD_REGEX =
-                "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+                "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*])(?=\\S+$).{8,}$";
         final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
         if (senha == null || senha.isEmpty())
