@@ -1,6 +1,8 @@
 package com.miaudote.model;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeParseException;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,22 @@ public class Adotante {
     private LocalDate dataNascimento;
 
     public boolean isValidAdotante() {
-        return true;
+        return isValidCpf() && isValidDataNascimento();
     }
+
+    public boolean isValidDataNascimento() {
+
+        return dataNascimento.isBefore(LocalDate.now());
+        
+    }
+
+    public boolean isValidCpf() {
+        if (cpf == null) {
+            return false;
+        }
+
+        // Apenas dígitos, exatamente 11
+        return cpf.matches("^\\d{11}$");
+    }
+
 }

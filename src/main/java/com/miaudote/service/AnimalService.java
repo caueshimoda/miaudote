@@ -38,6 +38,9 @@ public class AnimalService {
         animal.setStatus_ani(request.getStatus_ani());
         animal.setObs(request.getObs());
         animal.setDescricao(request.getDescricao());
+
+        if (!animal.isValidAnimal())
+            throw new IllegalArgumentException("Animal inválido, checar os dados");
         return animalRepository.save(animal);
     }
 
@@ -78,7 +81,11 @@ public class AnimalService {
         Optional.ofNullable(novosDados.getDescricao()).ifPresent(animal::setDescricao);
         Optional.ofNullable(novosDados.getObs()).ifPresent(animal::setObs);
 
-        return animalRepository.save(animal);
+        if (novosDados.isValidAnimal()){
+            animalRepository.save(animal);
+        }
+
+        return animal;
     }
 
     public void deletarAnimal(Long animalId, Long parceiroId) {

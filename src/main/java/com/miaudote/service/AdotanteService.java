@@ -30,17 +30,16 @@ public class AdotanteService {
     public Adotante cadastrarAdotante(AdotanteCadastroDTO request) {
         Usuario savedUsuario = null;
         try {
-            // Cadastra o usuário (isso insere na tabela usuarios)
             savedUsuario = usuarioService.cadastrarUsuario(request.getUsuario());
 
-            // Cria e associa o adotante
             Adotante adotante = new Adotante();
             adotante.setUsuario(savedUsuario);
             adotante.setCpf(request.getCpf());
             adotante.setDataNascimento(request.getDataNascimento());
 
+            if (!adotante.isValidAdotante())
+                throw new IllegalArgumentException("Adotante inválido, checar os dados");
 
-            // Salva o adotante
             return adotanteRepository.save(adotante);
 
         } catch (Exception e) {

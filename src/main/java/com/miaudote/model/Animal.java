@@ -59,38 +59,16 @@ public class Animal {
 
     private String descricao;
 
+    public boolean isValidAnimal() {
+        return isValidEspecie() && isValidNome() && isValidIdade();
+    }
+
     public boolean isValidEspecie() {
-        try {
-            String especie = getEspecie();
-            if (especie == null || especie.trim().isEmpty())
-                return false;
-
-            if (especie.trim().length() > 20)
-                return false;
-
-            // Apenas letras e espaços
-            return especie.matches("^[\\p{L} ]+$");
-
-        } catch (Exception e){
-            return false;
-        }
+        return ValidacaoNome.isValidNome(especie);
     }
 
     public boolean isValidNome(){
-        try {
-            String nome = getNome();
-            if (nome == null || nome.trim().isEmpty())
-                return false;
-
-            if (nome.trim().length() < 2 || nome.trim().length() > 60)
-                return false;
-
-            // Apenas letras e espaços
-            return nome.matches("^[\\p{L} ]+$");
-
-        } catch (Exception e){
-            return false;
-        }
+        return ValidacaoNome.isValidNome(nome);
     }
 
     public boolean isValidIdade() {

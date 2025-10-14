@@ -30,24 +30,20 @@ public class ParceiroService {
     public Parceiro cadastrarParceiro(ParceiroCadastroDTO request) {
         Usuario savedUsuario = null;
         try {
-            // Cadastra o usuário (isso insere na tabela usuarios)
             savedUsuario = usuarioService.cadastrarUsuario(request.getUsuario());
 
-            // Cria e associa o parceiro
             Parceiro parceiro = new Parceiro();
             parceiro.setUsuario(savedUsuario);
-            //parceiro.setId(savedUsuario.getId());
             parceiro.setDocumento(request.getDocumento());
             parceiro.setTipo(request.getTipo());
             parceiro.setSite(request.getSite());
 
-
-            // Salva o parceiro
+            if (!parceiro.isValidParceiro())
+                throw new IllegalArgumentException("Parceiro inválido, checar os dados");
             return parceiroRepository.save(parceiro);
 
         } catch (Exception e) {
-            System.err.println("Erro ao cadastrar parceiro: " + e.getMessage());
-            e.printStackTrace(); // <-- mostra o stack trace completo no console
+            e.printStackTrace(); 
 
             if (savedUsuario != null && savedUsuario.getId() != null) {
                 usuarioService.deletarUsuario(savedUsuario.getId());

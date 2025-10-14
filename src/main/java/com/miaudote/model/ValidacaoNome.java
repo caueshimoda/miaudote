@@ -7,7 +7,7 @@ public class ValidacaoNome {
             if (nome == null || nome.trim().isEmpty())
                 return false;
 
-            if (nome.trim().length() > 60) // Eu to aceitando nomes com 1 caractere td bem? Pra podermos usar para animais tb kkkk
+            if (nome.trim().length() < 2 && nome.trim().length() > 60) 
                 return false;
 
             // Apenas letras e espaços
