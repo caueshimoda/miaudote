@@ -8,11 +8,9 @@ import com.miaudote.model.Adotante;
 import com.miaudote.repository.FavoritoRepository;
 import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FavoritoService {

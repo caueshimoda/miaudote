@@ -4,15 +4,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.miaudote.model.Adotante;
 import com.miaudote.dto.AdotanteCadastroDTO;
 import com.miaudote.dto.AdotanteResponseDTO;
-import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.model.Usuario;
-import com.miaudote.repository.UsuarioRepository;
-import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.AdotanteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.Optional;
 
 @Service

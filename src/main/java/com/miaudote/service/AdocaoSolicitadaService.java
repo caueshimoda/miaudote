@@ -4,16 +4,11 @@ import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.dto.AdocaoSolicitadaResponseDTO;
 import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.Animal;
-import com.miaudote.model.Usuario;
-import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.Adotante;
 import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
 
-import jakarta.transaction.Transactional;
-
 import com.miaudote.repository.AdocaoSolicitadaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;

@@ -11,7 +11,6 @@ import jakarta.transaction.Transactional;
 import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.FotoRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,14 +22,12 @@ public class AnimalService {
 
     private final AnimalRepository animalRepository;
     private final ParceiroRepository parceiroRepository;
-    private final FotoRepository fotoRepository;
     private final FotoService fotoService;
 
     public AnimalService(AnimalRepository animalRepository, ParceiroRepository parceiroRepository, 
                         FotoRepository fotoRepository, FotoService fotoService) {
         this.animalRepository = animalRepository;
         this.parceiroRepository = parceiroRepository;
-        this.fotoRepository = fotoRepository;
         this.fotoService = fotoService;
     }
 
@@ -54,7 +51,6 @@ public class AnimalService {
             throw new IllegalArgumentException("Animal inválido, checar os dados");
         
         Animal animalSalvo = animalRepository.save(animal);
-        System.out.println("DATA DE CADASTRO: " + animalSalvo.getDataCadastro());
 
         fotoService.cadastrarFotos(animalSalvo.getId(), request.getFotos());
 

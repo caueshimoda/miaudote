@@ -3,20 +3,17 @@ package com.miaudote.service;
 import com.miaudote.model.Foto;
 import com.miaudote.dto.FotoResponseDTO;
 import com.miaudote.model.Animal;
-import com.miaudote.model.Foto;
 import com.miaudote.repository.FotoRepository;
 
 import jakarta.transaction.Transactional;
 
 import com.miaudote.repository.AnimalRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import java.io.IOException;
 
@@ -96,7 +93,7 @@ public class FotoService {
                 .orElseThrow(() -> new RuntimeException("Foto não encontrada"));
 
         if (fotoRepository.countByAnimalId(animalId) < 2) {
-            throw new RuntimeException("Não é possível deletar a foto, o animal precisa ter pelo menos uma");
+            throw new RuntimeException("Não é possível excluir a foto, o animal precisa ter pelo menos uma");
         }
 
         // Acho que pra essa classe não precisaria disso, mas deixei por precaução

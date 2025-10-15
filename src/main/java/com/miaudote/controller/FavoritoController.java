@@ -1,17 +1,13 @@
 package com.miaudote.controller;
 
-import com.miaudote.model.Favorito;
-import com.miaudote.model.Favorito;
 import com.miaudote.dto.FavoritoResponseDTO;
 import com.miaudote.dto.FavoritoRequest;
-import com.miaudote.dto.FavoritoResponseDTO;
 import com.miaudote.service.FavoritoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/favoritos")
