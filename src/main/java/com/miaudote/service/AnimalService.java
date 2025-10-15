@@ -2,7 +2,6 @@ package com.miaudote.service;
 
 import com.miaudote.dto.AnimalRequest;
 import com.miaudote.dto.AnimalResponseDTO;
-import com.miaudote.dto.ParceiroResponseDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
 import com.miaudote.repository.ParceiroRepository;
@@ -34,8 +33,8 @@ public class AnimalService {
         animal.setNome(request.getNome());
         animal.setSexo(request.getSexo());
         animal.setPorte(request.getPorte());
-        animal.setIdade_inicial(request.getIdade_inicial());
-        animal.setStatus_ani(request.getStatus_ani());
+        animal.setIdadeInicial(request.getIdadeInicial());
+        animal.setStatus(request.getStatus());
         animal.setObs(request.getObs());
         animal.setDescricao(request.getDescricao());
 
@@ -81,8 +80,8 @@ public class AnimalService {
         Optional.ofNullable(novosDados.getEspecie()).ifPresent(animal::setEspecie);
         Optional.ofNullable(novosDados.getSexo()).ifPresent(animal::setSexo);
         Optional.ofNullable(novosDados.getPorte()).ifPresent(animal::setPorte);
-        Optional.ofNullable(novosDados.getStatus_ani()).ifPresent(animal::setStatus_ani);
-        Optional.ofNullable(novosDados.getIdade_inicial()).ifPresent(animal::setIdade_inicial);
+        Optional.ofNullable(novosDados.getStatus()).ifPresent(animal::setStatus);
+        Optional.ofNullable(novosDados.getIdadeInicial()).ifPresent(animal::setIdadeInicial);
         Optional.ofNullable(novosDados.getDescricao()).ifPresent(animal::setDescricao);
         Optional.ofNullable(novosDados.getObs()).ifPresent(animal::setObs);
 
@@ -133,8 +132,8 @@ public class AnimalService {
                 animalExistente.setSexo(novosDados.getSexo());
                 animalExistente.setPorte(novosDados.getPorte());
                 animalExistente.setParceiro(novosDados.getParceiro());
-                animalExistente.setStatus_ani(novosDados.getStatus_ani());
-                animalExistente.setIdade_inicial(novosDados.getIdade_inicial());
+                animalExistente.setStatus(novosDados.getStatus());
+                animalExistente.setIdadeInicial(novosDados.getIdadeInicial());
                 animalExistente.setObs(novosDados.getObs());
                 animalExistente.setDescricao(novosDados.getDescricao());
                 return animalRepository.save(animalExistente);

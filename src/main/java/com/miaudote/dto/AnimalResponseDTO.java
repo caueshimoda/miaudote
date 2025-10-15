@@ -21,9 +21,9 @@ public class AnimalResponseDTO {
 
     private String porte;
 
-    private String status_ani;
+    private String status;
     
-    private int idade_inicial;
+    private int idadeInicial;
 
     private String obs;
 
@@ -35,8 +35,8 @@ public class AnimalResponseDTO {
         this.especie = animal.getEspecie();
         this.sexo = animal.getSexo().name();
         this.porte = animal.getPorte().name();
-        this.status_ani = animal.getStatus_ani().name();
-        this.idade_inicial = animal.getIdade_inicial();
+        this.status = animal.getStatus().name();
+        this.idadeInicial = animal.getIdadeInicial();
         this.obs = animal.getObs();
         this.descricao = animal.getDescricao();
 

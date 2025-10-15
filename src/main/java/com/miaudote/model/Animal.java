@@ -45,7 +45,8 @@ public class Animal {
     }
 
     @Enumerated(EnumType.STRING)
-    private Status status_ani;
+    @Column(name = "status_ani")
+    private Status status;
 
     public enum Status {
         Adotado,
@@ -53,7 +54,8 @@ public class Animal {
         Indisponível
     }
     
-    private int idade_inicial;
+    @Column(name = "idade_inicial")
+    private int idadeInicial;
 
     private String obs;
 
@@ -64,15 +66,14 @@ public class Animal {
     }
 
     public boolean isValidEspecie() {
-        return ValidacaoNome.isValidNome(especie);
+        return Validacao.isValidNome(especie);
     }
 
     public boolean isValidNome(){
-        return ValidacaoNome.isValidNome(nome);
+        return Validacao.isValidNome(nome);
     }
 
     public boolean isValidIdade() {
-        return getIdade_inicial() >= 0;
-
+        return getIdadeInicial() >= 0;
     }
 }

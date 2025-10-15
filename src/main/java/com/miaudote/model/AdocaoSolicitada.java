@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Arrays;
+
 @Entity
 @Table(name="adocoes_solicitadas")
 @NoArgsConstructor
@@ -32,7 +35,32 @@ public class AdocaoSolicitada {
     private LocalDate dataFinalizacao;
 
     public boolean isValidAdocaoSolicitada() {
-        return true;
+
+        return isValidStatus() && isValidDataFinalizacao();
     }
+
+    public boolean isValidStatus() {
+
+        if (status == null)
+            return false;
+
+        List<String> validos = Arrays.asList("Em andamento", "Na fila", "Finalizada com adoção", 
+                                            "Finalizada com adoção de terceiros", "Finalizada por desistência do parceiro", 
+                                            "Finalizada por desistência do adotante"); 
+
+        return validos.contains(status);
+    }
+
+    public boolean isValidDataFinalizacao() {
+        if (dataFinalizacao == null) {
+            if (status == null || status.substring(0, "Finalizada".length()).equals("Finalizada"))
+                return false;
+            return true;
+        }
+
+        return Validacao.isValidData(dataFinalizacao);
+    }
+
+
 
 }

@@ -12,8 +12,8 @@ public class AnimalRequest {
     private String nome;
     private Animal.Sexo sexo;
     private Animal.Porte porte;
-    private Animal.Status status_ani;
-    private int idade_inicial;
+    private Animal.Status status;
+    private int idadeInicial;
     private String obs;
     private String descricao;
 

@@ -1,6 +1,8 @@
 package com.miaudote.model;
 
-public class ValidacaoNome {
+import java.time.LocalDate;
+
+public class Validacao {
 
     public static boolean isValidNome(String nome){
         try {
@@ -16,6 +18,12 @@ public class ValidacaoNome {
         } catch (Exception e){
             return false;
         }
+    }
+
+    public static boolean isValidData(LocalDate data) {
+
+        return (!data.isAfter(LocalDate.now()));
+        
     }
 
 }

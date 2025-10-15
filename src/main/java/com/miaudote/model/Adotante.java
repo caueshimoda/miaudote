@@ -37,7 +37,7 @@ public class Adotante {
 
     public boolean isValidDataNascimento() {
 
-        return dataNascimento.isBefore(LocalDate.now());
+        return Validacao.isValidData(dataNascimento);
         
     }
 

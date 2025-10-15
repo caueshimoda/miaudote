@@ -58,7 +58,7 @@ public class Usuario {
 
 
     public boolean isValidNome(){
-        return ValidacaoNome.isValidNome(getNome());
+        return Validacao.isValidNome(getNome());
     }
 
     public boolean isValidEmail(){
@@ -91,7 +91,7 @@ public class Usuario {
     }
 
     public boolean isValidCidade(){
-        return ValidacaoNome.isValidNome(getCidade());
+        return Validacao.isValidNome(getCidade());
     }
 
     public boolean isValidEstado(){
