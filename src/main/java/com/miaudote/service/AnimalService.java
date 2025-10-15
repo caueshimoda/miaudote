@@ -54,6 +54,7 @@ public class AnimalService {
             throw new IllegalArgumentException("Animal inválido, checar os dados");
         
         Animal animalSalvo = animalRepository.save(animal);
+        System.out.println("DATA DE CADASTRO: " + animalSalvo.getDataCadastro());
 
         fotoService.cadastrarFotos(animalSalvo.getId(), request.getFotos());
 

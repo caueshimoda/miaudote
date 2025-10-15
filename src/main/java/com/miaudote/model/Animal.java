@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 //import java.util.List;
 
 @Entity
@@ -44,6 +46,7 @@ public class Animal {
         Grande
     }
 
+    @Generated(GenerationTime.INSERT)
     @Column(name="data_cad", insertable = false, updatable = false)
     private LocalDate dataCadastro;
 
