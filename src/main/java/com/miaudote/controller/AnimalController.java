@@ -1,5 +1,6 @@
 package com.miaudote.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -29,13 +30,22 @@ public class AnimalController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Animal> cadastrarAnimal(@RequestBody AnimalRequest request) {
-        try{
-            Animal novoAnimal = animalService.cadastrarAnimal(request);
+    public ResponseEntity<AnimalResponseDTO> cadastrarAnimal(@RequestBody AnimalRequest request) {
+        if (request.getFotos() == null || request.getFotos().isEmpty()) {
+            throw new IllegalArgumentException("Pelo menos uma foto é obrigatória para o cadastro do animal.");
+        }
+        
+        try {
+            AnimalResponseDTO novoAnimal = animalService.cadastrarAnimal(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
 
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+                System.out.println("Erro ao processar arquivo(s)");
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

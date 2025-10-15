@@ -58,4 +58,26 @@ public class FotoController {
         }
     }
 
+    @GetMapping("/first_animal/{id}")
+    public ResponseEntity<FotoResponseDTO> getPrimeiraFotoDoAnimal(@PathVariable Long id) {
+        FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(id);
+
+        try {
+            return ResponseEntity.ok(foto);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}/animal/{animalId}")
+    public ResponseEntity<HttpStatus> deletarFoto(@PathVariable Long id, @PathVariable Long animalId){
+        try{
+            fotoService.deletarFoto(id, animalId);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

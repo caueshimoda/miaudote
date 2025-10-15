@@ -5,9 +5,16 @@ import com.miaudote.dto.AnimalResponseDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
 import com.miaudote.repository.ParceiroRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.miaudote.repository.AnimalRepository;
+import com.miaudote.repository.FotoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,14 +23,19 @@ public class AnimalService {
 
     private final AnimalRepository animalRepository;
     private final ParceiroRepository parceiroRepository;
+    private final FotoRepository fotoRepository;
+    private final FotoService fotoService;
 
-    public AnimalService(AnimalRepository animalRepository, ParceiroRepository parceiroRepository) {
+    public AnimalService(AnimalRepository animalRepository, ParceiroRepository parceiroRepository, 
+                        FotoRepository fotoRepository, FotoService fotoService) {
         this.animalRepository = animalRepository;
         this.parceiroRepository = parceiroRepository;
+        this.fotoRepository = fotoRepository;
+        this.fotoService = fotoService;
     }
 
-
-    public Animal cadastrarAnimal(AnimalRequest request) {
+    @Transactional
+    public AnimalResponseDTO cadastrarAnimal(AnimalRequest request) throws IOException {
         Parceiro parceiro = parceiroRepository.findById(request.getParceiroId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -40,7 +52,13 @@ public class AnimalService {
 
         if (!animal.isValidAnimal())
             throw new IllegalArgumentException("Animal inválido, checar os dados");
-        return animalRepository.save(animal);
+        
+        Animal animalSalvo = animalRepository.save(animal);
+
+        fotoService.cadastrarFotos(animalSalvo.getId(), request.getFotos());
+
+        return new AnimalResponseDTO(animalSalvo);
+        
     }
 
     public AnimalResponseDTO getAnimal(Long id) {

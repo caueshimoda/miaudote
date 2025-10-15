@@ -1,5 +1,9 @@
 package com.miaudote.dto;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.miaudote.model.Animal;
 
 import lombok.Getter;
@@ -16,5 +20,6 @@ public class AnimalRequest {
     private int idadeInicial;
     private String obs;
     private String descricao;
+    private List<MultipartFile> fotos; 
 
 }
