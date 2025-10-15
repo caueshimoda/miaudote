@@ -5,6 +5,8 @@ import com.miaudote.dto.FotoResponseDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.repository.FotoRepository;
 
+import jakarta.transaction.Transactional;
+
 import com.miaudote.repository.AnimalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,19 +28,29 @@ public class FotoService {
         this.animalRepository = animalRepository;
     }
 
-    public Foto cadastrarFoto(Long animalId, MultipartFile arquivo) throws IOException {
+    // Como é uma lista de fotos, precisa ter o @Transactional pra ele desfazer o cadastro caso haja erro em alguma foto 
+    @Transactional
+    public List<Foto> cadastrarFotos(Long animalId, List<MultipartFile> arquivos) throws IOException {
+
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
-        if (fotoRepository.countByAnimalId(animalId) > 4) {
-            throw new RuntimeException("Não é possível adicionar mais fotos ao animal");
+        if (fotoRepository.countByAnimalId(animalId) + arquivos.size() > 5) {
+            throw new RuntimeException("Não é possível adicionar essa quantidade de fotos ao animal");
         }
 
-        Foto foto = new Foto();
-        foto.setAnimal(animal);
-        foto.setFoto(arquivo.getBytes());
+        return arquivos.stream().map(arquivo -> {
+                try {
+                    Foto foto = new Foto();
+                    foto.setAnimal(animal);
+                    foto.setFoto(arquivo.getBytes()); 
 
-        return fotoRepository.save(foto);
+                    return fotoRepository.save(foto);
+                } catch (IOException e) {
+                    
+                    throw new RuntimeException("Falha ao processar o arquivo: " + arquivo.getOriginalFilename(), e);
+                }
+            }).toList();
 
     }
 

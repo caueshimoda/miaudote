@@ -24,10 +24,10 @@ public class FotoController {
 
 
     @PostMapping("/cadastrar/{animalId}")
-    public ResponseEntity<String> cadastrarFoto(@PathVariable Long animalId, @RequestParam("file") MultipartFile arquivo){
+    public ResponseEntity<String> cadastrarFoto(@PathVariable Long animalId, @RequestParam("files") List<MultipartFile> arquivos){
         try {
-            fotoService.cadastrarFoto(animalId, arquivo);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Foto enviada com sucesso.");
+            fotoService.cadastrarFotos(animalId, arquivos);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Foto(s) enviada(s) com sucesso.");
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao ler o arquivo.");

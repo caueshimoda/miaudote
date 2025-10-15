@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//import java.time.LocalDate;
+import java.time.LocalDate;
 //import java.util.List;
 
 @Entity
@@ -43,6 +43,9 @@ public class Animal {
         Médio,
         Grande
     }
+
+    @Column(name="data_cad", insertable = false, updatable = false)
+    private LocalDate dataCadastro;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_ani")

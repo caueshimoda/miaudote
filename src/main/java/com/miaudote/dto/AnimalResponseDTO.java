@@ -3,15 +3,16 @@ import com.miaudote.model.Animal;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 @Data
 @NoArgsConstructor
 public class AnimalResponseDTO {
 
     private Long id;
 
-    private Long parceiroId;
-
-    private String parceiroNome;
+    private ParceiroResponseDTO parceiro;
 
     private String especie;
 
@@ -23,7 +24,7 @@ public class AnimalResponseDTO {
 
     private String status;
     
-    private int idadeInicial;
+    private int idade;
 
     private String obs;
 
@@ -36,14 +37,10 @@ public class AnimalResponseDTO {
         this.sexo = animal.getSexo().name();
         this.porte = animal.getPorte().name();
         this.status = animal.getStatus().name();
-        this.idadeInicial = animal.getIdadeInicial();
+        this.idade = animal.getIdadeInicial() + Period.between(animal.getDataCadastro(), LocalDate.now()).getYears();
         this.obs = animal.getObs();
         this.descricao = animal.getDescricao();
-
-        if (animal.getParceiro() != null) {
-            this.parceiroId = animal.getParceiro().getId();
-            this.parceiroNome = animal.getParceiro().getUsuario().getNome(); 
-        }
+        this.parceiro = new ParceiroResponseDTO(animal.getParceiro());
     }
 
 }
