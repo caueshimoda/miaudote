@@ -48,6 +48,29 @@ public class AdocaoSolicitadaController {
         }
     }
 
+    @GetMapping("/adotante/{id}")
+    public ResponseEntity<List<AdocaoSolicitadaResponseDTO>> getSolicitacoesByAdotante(@PathVariable Long id) {
+
+        List<AdocaoSolicitadaResponseDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorAdotante(id);
+        
+        try {
+            return ResponseEntity.ok(solicitacoes);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/parceiro/{id}")
+    public ResponseEntity<List<AdocaoSolicitadaResponseDTO>> getSolicitacoesByParceiro(@PathVariable Long id) {
+        List<AdocaoSolicitadaResponseDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorParceiro(id);
+        
+        try {
+            return ResponseEntity.ok(solicitacoes);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<AdocaoSolicitadaResponseDTO> atualizarAdocaoSolicitada(@PathVariable Long id, @RequestBody AdocaoSolicitada adocaoSolicitada){
         try {

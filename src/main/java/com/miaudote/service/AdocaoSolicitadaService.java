@@ -36,7 +36,7 @@ public class AdocaoSolicitadaService {
     public AdocaoSolicitadaResponseDTO cadastrarAdocaoSolicitada(AdocaoSolicitadaRequest request) {
         Adotante adotante = adotanteRepository.findById(request.getAdotanteId())
                 .orElseThrow(() -> new RuntimeException("Adotante não encontrado"));
-        Animal animal = animalRepository.findByIdAndParceiroId(request.getAnimalId(), request.getParceiroId())
+        Animal animal = animalRepository.findById(request.getAnimalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
         AdocaoSolicitada solicitacao = new AdocaoSolicitada();
@@ -53,6 +53,22 @@ public class AdocaoSolicitadaService {
         AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("AdocaoSolicitada não encontrado com id: " + id));
         return new AdocaoSolicitadaResponseDTO(adocaoSolicitada);
+    }
+
+    public List<AdocaoSolicitadaResponseDTO> getSolicitacoesPorAdotante(Long adotanteId) {
+        List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAdotanteId(adotanteId);
+
+        return solicitacoes.stream()
+               .map(AdocaoSolicitadaResponseDTO::new)
+               .toList();
+    }
+
+    public List<AdocaoSolicitadaResponseDTO> getSolicitacoesPorParceiro(Long parceiroId) {
+        List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAnimalParceiroId(parceiroId);
+
+        return solicitacoes.stream()
+               .map(AdocaoSolicitadaResponseDTO::new)
+               .toList();
     }
 
     public AdocaoSolicitadaResponseDTO atualizarAdocaoSolicitada(Long id, AdocaoSolicitada novosDados){

@@ -44,16 +44,21 @@ public class AnimalService {
         return animalRepository.save(animal);
     }
 
-    public AnimalResponseDTO getAnimal(Long id, Long parceiroId) {
-        Animal animal = animalRepository.findByIdAndParceiroId(id, parceiroId)
-            // Lança uma exceção se o animal não for encontrado ou
-            // se o animal não pertencer ao parceiroId fornecido.
-            .orElseThrow(() -> new RuntimeException("Animal não encontrado ou não pertence a este parceiro."));
+    public AnimalResponseDTO getAnimal(Long id) {
+        Animal animal = animalRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Animal não encontrado."));
 
             return new AnimalResponseDTO(animal);
     }
 
-    
+    public List<AnimalResponseDTO> getAnimais() {
+        
+        List<Animal> animais = animalRepository.findAll();
+
+        return animais.stream()
+                .map(AnimalResponseDTO::new) 
+                .toList(); 
+    }
 
     public List<AnimalResponseDTO> getAnimaisPorParceiro(Long parceiroId) {
         

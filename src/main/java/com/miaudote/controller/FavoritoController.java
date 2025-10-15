@@ -46,6 +46,17 @@ public class FavoritoController {
         }
     }
 
+    @GetMapping("/adotante/{id}")
+    public ResponseEntity<List<FavoritoResponseDTO>> getFavoritosByAdotanteId(@PathVariable Long id) {
+        List<FavoritoResponseDTO> favoritos = favoritoService.getFavoritosPorAdotante(id);
+
+        try {
+            return ResponseEntity.ok(favoritos);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    } 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletarFavorito(@PathVariable Long id){
         try{

@@ -46,10 +46,10 @@ public class AnimalController {
     Quebrar cliente é coisa de agiota, o que é meio badass, mas a gente não tá nesse nível de SIGMA :/
     */
 
-    @GetMapping("teste/{id}/parceiro/{parceiroId}")
-    public ResponseEntity<AnimalResponseDTO> getAnimal(@PathVariable Long id, @PathVariable Long parceiroId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<AnimalResponseDTO> getAnimal(@PathVariable Long id) {
         try {
-            AnimalResponseDTO animal = animalService.getAnimal(id, parceiroId);
+            AnimalResponseDTO animal = animalService.getAnimal(id);
             return ResponseEntity.ok(animal);
 
         } catch (Exception e) {
@@ -61,6 +61,17 @@ public class AnimalController {
     public ResponseEntity<List<AnimalResponseDTO>> getAnimaisPorParceiro(@PathVariable Long parceiroId) {
         try {
             List<AnimalResponseDTO> animais = animalService.getAnimaisPorParceiro(parceiroId);
+            return ResponseEntity.ok(animais);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AnimalResponseDTO>> getAnimais() {
+        try {
+            List<AnimalResponseDTO> animais = animalService.getAnimais();
             return ResponseEntity.ok(animais);
 
         } catch (Exception e) {

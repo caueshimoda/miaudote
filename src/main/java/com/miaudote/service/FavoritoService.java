@@ -31,7 +31,7 @@ public class FavoritoService {
     public FavoritoResponseDTO cadastrarFavorito(FavoritoRequest request) {
         Adotante adotante = adotanteRepository.findById(request.getAdotanteId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        Animal animal = animalRepository.findByIdAndParceiroId(request.getAnimalId(), request.getParceiroId())
+        Animal animal = animalRepository.findById(request.getAnimalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
         Favorito favorito = new Favorito();
@@ -49,6 +49,14 @@ public class FavoritoService {
         return new FavoritoResponseDTO(favorito);
     }
 
+    public List<FavoritoResponseDTO> getFavoritosPorAdotante(Long adotanteId) {
+        List<Favorito> favoritos = favoritoRepository.findByAdotanteId(adotanteId);
+
+        return favoritos.stream()
+               .map(FavoritoResponseDTO::new)
+               .toList();
+    }
+
     public void deletarFavorito(Long id){
         Favorito favorito = favoritoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Favorito não encontrado"));
@@ -60,5 +68,6 @@ public class FavoritoService {
             throw new RuntimeException("Não é possível excluir: favorito vinculado a outros registros", e);
         }
     }
+    
 
 }
