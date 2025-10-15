@@ -7,8 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.miaudote.model.Animal;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class AnimalRequest {
 
     private long parceiroId;
