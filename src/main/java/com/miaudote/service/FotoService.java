@@ -14,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,8 +75,20 @@ public class FotoService {
     public FotoResponseDTO getPrimeiraFotoDoAnimal(Long animalId) {
         Foto foto = fotoRepository.findFirstByAnimalIdOrderByIdAsc(animalId)
                 .orElseThrow(() -> new RuntimeException("Nenhuma foto encontrada para o animal ID: " + animalId));
-                
+
         return new FotoResponseDTO(foto);
+    }
+
+    public List<FotoResponseDTO> getFotosPorParceiro(Long parceiroId) {
+        List<Animal> animais = animalRepository.findAnimaisByParceiroId(parceiroId);
+
+        List<FotoResponseDTO> fotos = new ArrayList<>();
+
+        for (Animal animal : animais) {
+            fotos.add(getPrimeiraFotoDoAnimal(animal.getId()));
+        }
+
+        return fotos;
     }
 
     public void deletarFoto(Long id, Long animalId){

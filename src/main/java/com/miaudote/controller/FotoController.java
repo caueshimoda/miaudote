@@ -69,6 +69,17 @@ public class FotoController {
         }
     }
 
+    @GetMapping("/parceiro/{id}")
+    public ResponseEntity<List<FotoResponseDTO>> getFotosPorParceiro(@PathVariable Long id) {
+        List<FotoResponseDTO> fotos = fotoService.getFotosPorParceiro(id);
+
+        try {
+            return ResponseEntity.ok(fotos);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("/{id}/animal/{animalId}")
     public ResponseEntity<HttpStatus> deletarFoto(@PathVariable Long id, @PathVariable Long animalId){
         try{
