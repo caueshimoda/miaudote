@@ -34,7 +34,7 @@ public class ParceiroService {
             parceiro.setSite(request.getSite());
 
             if (!parceiro.isValidDocumento())
-                throw new IllegalArgumentException("Documento do Parceiro inválido. Deve ter 11 dígitos se for protetor, e 14 dígitos se for ONG.");
+                throw new IllegalArgumentException("Documento do Parceiro inválido. Deve ser um CPF válido se for protetor, ou um CNPJ válido se for ONG.");
             
                 return parceiroRepository.save(parceiro);
 

@@ -39,12 +39,9 @@ public class Adotante {
     }
 
     public boolean isValidCpf() {
-        if (cpf == null) {
-            return false;
-        }
+        
+        return Validacao.isValidCPF(cpf);
 
-        // Apenas dígitos, exatamente 11
-        return cpf.matches("^\\d{11}$");
     }
 
 }

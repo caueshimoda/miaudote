@@ -76,7 +76,7 @@ public class AdotanteService {
 
         // Você acha que não vale jogar erros se houver problema, igual no cadastro? Deixei assim, se quiser pode voltar como tava.
         if (!adotanteExistente.isValidCpf())
-            throw new IllegalArgumentException("CPF do Adotante inválido, deve ser composto apenas por números e ter 11 dígitos.");
+            throw new IllegalArgumentException("CPF do Adotante inválido.");
 
         if (!adotanteExistente.isValidDataNascimento())
             throw new IllegalArgumentException("Data de Nascimento do Adotante inválida, não pode estar no futuro.");

@@ -41,13 +41,11 @@ public class Parceiro {
         if (tipo.name() == null) 
             return false;
 
-        // 14 dígitos para CNPJ
         if (tipo.name() == "ONG") 
-            return documento.matches("^\\d{14}$");
+            return Validacao.isValidCNPJ(documento);
 
-        // 11 dígitos para CPF
         if (tipo.name() == "Protetor") 
-            return documento.matches("^\\d{11}$");
+            return Validacao.isValidCPF(documento);
 
         return false;
     }
