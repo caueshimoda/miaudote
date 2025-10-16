@@ -33,9 +33,10 @@ public class ParceiroService {
             parceiro.setTipo(request.getTipo());
             parceiro.setSite(request.getSite());
 
-            if (!parceiro.isValidParceiro())
-                throw new IllegalArgumentException("Parceiro inválido, checar os dados");
-            return parceiroRepository.save(parceiro);
+            if (!parceiro.isValidDocumento())
+                throw new IllegalArgumentException("Documento do Parceiro inválido. Deve ter 11 dígitos se for protetor, e 14 dígitos se for ONG.");
+            
+                return parceiroRepository.save(parceiro);
 
         } catch (Exception e) {
             e.printStackTrace(); 
@@ -69,11 +70,10 @@ public class ParceiroService {
         Optional.ofNullable(novosDados.getTipo()).ifPresent(parceiroExistente::setTipo);
         Optional.ofNullable(novosDados.getSite()).ifPresent(parceiroExistente::setSite);
 
-        // validação dos novos dados
-        if(parceiroExistente.isValidParceiro())
-            parceiroRepository.save(parceiroExistente);
+        if (!parceiroExistente.isValidDocumento())
+                throw new IllegalArgumentException("Documento do Parceiro inválido. Deve ter 11 dígitos se for protetor, e 14 dígitos se for ONG.");
 
-        return parceiroExistente;
+        return parceiroRepository.save(parceiroExistente);
     }
 
     @Transactional 

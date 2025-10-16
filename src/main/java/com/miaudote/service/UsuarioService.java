@@ -33,9 +33,24 @@ public class UsuarioService {
 
     public Usuario cadastrarUsuario(UsuarioCadastroDTO dto){
         Usuario usuario = new Usuario();
-        if (!usuario.isValidSenha(dto.getSenha())) {
+        if (!usuario.isValidSenha(dto.getSenha())) 
             throw new IllegalArgumentException("Senha inválida! Ela deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e caractere especial.");
-        }
+        
+        if (!usuario.isValidNome())
+            throw new IllegalArgumentException("Nome do Usuário inválido, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+
+        if (!usuario.isValidCidade())
+            throw new IllegalArgumentException("Cidade do Usuário inválida, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+
+        if (!usuario.isValidEmail())
+            throw new IllegalArgumentException("Email do Usuário inválido.");
+
+        if (!usuario.isValidEstado())
+            throw new IllegalArgumentException("Estado do Usuário inválido.");
+
+        if (!usuario.isValidTelefone())
+            throw new IllegalArgumentException("Telefone do Usuário inválido.");
+
         usuario = usuarioMapper.toEntity(dto);
          // seta a 'senhaHash' com a criptografia de 'senha'
         usuario.setSenha_hash(passwordEncoder.encode(dto.getSenha()));

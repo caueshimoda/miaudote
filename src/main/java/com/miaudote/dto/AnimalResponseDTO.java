@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +32,8 @@ public class AnimalResponseDTO {
     private String descricao;
 
     public AnimalResponseDTO(Animal animal) {
+        Objects.requireNonNull(animal, "A entidade Animal não pode ser nula ao criar AnimalResponseDTO.");
+        
         this.id = animal.getId();
         this.nome = animal.getNome();
         this.especie = animal.getEspecie();

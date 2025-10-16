@@ -28,7 +28,7 @@ public class FotoService {
         this.animalRepository = animalRepository;
     }
 
-    // Como é uma lista de fotos, precisa ter o @Transactional pra ele desfazer o cadastro caso haja erro em alguma foto 
+    // Como é uma lista de fotos, precisa ter o @Transactional pra ele desfazer o cadastro caso haja erro em alguma 
     @Transactional
     public List<Foto> cadastrarFotos(Long animalId, List<MultipartFile> arquivos) throws IOException {
 
@@ -58,7 +58,7 @@ public class FotoService {
         Foto foto = fotoRepository.findById(fotoId)
                 .orElseThrow(() -> new RuntimeException("Foto não encontrada com ID: " + fotoId));
         
-        return new FotoResponseDTO(foto);
+        return new FotoResponseDTO(foto, foto.getAnimal());
     }
 
     public List<FotoResponseDTO> getFotosPorAnimal(Long animalId) {
@@ -67,7 +67,7 @@ public class FotoService {
         List<FotoResponseDTO> dtos = new ArrayList<>();
     
         // Depois de usar várias funções sofisticadas, vamos do bom e velho loop pra fazer funcionar essa lógica :D
-        // A ideia é mandar os dados do animal só na primeira foto, pra não duplicar dados.
+        // A ideia é mandar os dados do animal só na primeira foto, pra não duplicar dados
         for (int i = 0; i < fotos.size(); i++) {
             Foto foto = fotos.get(i);
             
@@ -75,7 +75,7 @@ public class FotoService {
                 // Usar o construtor que inclui os dados do animal quando for a primeira foto
                 dtos.add(new FotoResponseDTO(foto, foto.getAnimal()));
             } else {
-                // Para as outras: usa o construtor que não inclui os dados do animal.
+                // Para as outras: usa o construtor que não inclui os dados do animal
                 dtos.add(new FotoResponseDTO(foto)); 
             }
         }
@@ -83,10 +83,11 @@ public class FotoService {
         return dtos;
     }
 
-    public FotoResponseDTO getPrimeiraFotoDoAnimal(Long animalId) {
+    public FotoResponseDTO getPrimeiraFotoDoAnimal(Long animalId, boolean pegarDados) {
         Foto foto = fotoRepository.findFirstByAnimalIdOrderByIdAsc(animalId)
                 .orElseThrow(() -> new RuntimeException("Nenhuma foto encontrada para o animal ID: " + animalId));
-
+        if (pegarDados)
+            return new FotoResponseDTO(foto, foto.getAnimal());
         return new FotoResponseDTO(foto);
     }
 
@@ -95,8 +96,11 @@ public class FotoService {
 
         List<FotoResponseDTO> fotos = new ArrayList<>();
 
+        int i = 0;
+
         for (Animal animal : animais) {
-            fotos.add(getPrimeiraFotoDoAnimal(animal.getId()));
+            // Só vai pegar os dados se i for igual a zero, ou seja, primeiro animal da página
+            fotos.add(getPrimeiraFotoDoAnimal(animal.getId(), i == 0));
         }
 
         return fotos;

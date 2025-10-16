@@ -73,9 +73,13 @@ public class AdocaoSolicitadaService {
         Optional.ofNullable(novosDados.getStatus()).ifPresent(adocaoSolicitadaExistente::setStatus);
         Optional.ofNullable(novosDados.getDataFinalizacao()).ifPresent(adocaoSolicitadaExistente::setDataFinalizacao);
 
-        if (adocaoSolicitadaExistente.isValidAdocaoSolicitada()) {
-            adocaoSolicitadaRepository.save(adocaoSolicitadaExistente);
-        }
+        if (!adocaoSolicitadaExistente.isValidStatus()) 
+            throw new IllegalArgumentException("Status da adoção inválido.");    
+            
+        if (!adocaoSolicitadaExistente.isValidDataFinalizacao()) 
+            throw new IllegalArgumentException("A data de finalização da adoção não pode estar no futuro.");  
+
+        adocaoSolicitadaRepository.save(adocaoSolicitadaExistente);
 
         return new AdocaoSolicitadaResponseDTO(adocaoSolicitadaExistente);
     }

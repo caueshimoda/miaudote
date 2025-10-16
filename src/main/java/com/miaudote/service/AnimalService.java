@@ -47,8 +47,14 @@ public class AnimalService {
         animal.setObs(request.getObs());
         animal.setDescricao(request.getDescricao());
 
-        if (!animal.isValidAnimal())
-            throw new IllegalArgumentException("Animal inválido, checar os dados");
+        if (!animal.isValidEspecie())
+            throw new IllegalArgumentException("Espécie do Animal inválida, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+
+        if (!animal.isValidNome())
+            throw new IllegalArgumentException("Nome do Animal inválido, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+
+        if (!animal.isValidIdade())
+            throw new IllegalArgumentException("Idade do Animal inválida, não pode ser negativa.");
         
         Animal animalSalvo = animalRepository.save(animal);
 
@@ -100,11 +106,16 @@ public class AnimalService {
         Optional.ofNullable(novosDados.getDescricao()).ifPresent(animal::setDescricao);
         Optional.ofNullable(novosDados.getObs()).ifPresent(animal::setObs);
 
-        if (novosDados.isValidAnimal()){
-            animalRepository.save(animal);
-        }
+        if (!animal.isValidEspecie())
+            throw new IllegalArgumentException("Espécie do Animal inválida, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
 
-        return animal;
+        if (!animal.isValidNome())
+            throw new IllegalArgumentException("Nome do Animal inválido, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+
+        if (!animal.isValidIdade())
+            throw new IllegalArgumentException("Idade do Animal inválida, não pode ser negativa.");
+
+        return animalRepository.save(animal);
     }
 
     public void deletarAnimal(Long animalId, Long parceiroId) {

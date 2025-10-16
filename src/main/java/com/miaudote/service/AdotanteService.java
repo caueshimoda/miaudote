@@ -32,14 +32,17 @@ public class AdotanteService {
             adotante.setCpf(request.getCpf());
             adotante.setDataNascimento(request.getDataNascimento());
 
-            if (!adotante.isValidAdotante())
-                throw new IllegalArgumentException("Adotante inválido, checar os dados");
+            if (!adotante.isValidCpf())
+                throw new IllegalArgumentException("CPF do Adotante inválido, deve ser composto apenas por números e ter 11 dígitos.");
+
+            if (!adotante.isValidDataNascimento())
+                throw new IllegalArgumentException("Data de Nascimento do Adotante inválida, não pode estar no futuro.");
 
             return adotanteRepository.save(adotante);
 
         } catch (Exception e) {
             System.err.println("Erro ao cadastrar Adotante: " + e.getMessage());
-            e.printStackTrace(); // <-- mostra o stack trace completo no console
+            e.printStackTrace(); 
 
             if (savedUsuario != null && savedUsuario.getId() != null) {
                 usuarioService.deletarUsuario(savedUsuario.getId());
@@ -68,10 +71,17 @@ public class AdotanteService {
         Optional.ofNullable(novosDados.getCpf()).ifPresent(adotanteExistente::setCpf);
 
         // validação dos novos dados
-        if(adotanteExistente.isValidAdotante())
-            adotanteRepository.save(adotanteExistente);
+        // if(adotanteExistente.isValidAdotante())
+            // adotanteRepository.save(adotanteExistente);
 
-        return adotanteExistente;
+        // Você acha que não vale jogar erros se houver problema, igual no cadastro? Deixei assim, se quiser pode voltar como tava.
+        if (!adotanteExistente.isValidCpf())
+            throw new IllegalArgumentException("CPF do Adotante inválido, deve ser composto apenas por números e ter 11 dígitos.");
+
+        if (!adotanteExistente.isValidDataNascimento())
+            throw new IllegalArgumentException("Data de Nascimento do Adotante inválida, não pode estar no futuro.");
+
+        return adotanteRepository.save(adotanteExistente);
     }
 
     @Transactional 

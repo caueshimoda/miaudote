@@ -58,7 +58,7 @@ public class FotoController {
 
     @GetMapping("/first_animal/{id}")
     public ResponseEntity<FotoResponseDTO> getPrimeiraFotoDoAnimal(@PathVariable Long id) {
-        FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(id);
+        FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(id, true);
 
         try {
             return ResponseEntity.ok(foto);

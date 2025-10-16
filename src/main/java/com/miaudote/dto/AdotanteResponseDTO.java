@@ -1,5 +1,7 @@
 package com.miaudote.dto;
 
+import java.util.Objects;
+
 import com.miaudote.model.Adotante;
 import lombok.Getter;
 
@@ -19,15 +21,16 @@ public class AdotanteResponseDTO {
     private String estado;
 
     public AdotanteResponseDTO(Adotante adotante) {
-        this.id = adotante.getId();
+        Objects.requireNonNull(adotante, "A entidade Adotante não pode ser nula ao criar AdotanteResponseDTO.");
+        Objects.requireNonNull(adotante.getUsuario(), "A entidade Usuario não pode ser nula ao criar AdotanteResponseDTO.");
 
-        if (adotante.getUsuario() != null) {
-            this.nome = adotante.getUsuario().getNome();
-            this.email = adotante.getUsuario().getEmail();
-            this.telefone = adotante.getUsuario().getTelefone();
-            this.cidade = adotante.getUsuario().getCidade();
-            this.estado = adotante.getUsuario().getEstado();
-        }
+        this.id = adotante.getId();
+        this.nome = adotante.getUsuario().getNome();
+        this.email = adotante.getUsuario().getEmail();
+        this.telefone = adotante.getUsuario().getTelefone();
+        this.cidade = adotante.getUsuario().getCidade();
+        this.estado = adotante.getUsuario().getEstado();
+    
     }
 
 }
