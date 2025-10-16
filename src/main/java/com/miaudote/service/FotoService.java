@@ -64,9 +64,23 @@ public class FotoService {
     public List<FotoResponseDTO> getFotosPorAnimal(Long animalId) {
         List<Foto> fotos = fotoRepository.findByAnimalId(animalId);
 
-        return fotos.stream()
-               .map(FotoResponseDTO::new)
-               .toList();
+        List<FotoResponseDTO> dtos = new ArrayList<>();
+    
+        // Depois de usar várias funções sofisticadas, vamos do bom e velho loop pra fazer funcionar essa lógica :D
+        // A ideia é mandar os dados do animal só na primeira foto, pra não duplicar dados.
+        for (int i = 0; i < fotos.size(); i++) {
+            Foto foto = fotos.get(i);
+            
+            if (i == 0) {
+                // Usar o construtor que inclui os dados do animal quando for a primeira foto
+                dtos.add(new FotoResponseDTO(foto, foto.getAnimal()));
+            } else {
+                // Para as outras: usa o construtor que não inclui os dados do animal.
+                dtos.add(new FotoResponseDTO(foto)); 
+            }
+        }
+        
+        return dtos;
     }
 
     public FotoResponseDTO getPrimeiraFotoDoAnimal(Long animalId) {
