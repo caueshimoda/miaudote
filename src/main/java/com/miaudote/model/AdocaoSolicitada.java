@@ -36,7 +36,7 @@ public class AdocaoSolicitada {
 
     public boolean isValidAdocaoSolicitada() {
 
-        return isValidStatus() && isValidDataFinalizacao();
+        return isValidStatus();
     }
 
     public boolean isValidStatus() {
@@ -50,17 +50,6 @@ public class AdocaoSolicitada {
 
         return validos.contains(status);
     }
-
-    public boolean isValidDataFinalizacao() {
-        if (dataFinalizacao == null) {
-            if (status == null || status.substring(0, "Finalizada".length()).equals("Finalizada"))
-                return false;
-            return true;
-        }
-
-        return Validacao.isValidData(dataFinalizacao);
-    }
-
 
 
 }

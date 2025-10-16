@@ -1,6 +1,7 @@
 package com.miaudote.controller;
 
 import com.miaudote.model.AdocaoSolicitada;
+import com.miaudote.dto.AdocaoComFotoDTO;
 import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.dto.AdocaoSolicitadaResponseDTO;
 import com.miaudote.service.AdocaoSolicitadaService;
@@ -34,8 +35,8 @@ public class AdocaoSolicitadaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdocaoSolicitadaResponseDTO> getAdocaoSolicitadaById(@PathVariable Long id) {
-        AdocaoSolicitadaResponseDTO adocaoSolicitadaDTO = adocaoSolicitadaService.getAdocaoSolicitada(id);
+    public ResponseEntity<AdocaoComFotoDTO> getAdocaoSolicitadaById(@PathVariable Long id) {
+        AdocaoComFotoDTO adocaoSolicitadaDTO = adocaoSolicitadaService.getAdocaoSolicitada(id);
         
         try {
             return ResponseEntity.ok(adocaoSolicitadaDTO);
@@ -45,9 +46,9 @@ public class AdocaoSolicitadaController {
     }
 
     @GetMapping("/adotante/{id}")
-    public ResponseEntity<List<AdocaoSolicitadaResponseDTO>> getSolicitacoesByAdotante(@PathVariable Long id) {
+    public ResponseEntity<List<AdocaoComFotoDTO>> getSolicitacoesByAdotante(@PathVariable Long id) {
 
-        List<AdocaoSolicitadaResponseDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorAdotante(id);
+        List<AdocaoComFotoDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorAdotante(id);
         
         try {
             return ResponseEntity.ok(solicitacoes);
@@ -57,8 +58,8 @@ public class AdocaoSolicitadaController {
     }
 
     @GetMapping("/parceiro/{id}")
-    public ResponseEntity<List<AdocaoSolicitadaResponseDTO>> getSolicitacoesByParceiro(@PathVariable Long id) {
-        List<AdocaoSolicitadaResponseDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorParceiro(id);
+    public ResponseEntity<List<AdocaoComFotoDTO>> getSolicitacoesByParceiro(@PathVariable Long id) {
+        List<AdocaoComFotoDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorParceiro(id);
         
         try {
             return ResponseEntity.ok(solicitacoes);

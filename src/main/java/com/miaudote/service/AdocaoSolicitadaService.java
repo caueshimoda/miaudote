@@ -1,7 +1,9 @@
 package com.miaudote.service;
 
+import com.miaudote.dto.AdocaoComFotoDTO;
 import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.dto.AdocaoSolicitadaResponseDTO;
+import com.miaudote.dto.FotoResponseDTO;
 import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Adotante;
@@ -11,6 +13,9 @@ import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.AdocaoSolicitadaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +25,13 @@ public class AdocaoSolicitadaService {
     private final AdocaoSolicitadaRepository adocaoSolicitadaRepository;
     private final AnimalRepository animalRepository;
     private final AdotanteRepository adotanteRepository;
+    private final FotoService fotoService; 
 
-    public AdocaoSolicitadaService(AdocaoSolicitadaRepository adocaoSolicitadaRepository, AnimalRepository animalRepository, AdotanteRepository adotanteRepository) {
+    public AdocaoSolicitadaService(AdocaoSolicitadaRepository adocaoSolicitadaRepository, AnimalRepository animalRepository, AdotanteRepository adotanteRepository, FotoService fotoService) {
         this.adocaoSolicitadaRepository = adocaoSolicitadaRepository;
         this.animalRepository = animalRepository;
         this.adotanteRepository = adotanteRepository;
+        this.fotoService = fotoService;
     }
 
 
@@ -44,26 +51,38 @@ public class AdocaoSolicitadaService {
         return new AdocaoSolicitadaResponseDTO(solicitacao);
     }
 
-    public AdocaoSolicitadaResponseDTO getAdocaoSolicitada(Long id) {
+    public AdocaoComFotoDTO getAdocaoSolicitada(Long id) {
         AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("AdocaoSolicitada não encontrado com id: " + id));
-        return new AdocaoSolicitadaResponseDTO(adocaoSolicitada);
+
+        FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(adocaoSolicitada.getAnimal().getId(), true);
+        return new AdocaoComFotoDTO(adocaoSolicitada, foto);
     }
 
-    public List<AdocaoSolicitadaResponseDTO> getSolicitacoesPorAdotante(Long adotanteId) {
+    public List<AdocaoComFotoDTO> getSolicitacoesPorAdotante(Long adotanteId) {
         List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAdotanteId(adotanteId);
 
-        return solicitacoes.stream()
-               .map(AdocaoSolicitadaResponseDTO::new)
-               .toList();
+        List<AdocaoComFotoDTO> dtos = new ArrayList<>();
+
+        for (AdocaoSolicitada adocao: solicitacoes) {
+            FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(adocao.getAnimal().getId(), true);
+            dtos.add(new AdocaoComFotoDTO(adocao, foto));
+        }
+
+        return dtos;
     }
 
-    public List<AdocaoSolicitadaResponseDTO> getSolicitacoesPorParceiro(Long parceiroId) {
+    public List<AdocaoComFotoDTO> getSolicitacoesPorParceiro(Long parceiroId) {
         List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAnimalParceiroId(parceiroId);
 
-        return solicitacoes.stream()
-               .map(AdocaoSolicitadaResponseDTO::new)
-               .toList();
+        List<AdocaoComFotoDTO> dtos = new ArrayList<>();
+
+        for (AdocaoSolicitada adocao: solicitacoes) {
+            FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(adocao.getAnimal().getId(), true);
+            dtos.add(new AdocaoComFotoDTO(adocao, foto));
+        }
+
+        return dtos;
     }
 
     public AdocaoSolicitadaResponseDTO atualizarAdocaoSolicitada(Long id, AdocaoSolicitada novosDados){
@@ -71,13 +90,12 @@ public class AdocaoSolicitadaService {
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
 
         Optional.ofNullable(novosDados.getStatus()).ifPresent(adocaoSolicitadaExistente::setStatus);
-        Optional.ofNullable(novosDados.getDataFinalizacao()).ifPresent(adocaoSolicitadaExistente::setDataFinalizacao);
 
         if (!adocaoSolicitadaExistente.isValidStatus()) 
             throw new IllegalArgumentException("Status da adoção inválido.");    
-            
-        if (!adocaoSolicitadaExistente.isValidDataFinalizacao()) 
-            throw new IllegalArgumentException("A data de finalização da adoção não pode estar no futuro.");  
+
+        if (novosDados.getStatus() != null && novosDados.getStatus().substring(0, "Finalizada".length()).equals("Finalizada"))
+            adocaoSolicitadaExistente.setDataFinalizacao(LocalDate.now());
 
         adocaoSolicitadaRepository.save(adocaoSolicitadaExistente);
 
