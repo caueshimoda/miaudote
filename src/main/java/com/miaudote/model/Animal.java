@@ -82,4 +82,8 @@ public class Animal {
     public boolean isValidIdade() {
         return getIdadeInicial() >= 0;
     }
+
+    public boolean isDisponivel() {
+        return status.equals(Status.Disponível);
+    }
 }

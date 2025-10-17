@@ -44,11 +44,7 @@ public class AdocaoSolicitada {
         if (status == null)
             return false;
 
-        List<String> validos = Arrays.asList("Em andamento", "Na fila", "Finalizada com adoção", 
-                                            "Finalizada com adoção de terceiros", "Finalizada por desistência do parceiro", 
-                                            "Finalizada por desistência do adotante"); 
-
-        return validos.contains(status);
+        return StatusAdocao.isValidStatus(status);
     }
 
 

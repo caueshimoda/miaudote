@@ -6,6 +6,7 @@ import com.miaudote.dto.AdocaoSolicitadaResponseDTO;
 import com.miaudote.dto.FotoResponseDTO;
 import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.Animal;
+import com.miaudote.model.StatusAdocao;
 import com.miaudote.model.Adotante;
 import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
@@ -41,10 +42,13 @@ public class AdocaoSolicitadaService {
         Animal animal = animalRepository.findById(request.getAnimalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
+        if (!animal.isDisponivel())
+            throw new RuntimeException("Animal indisponível para adoção");
+
         AdocaoSolicitada solicitacao = new AdocaoSolicitada();
         solicitacao.setAdotante(adotante);
         solicitacao.setAnimal(animal);
-        solicitacao.setStatus("Em andamento");
+        solicitacao.setStatus(StatusAdocao.EM_ANDAMENTO);
 
         adocaoSolicitadaRepository.save(solicitacao);
 
@@ -53,7 +57,7 @@ public class AdocaoSolicitadaService {
 
     public AdocaoComFotoDTO getAdocaoSolicitada(Long id) {
         AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("AdocaoSolicitada não encontrado com id: " + id));
+            .orElseThrow(() -> new RuntimeException("Solicitação não encontrado com id: " + id));
 
         FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(adocaoSolicitada.getAnimal().getId(), true);
         return new AdocaoComFotoDTO(adocaoSolicitada, foto);
@@ -89,12 +93,15 @@ public class AdocaoSolicitadaService {
         AdocaoSolicitada adocaoSolicitadaExistente = adocaoSolicitadaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
 
+        if (!StatusAdocao.isAberta(adocaoSolicitadaExistente.getStatus()))
+            throw new RuntimeException("Soliticações finalizadas não podem ser atualizadas");
+
         Optional.ofNullable(novosDados.getStatus()).ifPresent(adocaoSolicitadaExistente::setStatus);
 
         if (!adocaoSolicitadaExistente.isValidStatus()) 
             throw new IllegalArgumentException("Status da adoção inválido.");    
 
-        if (novosDados.getStatus() != null && novosDados.getStatus().substring(0, "Finalizada".length()).equals("Finalizada"))
+        if (novosDados.getStatus() != null && !StatusAdocao.isAberta(novosDados.getStatus()))
             adocaoSolicitadaExistente.setDataFinalizacao(LocalDate.now());
 
         adocaoSolicitadaRepository.save(adocaoSolicitadaExistente);
