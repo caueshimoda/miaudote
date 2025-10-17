@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.miaudote.model.Parceiro;
 import com.miaudote.dto.ParceiroCadastroDTO;
 import com.miaudote.dto.ParceiroResponseDTO;
+import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.ParceiroRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -57,22 +58,20 @@ public class ParceiroService {
     }
 
     @Transactional
-    public Parceiro atualizarParceiro(Long id, Parceiro novosDados){
+    public Parceiro atualizarParceiro(Long id, ParceiroCadastroDTO novosDados){
         Parceiro parceiroExistente = parceiroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado"));
 
         //todo: criar método separado para o merge de dados novos com os existentes
-        Usuario novoUsuario = novosDados.getUsuario();
+        UsuarioCadastroDTO novoUsuario = novosDados.getUsuario();
         Optional.ofNullable(novoUsuario)
             .ifPresent(usuario -> {
                 usuarioService.atualizarUsuario(id, usuario); 
             });
-        Optional.ofNullable(novosDados.getDocumento()).ifPresent(parceiroExistente::setDocumento);
-        Optional.ofNullable(novosDados.getTipo()).ifPresent(parceiroExistente::setTipo);
+            // Não vamos deixar atualizar documento
+            // Optional.ofNullable(novosDados.getDocumento()).ifPresent(parceiroExistente::setDocumento); 
+            
         Optional.ofNullable(novosDados.getSite()).ifPresent(parceiroExistente::setSite);
-
-        if (!parceiroExistente.isValidDocumento())
-                throw new IllegalArgumentException("Documento do Parceiro inválido. Deve ter 11 dígitos se for protetor, e 14 dígitos se for ONG.");
 
         return parceiroRepository.save(parceiroExistente);
     }

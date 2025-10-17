@@ -3,11 +3,14 @@ package com.miaudote.dto;
 import java.util.Objects;
 
 import com.miaudote.model.AdocaoSolicitada;
-import com.miaudote.model.Foto;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AdocaoComFotoDTO {
 
     private Long id; 

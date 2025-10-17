@@ -6,11 +6,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.miaudote.model.Animal;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AnimalRequest {
 
     private long parceiroId;

@@ -25,14 +25,15 @@ public class UsuarioController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioCadastroDTO dto){
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioCadastroDTO dto){
         try {
             Usuario usuario = usuarioService.cadastrarUsuario(dto);
             UsuarioDTO respostaDTO = usuarioMapper.toDTO(usuario);
             return new ResponseEntity<>(respostaDTO, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao cadastrar usuário: " + e.getMessage());
         }
     }
 
@@ -53,18 +54,17 @@ public class UsuarioController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
+    public ResponseEntity<?> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioCadastroDTO usuario){
+        
         try {
-            if(!usuario.isValidUsuario())
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
             Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuario);
             //todo: e se o usuário retornar com os mesmos dados?
 
-            return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
+            return new ResponseEntity<>(new UsuarioDTO(usuarioAtualizado), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao cadastrar usuário: " + e.getMessage());
         }
     }
 

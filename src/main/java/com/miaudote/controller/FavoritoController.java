@@ -21,35 +21,38 @@ public class FavoritoController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<FavoritoResponseDTO> cadastrarFavorito(@RequestBody FavoritoRequest request){
+    public ResponseEntity<?> cadastrarFavorito(@RequestBody FavoritoRequest request){
         try {
             FavoritoResponseDTO favorito = favoritoService.cadastrarFavorito(request);
             return new ResponseEntity<>(favorito, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao cadastrar favorito: " + e.getMessage());
         }
     }
 
      @GetMapping("/{id}")
-    public ResponseEntity<FavoritoResponseDTO> getFavoritoById(@PathVariable Long id) {
+    public ResponseEntity<?> getFavoritoById(@PathVariable Long id) {
         FavoritoResponseDTO favoritoDTO = favoritoService.getFavorito(id);
         
         try {
             return ResponseEntity.ok(favoritoDTO);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar favorito: " + e.getMessage());
         }
     }
 
     @GetMapping("/adotante/{id}")
-    public ResponseEntity<List<FavoritoResponseDTO>> getFavoritosByAdotanteId(@PathVariable Long id) {
+    public ResponseEntity<?> getFavoritosByAdotanteId(@PathVariable Long id) {
         List<FavoritoResponseDTO> favoritos = favoritoService.getFavoritosPorAdotante(id);
 
         try {
             return ResponseEntity.ok(favoritos);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar favoritos: " + e.getMessage());
         }
     } 
 

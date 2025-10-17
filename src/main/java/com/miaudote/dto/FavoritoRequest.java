@@ -1,8 +1,12 @@
 package com.miaudote.dto;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class FavoritoRequest {
 
     private Long adotanteId;

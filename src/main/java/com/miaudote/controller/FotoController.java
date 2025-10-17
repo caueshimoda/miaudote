@@ -35,46 +35,50 @@ public class FotoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FotoResponseDTO> getFoto(@PathVariable Long id) {
+    public ResponseEntity<?> getFoto(@PathVariable Long id) {
         FotoResponseDTO fotoDTO = fotoService.getFoto(id);
 
         try {
             return ResponseEntity.ok(fotoDTO);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar a foto: " + e.getMessage());
         }
     }
 
     @GetMapping("/animal/{id}")
-    public ResponseEntity<List<FotoResponseDTO>> getFotoPorAnimal(@PathVariable Long id) {
+    public ResponseEntity<?> getFotoPorAnimal(@PathVariable Long id) {
         List<FotoResponseDTO> fotos = fotoService.getFotosPorAnimal(id);
 
         try {
             return ResponseEntity.ok(fotos);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar as fotos: " + e.getMessage());
         }
     }
 
     @GetMapping("/first_animal/{id}")
-    public ResponseEntity<FotoResponseDTO> getPrimeiraFotoDoAnimal(@PathVariable Long id) {
+    public ResponseEntity<?> getPrimeiraFotoDoAnimal(@PathVariable Long id) {
         FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(id, true);
 
         try {
             return ResponseEntity.ok(foto);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar a foto: " + e.getMessage());
         }
     }
 
     @GetMapping("/parceiro/{id}")
-    public ResponseEntity<List<FotoResponseDTO>> getFotosPorParceiro(@PathVariable Long id) {
+    public ResponseEntity<?> getFotosPorParceiro(@PathVariable Long id) {
         List<FotoResponseDTO> fotos = fotoService.getFotosPorParceiro(id);
 
         try {
             return ResponseEntity.ok(fotos);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar as fotos: " + e.getMessage());
         }
     }
 

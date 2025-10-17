@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.miaudote.model.Adotante;
 import com.miaudote.dto.AdotanteCadastroDTO;
 import com.miaudote.dto.AdotanteResponseDTO;
+import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.AdotanteRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -60,27 +61,18 @@ public class AdotanteService {
     }
 
     @Transactional
-    public Adotante atualizarAdotante(Long id, Adotante novosDados){
+    public Adotante atualizarAdotante(Long id, AdotanteCadastroDTO novosDados){
         Adotante adotanteExistente = adotanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("adotante não encontrado"));
 
-        Usuario novoUsuario = novosDados.getUsuario();
+        UsuarioCadastroDTO novoUsuario = novosDados.getUsuario();
         Optional.ofNullable(novoUsuario)
             .ifPresent(usuario -> {
                 usuarioService.atualizarUsuario(id, usuario); 
             });
-        Optional.ofNullable(novosDados.getCpf()).ifPresent(adotanteExistente::setCpf);
 
-        // validação dos novos dados
-        // if(adotanteExistente.isValidAdotante())
-            // adotanteRepository.save(adotanteExistente);
-
-        // Você acha que não vale jogar erros se houver problema, igual no cadastro? Deixei assim, se quiser pode voltar como tava.
-        if (!adotanteExistente.isValidCpf())
-            throw new IllegalArgumentException("CPF do Adotante inválido.");
-
-        if (!adotanteExistente.isValidDataNascimento())
-            throw new IllegalArgumentException("Data de Nascimento do Adotante inválida, não pode estar no futuro.");
+        // Não vamos deixar atualizar documento
+        // Optional.ofNullable(novosDados.getCpf()).ifPresent(adotanteExistente::setCpf);
 
         return adotanteRepository.save(adotanteExistente);
     }

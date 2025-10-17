@@ -4,9 +4,14 @@ import java.util.Objects;
 
 import com.miaudote.model.Animal;
 import com.miaudote.model.Foto;
-import lombok.Getter;
 
-@Getter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class FotoResponseDTO {
 
     private Long id;

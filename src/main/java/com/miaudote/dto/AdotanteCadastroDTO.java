@@ -2,9 +2,13 @@ package com.miaudote.dto;
 
 import java.time.LocalDate;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AdotanteCadastroDTO {
     private UsuarioCadastroDTO usuario;
     private String cpf;

@@ -1,5 +1,9 @@
 package com.miaudote.dto;
 
+import java.util.Objects;
+
+import com.miaudote.model.Usuario;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +16,15 @@ public class UsuarioDTO {
     private String nome;
     private String email;
     private String telefone;
+
+    public UsuarioDTO(Usuario usuario) {
+      Objects.requireNonNull(usuario, "A entidade Usuário não pode ser nula ao criar UsuarioDTO.");
+        this.id = usuario.getId();
+        this.email = usuario.getEmail();
+        this.telefone = usuario.getTelefone();
+        this.nome = usuario.getNome();
+
+    }
     //private Usuario.TipoUsuario tipoUsuario;
 
     /* Por que a classe não retorna os dados do endereço e cpf/cnpj?

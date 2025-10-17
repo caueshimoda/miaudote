@@ -3,9 +3,14 @@ package com.miaudote.dto;
 import java.util.Objects;
 
 import com.miaudote.model.Adotante;
-import lombok.Getter;
 
-@Getter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AdotanteResponseDTO {
 
     private Long id;

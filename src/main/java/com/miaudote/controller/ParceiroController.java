@@ -21,29 +21,31 @@ public class ParceiroController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Parceiro> cadastrarParceiro(@RequestBody ParceiroCadastroDTO request){
+    public ResponseEntity<?> cadastrarParceiro(@RequestBody ParceiroCadastroDTO request){
         try {
             Parceiro parceiro = parceiroService.cadastrarParceiro(request);
             return new ResponseEntity<>(parceiro, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao cadastrar parceiro: " + e.getMessage());
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ParceiroResponseDTO> getParceiroById(@PathVariable Long id) {
+    public ResponseEntity<?> getParceiroById(@PathVariable Long id) {
         ParceiroResponseDTO parceiroDTO = parceiroService.getParceiro(id);
         
         try {
             return ResponseEntity.ok(parceiroDTO);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar parceiro: " + e.getMessage());
         }
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Parceiro> atualizarParceiro(@PathVariable Long id, @RequestBody Parceiro parceiro){
+    public ResponseEntity<?> atualizarParceiro(@PathVariable Long id, @RequestBody ParceiroCadastroDTO parceiro){
 
         try {
 
@@ -52,7 +54,8 @@ public class ParceiroController {
             return new ResponseEntity<>(parceiroAtualizado, HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao atualizar parceiro: " + e.getMessage());
         }
     }
 

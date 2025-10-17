@@ -3,9 +3,14 @@ package com.miaudote.dto;
 import java.util.Objects;
 
 import com.miaudote.model.Favorito;
-import lombok.Getter;
 
-@Getter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class FavoritoResponseDTO {
 
     private Long id; 

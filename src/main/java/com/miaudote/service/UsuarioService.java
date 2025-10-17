@@ -71,7 +71,7 @@ public class UsuarioService {
         return usuario;
     }
 
-    public Usuario atualizarUsuario(Long id, Usuario novosDados){
+    public Usuario atualizarUsuario(Long id, UsuarioCadastroDTO novosDados){
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -84,18 +84,30 @@ public class UsuarioService {
 
         // atualizar a senha é opcional, mas se uma nova senha for informada:
         if(novosDados.getSenha() != null && !novosDados.getSenha().isEmpty()){
-            if (!novosDados.isValidSenha(novosDados.getSenha()))
+            if (!usuarioExistente.isValidSenha(novosDados.getSenha()))
                 throw new IllegalArgumentException("Senha inválida");
             
             usuarioExistente.setSenha_hash(passwordEncoder.encode(novosDados.getSenha()));
             
         }
 
-        // validação dos novos dados
-        if(usuarioExistente.isValidUsuario())
-            usuarioRepository.save(usuarioExistente);
+        // Você acha que não vale jogar erros se houver problema, igual no cadastro? Deixei assim, se quiser pode voltar como tava.
+        if (!usuarioExistente.isValidCidade()) 
+            throw new IllegalArgumentException("Cidade inválida");
+        if (!usuarioExistente.isValidEmail()) 
+            throw new IllegalArgumentException("E-mail inválido");
+        if (!usuarioExistente.isValidEstado()) 
+            throw new IllegalArgumentException("Estado inválido");
+        if (!usuarioExistente.isValidNome()) 
+            throw new IllegalArgumentException("Nome inválido");
+        if (!usuarioExistente.isValidTelefone()) 
+            throw new IllegalArgumentException("Telefone inválido");
 
-        return usuarioExistente;
+        // validação dos novos dados
+        //if(usuarioExistente.isValidUsuario())
+            //usuarioRepository.save(usuarioExistente);
+
+        return usuarioRepository.save(usuarioExistente);
     }
 
     public void deletarUsuario(Long id){

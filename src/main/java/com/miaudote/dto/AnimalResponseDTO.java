@@ -7,8 +7,11 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
 
-@Data
+import lombok.AllArgsConstructor;
+
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AnimalResponseDTO {
 
     private Long id;

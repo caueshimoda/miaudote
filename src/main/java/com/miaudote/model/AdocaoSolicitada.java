@@ -1,13 +1,15 @@
 package com.miaudote.model;
 
 import java.time.LocalDate;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Arrays;
 
 @Entity
 @Table(name="adocoes_solicitadas")
@@ -33,6 +35,9 @@ public class AdocaoSolicitada {
     
     @Column(name = "data_finalizacao")
     private LocalDate dataFinalizacao;
+
+    @Column(name="data_cad", insertable = false, updatable = false)
+    private LocalDate dataCadastro;
 
     public boolean isValidAdocaoSolicitada() {
 

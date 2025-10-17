@@ -31,7 +31,7 @@ public class AnimalController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<AnimalResponseDTO> cadastrarAnimal(@ModelAttribute AnimalRequest request) {
+    public ResponseEntity<?> cadastrarAnimal(@ModelAttribute AnimalRequest request) {
         if (request.getFotos() == null || request.getFotos().isEmpty()) {
             throw new IllegalArgumentException("Pelo menos uma foto é obrigatória para o cadastro do animal.");
         }
@@ -41,12 +41,11 @@ public class AnimalController {
             return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
 
         } catch (IOException e) {
-                System.out.println("Erro ao processar arquivo(s)");
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return ResponseEntity.badRequest().body("Erro ao processar arquivo(s)" + e.getMessage());
 
         } catch (RuntimeException e) {
-                System.out.println(e.getMessage());
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                e.printStackTrace(); 
+                return ResponseEntity.badRequest().body("Erro ao cadastrar animal: " + e.getMessage());
         }
     }
 
@@ -58,47 +57,51 @@ public class AnimalController {
     */
 
     @GetMapping("/{id}")
-    public ResponseEntity<AnimalResponseDTO> getAnimal(@PathVariable Long id) {
+    public ResponseEntity<?> getAnimal(@PathVariable Long id) {
         try {
             AnimalResponseDTO animal = animalService.getAnimal(id);
             return ResponseEntity.ok(animal);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar animal: " + e.getMessage());
         }
     }
 
     @GetMapping("/parceiro/{parceiroId}")
-    public ResponseEntity<List<AnimalResponseDTO>> getAnimaisPorParceiro(@PathVariable Long parceiroId) {
+    public ResponseEntity<?> getAnimaisPorParceiro(@PathVariable Long parceiroId) {
         try {
             List<AnimalResponseDTO> animais = animalService.getAnimaisPorParceiro(parceiroId);
             return ResponseEntity.ok(animais);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar animais: " + e.getMessage());
         }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<AnimalResponseDTO>> getAnimais() {
+    public ResponseEntity<?> getAnimais() {
         try {
             List<AnimalResponseDTO> animais = animalService.getAnimais();
             return ResponseEntity.ok(animais);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar animais: " + e.getMessage());
         }
     }
 
     @PatchMapping("/{animalId}/parceiro/{parceiroId}")
-    public ResponseEntity<Animal> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId,
+    public ResponseEntity<?> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId,
                                                   @RequestBody Animal novosDados) {
         try {
             Animal animalAtualizado = animalService.atualizarAnimal(animalId, parceiroId, novosDados);
-            return new ResponseEntity<>(animalAtualizado, HttpStatus.OK);
+            return new ResponseEntity<>(new AnimalResponseDTO(animalAtualizado), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao atualizar animal: " + e.getMessage()); 
         }
     }
 

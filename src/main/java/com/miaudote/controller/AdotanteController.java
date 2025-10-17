@@ -20,37 +20,40 @@ public class AdotanteController {
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Adotante> cadastrarAdotante(@RequestBody AdotanteCadastroDTO request){
+    public ResponseEntity<?> cadastrarAdotante(@RequestBody AdotanteCadastroDTO request){
         try {
-            Adotante Adotante = adotanteService.cadastrarAdotante(request);
-            return new ResponseEntity<>(Adotante, HttpStatus.CREATED);
+            Adotante adotante = adotanteService.cadastrarAdotante(request);
+            return new ResponseEntity<>(new AdotanteResponseDTO(adotante), HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao cadastrar adotante: " + e.getMessage());
         }
     }  
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdotanteResponseDTO> getAdotanteById(@PathVariable Long id) {
+    public ResponseEntity<?> getAdotanteById(@PathVariable Long id) {
         AdotanteResponseDTO adotanteDTO = adotanteService.getAdotante(id);
         
         try {
             return ResponseEntity.ok(adotanteDTO);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar adotante: " + e.getMessage());
         }
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Adotante> atualizarAdotante(@PathVariable Long id, @RequestBody Adotante adotante){
+    public ResponseEntity<?> atualizarAdotante(@PathVariable Long id, @RequestBody AdotanteCadastroDTO adotante){
         try {
 
             Adotante adotanteAtualizado = adotanteService.atualizarAdotante(id, adotante);
 
-            return new ResponseEntity<>(adotanteAtualizado, HttpStatus.OK);
+            return new ResponseEntity<>(new AdotanteResponseDTO(adotanteAtualizado), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao atualizar adotante: " + e.getMessage());
         }
     }
 

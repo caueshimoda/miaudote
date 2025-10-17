@@ -3,9 +3,14 @@ package com.miaudote.dto;
 import java.util.Objects;
 
 import com.miaudote.model.Parceiro;
-import lombok.Getter;
 
-@Getter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class ParceiroResponseDTO {
 
     private Long id;

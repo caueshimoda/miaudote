@@ -1,17 +1,25 @@
 package com.miaudote.dto;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import com.miaudote.model.AdocaoSolicitada;
-import lombok.Getter;
+import com.miaudote.model.StatusAdocao;
 
-@Getter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AdocaoSolicitadaResponseDTO {
 
     private Long id; 
     private AdotanteResponseDTO adotante;
     private AnimalResponseDTO animal;
     private String status;
+    LocalDate dataCadastro;
 
     public AdocaoSolicitadaResponseDTO(AdocaoSolicitada adocaoSolicitada) {
         Objects.requireNonNull(adocaoSolicitada, "A entidade Adoção Solicitada não pode ser nula ao criar AdocaoSolicitadalResponseDTO.");
@@ -19,17 +27,14 @@ public class AdocaoSolicitadaResponseDTO {
         this.id = adocaoSolicitada.getId();
         this.adotante = new AdotanteResponseDTO(adocaoSolicitada.getAdotante());
         this.animal = new AnimalResponseDTO(adocaoSolicitada.getAnimal());
+        this.dataCadastro = adocaoSolicitada.getDataCadastro();
 
-        if (adocaoSolicitada.getStatus() == null) {
-            this.status = "Status Indefinido"; 
-        } else if (adocaoSolicitada.getStatus().equals("Em andamento") || adocaoSolicitada.getStatus().equals("Na fila")) {
-            this.status = "Solitação Aberta"; 
-        } else if (adocaoSolicitada.getStatus().substring(0, "Finalizada".length()).equals("Finalizada")) {
+        if (adocaoSolicitada.getStatus() == null) 
+            this.status = "Indefinido"; 
+        else if (StatusAdocao.isAberta(adocaoSolicitada.getStatus())) 
+            this.status = "Em Aberto"; 
+        else 
             this.status = "Encerrada";
-        }
-        else {
-            this.status = "Status da solicitação: desconhecido";
-        }
     }
 
 }
