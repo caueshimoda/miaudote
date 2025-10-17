@@ -7,11 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-//import java.util.List;
-
 @Entity
 @Table(name="Animais")
 @NoArgsConstructor

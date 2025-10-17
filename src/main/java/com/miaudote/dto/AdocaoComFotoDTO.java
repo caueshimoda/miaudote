@@ -17,8 +17,8 @@ public class AdocaoComFotoDTO {
     private AdocaoSolicitadaResponseDTO adocao;
 
     public AdocaoComFotoDTO(AdocaoSolicitada adocaoSolicitada, FotoResponseDTO foto) {
-        Objects.requireNonNull(adocaoSolicitada, "A entidade Adoção Solicitada não pode ser nula ao criar AdocaoSolicitadalResponseDTO.");
-        Objects.requireNonNull(foto, "A entidade Foto não pode ser nula ao criar AdocaoSolicitadalResponseDTO.");
+        Objects.requireNonNull(adocaoSolicitada, "A entidade Adoção Solicitada não pode ser nula ao criar AdocaoComFotoDTO.");
+        Objects.requireNonNull(foto, "A entidade Foto não pode ser nula ao criar AdocaoComFotoDTO.");
 
         this.adocao = new AdocaoSolicitadaResponseDTO(adocaoSolicitada);
         this.foto = foto;

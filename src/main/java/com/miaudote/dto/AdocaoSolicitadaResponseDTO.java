@@ -19,6 +19,7 @@ public class AdocaoSolicitadaResponseDTO {
     private AdotanteResponseDTO adotante;
     private AnimalResponseDTO animal;
     private String status;
+    private String cpf;
     LocalDate dataCadastro;
 
     public AdocaoSolicitadaResponseDTO(AdocaoSolicitada adocaoSolicitada) {
@@ -28,6 +29,8 @@ public class AdocaoSolicitadaResponseDTO {
         this.adotante = new AdotanteResponseDTO(adocaoSolicitada.getAdotante());
         this.animal = new AnimalResponseDTO(adocaoSolicitada.getAnimal());
         this.dataCadastro = adocaoSolicitada.getDataCadastro();
+        if (adocaoSolicitada.getAdotante() != null)
+            this.cpf = adocaoSolicitada.getAdotante().getCpf();
 
         if (adocaoSolicitada.getStatus() == null) 
             this.status = "Indefinido"; 
