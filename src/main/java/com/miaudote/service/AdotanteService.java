@@ -59,6 +59,7 @@ public class AdotanteService {
         return new AdotanteResponseDTO(adotante);
     }
 
+    @Transactional
     public Adotante atualizarAdotante(Long id, Adotante novosDados){
         Adotante adotanteExistente = adotanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("adotante não encontrado"));

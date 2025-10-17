@@ -44,8 +44,6 @@ public class AdotanteController {
     @PatchMapping("/{id}")
     public ResponseEntity<Adotante> atualizarAdotante(@PathVariable Long id, @RequestBody Adotante adotante){
         try {
-            if(!adotante.isValidAdotante())
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
             Adotante adotanteAtualizado = adotanteService.atualizarAdotante(id, adotante);
 

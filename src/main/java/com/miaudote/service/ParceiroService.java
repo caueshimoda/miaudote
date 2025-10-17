@@ -56,6 +56,7 @@ public class ParceiroService {
         return new ParceiroResponseDTO(parceiro);
     }
 
+    @Transactional
     public Parceiro atualizarParceiro(Long id, Parceiro novosDados){
         Parceiro parceiroExistente = parceiroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado"));

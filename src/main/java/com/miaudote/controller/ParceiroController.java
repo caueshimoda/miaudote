@@ -46,8 +46,6 @@ public class ParceiroController {
     public ResponseEntity<Parceiro> atualizarParceiro(@PathVariable Long id, @RequestBody Parceiro parceiro){
 
         try {
-            if(!parceiro.isValidParceiro())
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
             Parceiro parceiroAtualizado = parceiroService.atualizarParceiro(id, parceiro);
 
