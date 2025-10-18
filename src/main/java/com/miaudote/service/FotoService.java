@@ -8,13 +8,17 @@ import com.miaudote.repository.FotoRepository;
 import jakarta.transaction.Transactional;
 
 import com.miaudote.repository.AnimalRepository;
+
+import org.springframework.data.domain.Page;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import java.io.IOException;
 
 @Service
@@ -22,7 +26,7 @@ public class FotoService {
 
     private final FotoRepository fotoRepository;
     private final AnimalRepository animalRepository;
-    private final Long FOTO_POR_PAGINA = Long.valueOf(8);
+    private final int FOTOS_POR_PAGINA = 8;
 
     public FotoService(FotoRepository fotoRepository, AnimalRepository animalRepository) {
         this.fotoRepository = fotoRepository;
@@ -109,11 +113,18 @@ public class FotoService {
 
     public List<FotoResponseDTO> getFotosPorPagina(int pagina) {
 
-        Long inicio = (pagina - 1) * FOTO_POR_PAGINA + 1;
-        Long fim = FOTO_POR_PAGINA * pagina;
+        if (pagina < 1)
+            throw new IllegalArgumentException("A página deve ser maior ou igual a 1");
 
+        pagina -= 1;
 
-        List<Animal> animais = animalRepository.findByIdBetweenOrderByIdAsc(inicio, fim);
+        Pageable pageable = PageRequest.of(
+            pagina,  
+            FOTOS_POR_PAGINA,       
+            Sort.by("id").ascending() 
+        );
+
+        List<Animal> animais = animalRepository.findAll(pageable).getContent();
 
         List<FotoResponseDTO> dtos = new ArrayList<FotoResponseDTO>();
 

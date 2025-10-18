@@ -5,14 +5,10 @@ import com.miaudote.dto.AnimalResponseDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
 import com.miaudote.repository.ParceiroRepository;
-
-import jakarta.transaction.Transactional;
-
 import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.FotoRepository;
-
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
