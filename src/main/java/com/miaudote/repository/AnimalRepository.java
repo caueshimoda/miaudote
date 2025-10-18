@@ -10,8 +10,6 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
     List<Animal> findAnimaisByParceiroId(Long parceiroId);
 
-    Long countByAnimalId();
-
     List<Animal> findByIdBetweenOrderByIdAsc(Long startId, Long endId);
 
 }
