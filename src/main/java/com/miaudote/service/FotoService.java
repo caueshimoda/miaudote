@@ -209,8 +209,10 @@ public class FotoService {
         List<FotoResponseDTO> fotos = new ArrayList<>();
 
         for (Favorito favorito : favoritos) {
+            Long favoritoId = favorito.getId();
             FotoResponseDTO foto = getPrimeiraFotoDoAnimal(favorito.getAnimal().getId(), true);
             foto.setTotalPaginas(totalPaginas);
+            foto.setFavoritoId(favoritoId);
             fotos.add(foto);
         }
 
