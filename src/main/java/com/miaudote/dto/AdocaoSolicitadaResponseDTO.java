@@ -28,7 +28,7 @@ public class AdocaoSolicitadaResponseDTO {
         this.id = adocaoSolicitada.getId();
         this.adotante = new AdotanteResponseDTO(adocaoSolicitada.getAdotante());
         this.animal = new AnimalResponseDTO(adocaoSolicitada.getAnimal());
-        this.dataCadastro = adocaoSolicitada.getDataCadastro();
+        this.dataCadastro = adocaoSolicitada.getDataCadastro().toLocalDate();
         if (adocaoSolicitada.getAdotante() != null)
             this.cpf = adocaoSolicitada.getAdotante().getCpf();
 

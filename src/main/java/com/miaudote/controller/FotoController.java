@@ -82,6 +82,18 @@ public class FotoController {
         }
     }
 
+    @GetMapping("/pagina/{pagina}")
+    public ResponseEntity<?> getFotosPorPagina(@PathVariable int pagina) {
+        List<FotoResponseDTO> fotos = fotoService.getFotosPorPagina(pagina);
+
+        try {
+            return ResponseEntity.ok(fotos);
+        }catch (Exception e) {
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar as fotos: " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}/animal/{animalId}")
     public ResponseEntity<HttpStatus> deletarFoto(@PathVariable Long id, @PathVariable Long animalId){
         try{

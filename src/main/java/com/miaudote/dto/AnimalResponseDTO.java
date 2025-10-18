@@ -43,7 +43,7 @@ public class AnimalResponseDTO {
         this.sexo = animal.getSexo().name();
         this.porte = animal.getPorte().name();
         this.status = animal.getStatus().name();
-        this.idade = animal.getIdadeInicial() + Period.between(animal.getDataCadastro(), LocalDate.now()).getYears();
+        this.idade = animal.getIdadeInicial() + Period.between(animal.getDataCadastro().toLocalDate(), LocalDate.now()).getYears();
         this.obs = animal.getObs();
         this.descricao = animal.getDescricao();
         this.parceiro = new ParceiroResponseDTO(animal.getParceiro());

@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name="Animais")
@@ -43,8 +45,9 @@ public class Animal {
         Grande
     }
 
-    @Column(name="data_cad", insertable = false, updatable = false)
-    private LocalDate dataCadastro;
+    @CreationTimestamp
+    @Column(name="data_cad", nullable = false, updatable = false)
+    private LocalDateTime dataCadastro;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_ani")

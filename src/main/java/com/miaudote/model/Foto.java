@@ -1,5 +1,9 @@
 package com.miaudote.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +27,9 @@ public class Foto {
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] foto;
+
+    @CreationTimestamp
+    @Column(name="data_cad", nullable = false, updatable = false)
+    private LocalDateTime dataCadastro;
 
 }

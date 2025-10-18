@@ -1,6 +1,9 @@
 package com.miaudote.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,8 +35,9 @@ public class AdocaoSolicitada {
     @Column(name = "data_finalizacao")
     private LocalDate dataFinalizacao;
 
-    @Column(name="data_cad", insertable = false, updatable = false)
-    private LocalDate dataCadastro;
+    @CreationTimestamp
+    @Column(name="data_cad", nullable = false, updatable = false)
+    private LocalDateTime dataCadastro;
 
     public boolean isValidAdocaoSolicitada() {
 

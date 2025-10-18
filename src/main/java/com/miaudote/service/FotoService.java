@@ -22,6 +22,7 @@ public class FotoService {
 
     private final FotoRepository fotoRepository;
     private final AnimalRepository animalRepository;
+    private final Long FOTO_POR_PAGINA = Long.valueOf(8);
 
     public FotoService(FotoRepository fotoRepository, AnimalRepository animalRepository) {
         this.fotoRepository = fotoRepository;
@@ -104,6 +105,24 @@ public class FotoService {
         }
 
         return fotos;
+    }
+
+    public List<FotoResponseDTO> getFotosPorPagina(int pagina) {
+
+        Long inicio = (pagina - 1) * FOTO_POR_PAGINA + 1;
+        Long fim = FOTO_POR_PAGINA * pagina;
+
+
+        List<Animal> animais = animalRepository.findByIdBetweenOrderByIdAsc(inicio, fim);
+
+        List<FotoResponseDTO> dtos = new ArrayList<FotoResponseDTO>();
+
+        for (Animal animal: animais) {
+            dtos.add(getPrimeiraFotoDoAnimal(animal.getId(), true));
+        }
+
+        return dtos;
+
     }
 
     public void deletarFoto(Long id, Long animalId){

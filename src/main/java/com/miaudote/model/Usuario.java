@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /*
@@ -14,6 +15,8 @@ import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.List;*/
 import java.util.regex.Pattern;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 
 @Entity
@@ -38,6 +41,9 @@ public class Usuario {
     private String cidade;
     private String estado;
     private String telefone; // regex
+    @CreationTimestamp
+    @Column(name="data_cad", nullable = false, updatable = false)
+    private LocalDateTime dataCadastro;
     //private String cpf;
     //private String cnpj;
 
