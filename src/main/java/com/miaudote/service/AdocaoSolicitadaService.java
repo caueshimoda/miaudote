@@ -3,6 +3,7 @@ package com.miaudote.service;
 import com.miaudote.dto.AdocaoComFotoDTO;
 import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.dto.AdocaoSolicitadaResponseDTO;
+import com.miaudote.dto.FavoritoRequest;
 import com.miaudote.dto.FotoResponseDTO;
 import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.Animal;
@@ -10,7 +11,7 @@ import com.miaudote.model.StatusAdocao;
 import com.miaudote.model.Adotante;
 import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
-
+import com.miaudote.repository.FavoritoRepository;
 import com.miaudote.repository.AdocaoSolicitadaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -26,13 +27,20 @@ public class AdocaoSolicitadaService {
     private final AdocaoSolicitadaRepository adocaoSolicitadaRepository;
     private final AnimalRepository animalRepository;
     private final AdotanteRepository adotanteRepository;
+    private final FavoritoRepository favoritoRepository;
     private final FotoService fotoService; 
+    private final FavoritoService favoritoService; 
 
-    public AdocaoSolicitadaService(AdocaoSolicitadaRepository adocaoSolicitadaRepository, AnimalRepository animalRepository, AdotanteRepository adotanteRepository, FotoService fotoService) {
+    public AdocaoSolicitadaService(AdocaoSolicitadaRepository adocaoSolicitadaRepository, AnimalRepository animalRepository, 
+                                    AdotanteRepository adotanteRepository, FotoService fotoService, 
+                                    FavoritoRepository favoritoRepository, FavoritoService favoritoService) {
+       
         this.adocaoSolicitadaRepository = adocaoSolicitadaRepository;
         this.animalRepository = animalRepository;
         this.adotanteRepository = adotanteRepository;
         this.fotoService = fotoService;
+        this.favoritoRepository = favoritoRepository;
+        this.favoritoService = favoritoService;
     }
 
 
@@ -44,6 +52,14 @@ public class AdocaoSolicitadaService {
 
         if (!animal.isDisponivel())
             throw new RuntimeException("Animal indisponível para adoção");
+
+        if (adocaoSolicitadaRepository.existsByAdotanteAndAnimalAndStatus(adotante, animal, StatusAdocao.EM_ANDAMENTO)) 
+            throw new RuntimeException("Já existe uma solicitação em aberto para esse animal vindo do adotante");
+
+        // Ao abrir uma solicitação, o animal vira favorito do adotante automaticamente, se já não era
+        if (!favoritoRepository.existsByAnimalAndAdotante(animal, adotante)) 
+            favoritoService.cadastrarFavorito(new FavoritoRequest(adotante.getId(), animal.getId()));
+    
 
         AdocaoSolicitada solicitacao = new AdocaoSolicitada();
         solicitacao.setAdotante(adotante);

@@ -32,6 +32,9 @@ public class FavoritoService {
         Animal animal = animalRepository.findById(request.getAnimalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
+        if (favoritoRepository.existsByAnimalAndAdotante(animal, adotante))
+            throw new RuntimeException("O adotante já favoritou esse animal");
+
         Favorito favorito = new Favorito();
         favorito.setAdotante(adotante);
         favorito.setAnimal(animal);
