@@ -97,7 +97,7 @@ public class FotoService {
         return new FotoResponseDTO(foto);
     }
 
-    public List<FotoResponseDTO> getFotosPorParceiro(Long parceiroId, int pagina) {
+    public Pageable getPageable(int pagina, int fotosPorPagina) {
         if (pagina < 1)
             throw new IllegalArgumentException("A página deve ser maior ou igual a 1");
 
@@ -105,9 +105,17 @@ public class FotoService {
 
         Pageable pageable = PageRequest.of(
             pagina,  
-            FOTOS_POR_PAGINA_PARCEIRO,       
+            fotosPorPagina,       
             Sort.by("id").ascending() 
         );
+
+        return pageable;
+
+    }
+
+    public List<FotoResponseDTO> getFotosPorParceiro(Long parceiroId, int pagina) {
+
+        Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_PARCEIRO);
 
         Page<Animal> paginas = animalRepository.findAnimaisByParceiroId(pageable, parceiroId);
         int totalPaginas = paginas.getTotalPages();
@@ -131,16 +139,7 @@ public class FotoService {
 
     public List<FotoResponseDTO> getFotosPorPagina(int pagina) {
 
-        if (pagina < 1)
-            throw new IllegalArgumentException("A página deve ser maior ou igual a 1");
-
-        pagina -= 1;
-
-        Pageable pageable = PageRequest.of(
-            pagina,  
-            FOTOS_POR_PAGINA_ALL,       
-            Sort.by("id").ascending() 
-        );
+        Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_ALL);
 
         Page<Animal> paginas = animalRepository.findAll(pageable);
         int totalPaginas = paginas.getTotalPages();
