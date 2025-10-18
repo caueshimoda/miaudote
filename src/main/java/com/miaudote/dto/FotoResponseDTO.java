@@ -17,6 +17,9 @@ public class FotoResponseDTO {
     private Long id;
     private AnimalResponseDTO animal;
     private byte[] foto;
+    private int totalPaginas; /*  Isso é para a paginação. Sim, eu poderia criar um novo DTO, não me julgue. 
+    Mas é que int pega pouca memória, achei melhor simplificar :D
+    */
 
     // Construtor para mandar apenas dados da foto
     public FotoResponseDTO(Foto foto) {
@@ -25,6 +28,7 @@ public class FotoResponseDTO {
         this.id = foto.getId();
         this.foto = foto.getFoto();
         this.animal = null;
+        this.totalPaginas = 1;
     }
 
     // Construtor caso seja necessário mandar os dados do animal também. 
@@ -37,6 +41,7 @@ public class FotoResponseDTO {
         this.id = foto.getId();
         this.foto = foto.getFoto();
         this.animal = new AnimalResponseDTO(animal);
+        this.totalPaginas = 1;
     }
 
 }

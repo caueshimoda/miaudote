@@ -124,12 +124,17 @@ public class FotoService {
             Sort.by("id").ascending() 
         );
 
-        List<Animal> animais = animalRepository.findAll(pageable).getContent();
+        Page<Animal> paginas = animalRepository.findAll(pageable);
+        int totalPaginas = paginas.getTotalPages();
+
+        List<Animal> animais = paginas.getContent();
 
         List<FotoResponseDTO> dtos = new ArrayList<FotoResponseDTO>();
 
         for (Animal animal: animais) {
-            dtos.add(getPrimeiraFotoDoAnimal(animal.getId(), true));
+            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), true);
+            foto.setTotalPaginas(totalPaginas);
+            dtos.add(foto);
         }
 
         return dtos;
