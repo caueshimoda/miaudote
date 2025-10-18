@@ -20,4 +20,6 @@ public interface FavoritoRepository extends JpaRepository<Favorito, Long> {
 
     boolean existsByAnimalAndAdotante(Animal animal, Adotante adotante);
 
+    List<Favorito> findByAdotanteAndAnimalIn(Adotante adotante, List<Animal> animais);
+
 } 

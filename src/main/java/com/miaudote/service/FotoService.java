@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FotoService {
@@ -163,15 +166,30 @@ public class FotoService {
 
         Adotante adotante = adotanteOptional.orElse(null);
 
-        boolean isFavorito = false;
+        Map<Long, Long> favoritosMap = new HashMap<>(); // Usado para melhorar performance (tava lerdo kkkkk)
+
+        if (adotante != null) {
+            List<Favorito> favoritos = favoritoRepository.findByAdotanteAndAnimalIn(adotante, animais);
+            // Essa lista e mapeamento são usados pro JPA fazer a consulta ao Banco de Dados uma vez só
+            // A consulta vai trazer todos os favoritos do adotante dentro da lista de animais fornecida
+            favoritosMap = favoritos.stream()
+            .collect(Collectors.toMap(
+                favorito -> favorito.getAnimal().getId(), // Chave: ID do Animal
+                Favorito::getId // Valor: ID do Favorito
+            ));
+        }
 
         for (Animal animal: animais) {
             FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), true);
-            if (adotante != null){
-                isFavorito = favoritoRepository.existsByAnimalAndAdotante(animal, adotante);
-            }
+        
+            Long favoritoId = favoritosMap.get(animal.getId()); // Pega o id do favorito relacionado ao id do animal, como mapeado acima (pode ser nulo)
+            
             foto.setTotalPaginas(totalPaginas);
-            foto.setFavorito(isFavorito);
+            foto.setFavorito((favoritoId != null)); // Se o id do favorito for nulo, vai ser falso, se não vai ser verdadeiro
+            
+            // 🚨 NOVO CAMPO: Seta o ID do Favorito (se existir), senão seta null.
+            foto.setFavoritoId(favoritoId); 
+            
             dtos.add(foto);
         }
 

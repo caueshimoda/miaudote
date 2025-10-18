@@ -17,11 +17,12 @@ public class FotoResponseDTO {
     private Long id;
     private AnimalResponseDTO animal;
     private byte[] foto;
-    private int totalPaginas; /*  Isso é para a paginação. Sim, eu poderia criar um novo DTO, não me julgue. 
-    Mas é que int pega pouca memória, achei melhor simplificar :D
-    */
+    private int totalPaginas; //  Isso é para a paginação. Sim, eu poderia criar um novo DTO, mas quis simplificar, não me julgue. 
     // Mesma coisa pra esse atributo rs
     private boolean isFavorito;
+    // E pra esse, oh Deus
+    private Long favoritoId;
+
 
     // Construtor para mandar apenas dados da foto
     public FotoResponseDTO(Foto foto) {
