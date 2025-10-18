@@ -67,6 +67,7 @@ public class AnimalService {
             return new AnimalResponseDTO(animal);
     }
 
+    /* Acho que não vamos precisar disso
     public List<AnimalResponseDTO> getAnimais() {
         
         List<Animal> animais = animalRepository.findAll();
@@ -75,7 +76,9 @@ public class AnimalService {
                 .map(AnimalResponseDTO::new) 
                 .toList(); 
     }
+    */
 
+    /* Também não precisamos disso, estamos enviando pelo fotoService
     public List<AnimalResponseDTO> getAnimaisPorParceiro(Long parceiroId) {
         
         List<Animal> animais = animalRepository.findAnimaisByParceiroId(parceiroId);
@@ -83,7 +86,7 @@ public class AnimalService {
         return animais.stream()
                 .map(AnimalResponseDTO::new) 
                 .toList(); 
-    }
+    }*/
 
     public Animal atualizarAnimal(Long animalId, Long parceiroId, Animal novosDados) {
         Animal animal = animalRepository.findById(animalId)

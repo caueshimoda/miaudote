@@ -68,17 +68,7 @@ public class AnimalController {
         }
     }
 
-    @GetMapping("/parceiro/{parceiroId}")
-    public ResponseEntity<?> getAnimaisPorParceiro(@PathVariable Long parceiroId) {
-        try {
-            List<AnimalResponseDTO> animais = animalService.getAnimaisPorParceiro(parceiroId);
-            return ResponseEntity.ok(animais);
-
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            return ResponseEntity.badRequest().body("Erro ao requisitar animais: " + e.getMessage());
-        }
-    }
+    /* Acho que não vamos precisar disso, mas se quiser voltar tem que descomentar o código em animalService também!
 
     @GetMapping("/all")
     public ResponseEntity<?> getAnimais() {
@@ -90,7 +80,20 @@ public class AnimalController {
             e.printStackTrace(); 
             return ResponseEntity.badRequest().body("Erro ao requisitar animais: " + e.getMessage());
         }
-    }
+    }*/
+
+    /* Também não precisamos disso, estamos enviando pelo FotoController
+    @GetMapping("/parceiro/{parceiroId}")
+    public ResponseEntity<?> getAnimaisPorParceiro(@PathVariable Long parceiroId) {
+        try {
+            List<AnimalResponseDTO> animais = animalService.getAnimaisPorParceiro(parceiroId);
+            return ResponseEntity.ok(animais);
+
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar animais: " + e.getMessage());
+        }
+    }*/
 
     @PatchMapping("/{animalId}/parceiro/{parceiroId}")
     public ResponseEntity<?> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId,

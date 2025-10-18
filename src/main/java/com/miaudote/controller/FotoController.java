@@ -70,9 +70,9 @@ public class FotoController {
         }
     }
 
-    @GetMapping("/parceiro/{id}")
-    public ResponseEntity<?> getFotosPorParceiro(@PathVariable Long id) {
-        List<FotoResponseDTO> fotos = fotoService.getFotosPorParceiro(id);
+    @GetMapping("/parceiro/{id}/pagina/{pagina}")
+    public ResponseEntity<?> getFotosPorParceiro(@PathVariable Long id, @PathVariable int pagina) {
+        List<FotoResponseDTO> fotos = fotoService.getFotosPorParceiro(id, pagina);
 
         try {
             return ResponseEntity.ok(fotos);

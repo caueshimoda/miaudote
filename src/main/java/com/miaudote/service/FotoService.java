@@ -26,7 +26,8 @@ public class FotoService {
 
     private final FotoRepository fotoRepository;
     private final AnimalRepository animalRepository;
-    private final int FOTOS_POR_PAGINA = 8;
+    private final int FOTOS_POR_PAGINA_ALL = 8;
+    private final int FOTOS_POR_PAGINA_PARCEIRO = 7;
 
     public FotoService(FotoRepository fotoRepository, AnimalRepository animalRepository) {
         this.fotoRepository = fotoRepository;
@@ -96,16 +97,33 @@ public class FotoService {
         return new FotoResponseDTO(foto);
     }
 
-    public List<FotoResponseDTO> getFotosPorParceiro(Long parceiroId) {
-        List<Animal> animais = animalRepository.findAnimaisByParceiroId(parceiroId);
+    public List<FotoResponseDTO> getFotosPorParceiro(Long parceiroId, int pagina) {
+        if (pagina < 1)
+            throw new IllegalArgumentException("A página deve ser maior ou igual a 1");
+
+        pagina -= 1;
+
+        Pageable pageable = PageRequest.of(
+            pagina,  
+            FOTOS_POR_PAGINA_PARCEIRO,       
+            Sort.by("id").ascending() 
+        );
+
+        Page<Animal> paginas = animalRepository.findAnimaisByParceiroId(pageable, parceiroId);
+        int totalPaginas = paginas.getTotalPages();
+
+        List<Animal> animais = paginas.getContent();
 
         List<FotoResponseDTO> fotos = new ArrayList<>();
 
-        int i = 0;
+        boolean pegarDados = true;
 
         for (Animal animal : animais) {
-            // Só vai pegar os dados se i for igual a zero, ou seja, primeiro animal da página
-            fotos.add(getPrimeiraFotoDoAnimal(animal.getId(), i == 0));
+            // Só vai pegar os dados do primeiro animal da página
+            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), pegarDados);
+            foto.setTotalPaginas(totalPaginas);
+            fotos.add(foto);
+            pegarDados = false;
         }
 
         return fotos;
@@ -120,7 +138,7 @@ public class FotoService {
 
         Pageable pageable = PageRequest.of(
             pagina,  
-            FOTOS_POR_PAGINA,       
+            FOTOS_POR_PAGINA_ALL,       
             Sort.by("id").ascending() 
         );
 
