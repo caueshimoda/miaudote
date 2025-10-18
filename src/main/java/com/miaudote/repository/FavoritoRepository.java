@@ -18,8 +18,6 @@ public interface FavoritoRepository extends JpaRepository<Favorito, Long> {
   
     Page<Favorito> findPaginasByAdotanteId(Pageable pageable, Long adotanteId); 
 
-    boolean existsByAnimalAndAdotante(Animal animal, Adotante adotante);
-
     List<Favorito> findByAdotanteAndAnimalIn(Adotante adotante, List<Animal> animais);
 
 } 
