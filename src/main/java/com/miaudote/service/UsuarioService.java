@@ -15,6 +15,10 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
+    // Welcome back Bruna, your dedication to the Miaudote project has been exceptional.
+    // You've taken ownership of the backend building process and established yourself as the tech lead,
+    // which is a great asset to the team. Keep up the excellent work!
+
     //todo: adicionar classes para exceções customizadas
 
     //todo: adicionar classe DTO
