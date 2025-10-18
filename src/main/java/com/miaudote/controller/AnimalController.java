@@ -82,7 +82,6 @@ public class AnimalController {
         }
     }*/
 
-    /* Também não precisamos disso, estamos enviando pelo FotoController
     @GetMapping("/parceiro/{parceiroId}")
     public ResponseEntity<?> getAnimaisPorParceiro(@PathVariable Long parceiroId) {
         try {
@@ -93,7 +92,7 @@ public class AnimalController {
             e.printStackTrace(); 
             return ResponseEntity.badRequest().body("Erro ao requisitar animais: " + e.getMessage());
         }
-    }*/
+    }
 
     @PatchMapping("/{animalId}/parceiro/{parceiroId}")
     public ResponseEntity<?> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId,

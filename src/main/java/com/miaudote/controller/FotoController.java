@@ -82,9 +82,21 @@ public class FotoController {
         }
     }
 
-    @GetMapping("/pagina/{pagina}")
-    public ResponseEntity<?> getFotosPorPagina(@PathVariable int pagina) {
-        List<FotoResponseDTO> fotos = fotoService.getFotosPorPagina(pagina);
+    @GetMapping("/pagina/{pagina}/{id}")
+    public ResponseEntity<?> getFotosPorPagina(@PathVariable int pagina, @PathVariable Long id) {
+        List<FotoResponseDTO> fotos = fotoService.getFotosPorPagina(id, pagina);
+
+        try {
+            return ResponseEntity.ok(fotos);
+        }catch (Exception e) {
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao requisitar as fotos: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/adotante/{id}/pagina/{pagina}")
+    public ResponseEntity<?> getFotosFavoritos(@PathVariable Long id, @PathVariable int pagina) {
+        List<FotoResponseDTO> fotos = fotoService.getFotosFavoritos(id, pagina);
 
         try {
             return ResponseEntity.ok(fotos);

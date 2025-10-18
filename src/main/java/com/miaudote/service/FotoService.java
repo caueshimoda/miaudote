@@ -2,12 +2,16 @@ package com.miaudote.service;
 
 import com.miaudote.model.Foto;
 import com.miaudote.dto.FotoResponseDTO;
+import com.miaudote.model.Adotante;
 import com.miaudote.model.Animal;
+import com.miaudote.model.Favorito;
 import com.miaudote.repository.FotoRepository;
 
 import jakarta.transaction.Transactional;
 
+import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
+import com.miaudote.repository.FavoritoRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,12 +32,16 @@ public class FotoService {
 
     private final FotoRepository fotoRepository;
     private final AnimalRepository animalRepository;
+    private final FavoritoRepository favoritoRepository;
+    private final AdotanteRepository adotanteRepository;
     private final int FOTOS_POR_PAGINA_ALL = 8;
     private final int FOTOS_POR_PAGINA_PARCEIRO = 7;
 
-    public FotoService(FotoRepository fotoRepository, AnimalRepository animalRepository) {
+    public FotoService(FotoRepository fotoRepository, AnimalRepository animalRepository, FavoritoRepository favoritoRepository, AdotanteRepository adotanteRepository) {
         this.fotoRepository = fotoRepository;
         this.animalRepository = animalRepository;
+        this.favoritoRepository = favoritoRepository;
+        this.adotanteRepository = adotanteRepository;
     }
 
     // Como é uma lista de fotos, precisa ter o @Transactional pra ele desfazer o cadastro caso haja erro em alguma 
@@ -117,7 +127,7 @@ public class FotoService {
 
         Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_PARCEIRO);
 
-        Page<Animal> paginas = animalRepository.findAnimaisByParceiroId(pageable, parceiroId);
+        Page<Animal> paginas = animalRepository.findPaginasByParceiroId(pageable, parceiroId);
         int totalPaginas = paginas.getTotalPages();
 
         List<Animal> animais = paginas.getContent();
@@ -137,7 +147,7 @@ public class FotoService {
         return fotos;
     }
 
-    public List<FotoResponseDTO> getFotosPorPagina(int pagina) {
+    public List<FotoResponseDTO> getFotosPorPagina(Long usuarioId, int pagina) {
 
         Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_ALL);
 
@@ -148,14 +158,45 @@ public class FotoService {
 
         List<FotoResponseDTO> dtos = new ArrayList<FotoResponseDTO>();
 
+        Optional<Adotante> adotanteOptional = Optional.ofNullable(usuarioId)
+            .flatMap(id -> adotanteRepository.findById(id));
+
+        Adotante adotante = adotanteOptional.orElse(null);
+
+        boolean isFavorito = false;
+
         for (Animal animal: animais) {
             FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), true);
+            if (adotante != null){
+                isFavorito = favoritoRepository.existsByAnimalAndAdotante(animal, adotante);
+            }
             foto.setTotalPaginas(totalPaginas);
+            foto.setFavorito(isFavorito);
             dtos.add(foto);
         }
 
         return dtos;
 
+    }
+
+    public List<FotoResponseDTO> getFotosFavoritos(Long adotanteId, int pagina) {
+
+        Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_ALL);
+
+        Page<Favorito> paginas = favoritoRepository.findPaginasByAdotanteId(pageable, adotanteId);
+        int totalPaginas = paginas.getTotalPages();
+
+        List<Favorito> favoritos = paginas.getContent();
+
+        List<FotoResponseDTO> fotos = new ArrayList<>();
+
+        for (Favorito favorito : favoritos) {
+            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(favorito.getAnimal().getId(), true);
+            foto.setTotalPaginas(totalPaginas);
+            fotos.add(foto);
+        }
+
+        return fotos;
     }
 
     public void deletarFoto(Long id, Long animalId){

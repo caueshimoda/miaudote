@@ -20,6 +20,8 @@ public class FotoResponseDTO {
     private int totalPaginas; /*  Isso é para a paginação. Sim, eu poderia criar um novo DTO, não me julgue. 
     Mas é que int pega pouca memória, achei melhor simplificar :D
     */
+    // Mesma coisa pra esse atributo rs
+    private boolean isFavorito;
 
     // Construtor para mandar apenas dados da foto
     public FotoResponseDTO(Foto foto) {
@@ -29,6 +31,7 @@ public class FotoResponseDTO {
         this.foto = foto.getFoto();
         this.animal = null;
         this.totalPaginas = 1;
+        this.isFavorito = false;
     }
 
     // Construtor caso seja necessário mandar os dados do animal também. 
@@ -42,6 +45,7 @@ public class FotoResponseDTO {
         this.foto = foto.getFoto();
         this.animal = new AnimalResponseDTO(animal);
         this.totalPaginas = 1;
+        this.isFavorito = false;
     }
 
 }

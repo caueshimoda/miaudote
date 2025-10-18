@@ -78,15 +78,14 @@ public class AnimalService {
     }
     */
 
-    /* Também não precisamos disso, estamos enviando pelo fotoService
     public List<AnimalResponseDTO> getAnimaisPorParceiro(Long parceiroId) {
         
-        List<Animal> animais = animalRepository.findAnimaisByParceiroId(parceiroId);
+        List<Animal> animais = animalRepository.findByParceiroId(parceiroId);
 
         return animais.stream()
                 .map(AnimalResponseDTO::new) 
                 .toList(); 
-    }*/
+    }
 
     public Animal atualizarAnimal(Long animalId, Long parceiroId, Animal novosDados) {
         Animal animal = animalRepository.findById(animalId)
