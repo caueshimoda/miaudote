@@ -3,10 +3,18 @@ package com.miaudote.controller;
 import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.dto.UsuarioDTO;
 import com.miaudote.dto.UsuarioMapper;
+import com.miaudote.jwt.JwtResponse;
+import com.miaudote.jwt.JwtUtil;
 import com.miaudote.model.Usuario;
 import com.miaudote.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +25,12 @@ import java.util.Optional;
 public class UsuarioController {
     private final UsuarioService usuarioService;
     private final UsuarioMapper usuarioMapper;
+
+    @Autowired
+    JwtUtil jwtUtils;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     public UsuarioController(UsuarioService usuarioService, UsuarioMapper usuarioMapper) {
         this.usuarioService = usuarioService;
@@ -37,16 +51,18 @@ public class UsuarioController {
         }
     }
 
-    //todo: rever lógica
     @PostMapping("/login")
-    public ResponseEntity<HttpStatus> loginUsuario(@RequestBody Usuario loginRequest){
+    public ResponseEntity<?> loginUsuario(@RequestBody Usuario loginRequest){
         try{
             Usuario usuario = usuarioService.loginUsuario(
                     loginRequest.getEmail(),
                     loginRequest.getSenha()
             );
 
-            return new ResponseEntity<>(HttpStatus.OK);
+            String token = jwtUtils.generateToken(usuario.getEmail());
+
+            return new ResponseEntity<>(new JwtResponse(token),HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -19,9 +19,6 @@ public class UsuarioService {
     // You've taken ownership of the backend building process and established yourself as the tech lead,
     // which is a great asset to the team. Keep up the excellent work!
 
-    //todo: adicionar classes para exceções customizadas
-
-    //todo: adicionar classe DTO
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,7 +33,7 @@ public class UsuarioService {
 
 
     public Usuario cadastrarUsuario(UsuarioCadastroDTO dto){
-        Usuario usuario = new Usuario();
+        Usuario usuario;
 
         usuario = usuarioMapper.toEntity(dto);
 
@@ -132,6 +129,14 @@ public class UsuarioService {
         */
     }
 
+    public Usuario buscarPorEmail(String email) {
+        /* esse metodo será utilizado depois que o user ja tiver criado a conta, então o e-mail já passou pela validação inicial,
+            então não senti a necessidade de validar dnv. Aberta a discussão... ou não
+        */
+
+        return usuarioRepository.findByEmail(email)
+                .orElse(null);
+    }
 
 
 
