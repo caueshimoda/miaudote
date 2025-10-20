@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,8 +76,8 @@ public class AdocaoSolicitadaService {
         AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Solicitação não encontrado com id: " + id));
 
-        FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(adocaoSolicitada.getAnimal().getId(), true);
-        return new AdocaoComFotoDTO(adocaoSolicitada, foto);
+        List<FotoResponseDTO> fotos = fotoService.getFotosPorAnimal(adocaoSolicitada.getAnimal().getId());
+        return new AdocaoComFotoDTO(adocaoSolicitada, fotos);
     }
 
     public List<AdocaoComFotoDTO> getSolicitacoesPorAdotante(Long adotanteId) {
@@ -85,7 +86,10 @@ public class AdocaoSolicitadaService {
         List<AdocaoComFotoDTO> dtos = new ArrayList<>();
 
         for (AdocaoSolicitada adocao: solicitacoes) {
-            FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(adocao.getAnimal().getId(), true);
+            // Estou criando essa lista pra mandar uma lista de uma foto só e evitar um novo DTO...
+            // Sim...
+            List<FotoResponseDTO> foto = new ArrayList<>();  
+            foto.add(fotoService.getPrimeiraFotoDoAnimal(adocao.getAnimal().getId(), true));
             dtos.add(new AdocaoComFotoDTO(adocao, foto));
         }
 
@@ -98,7 +102,8 @@ public class AdocaoSolicitadaService {
         List<AdocaoComFotoDTO> dtos = new ArrayList<>();
 
         for (AdocaoSolicitada adocao: solicitacoes) {
-            FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(adocao.getAnimal().getId(), true);
+            List<FotoResponseDTO> foto = new ArrayList<>();  
+            foto.add(fotoService.getPrimeiraFotoDoAnimal(adocao.getAnimal().getId(), true));
             dtos.add(new AdocaoComFotoDTO(adocao, foto));
         }
 

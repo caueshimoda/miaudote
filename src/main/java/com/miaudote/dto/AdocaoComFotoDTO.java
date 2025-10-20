@@ -1,5 +1,6 @@
 package com.miaudote.dto;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.miaudote.model.AdocaoSolicitada;
@@ -13,15 +14,14 @@ import lombok.NoArgsConstructor;
 @Data
 public class AdocaoComFotoDTO {
 
-    private FotoResponseDTO foto;
+    private List<FotoResponseDTO> fotos;
     private AdocaoSolicitadaResponseDTO adocao;
 
-    public AdocaoComFotoDTO(AdocaoSolicitada adocaoSolicitada, FotoResponseDTO foto) {
+    public AdocaoComFotoDTO(AdocaoSolicitada adocaoSolicitada, List<FotoResponseDTO> fotos) {
         Objects.requireNonNull(adocaoSolicitada, "A entidade Adoção Solicitada não pode ser nula ao criar AdocaoComFotoDTO.");
-        Objects.requireNonNull(foto, "A entidade Foto não pode ser nula ao criar AdocaoComFotoDTO.");
 
         this.adocao = new AdocaoSolicitadaResponseDTO(adocaoSolicitada);
-        this.foto = foto;
+        this.fotos = fotos;
     }
 
 }
