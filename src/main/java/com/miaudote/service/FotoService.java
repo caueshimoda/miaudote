@@ -137,8 +137,21 @@ public class FotoService {
 
         List<FotoResponseDTO> fotos = new ArrayList<>();
 
+        List<Long> animalIds = animais.stream()
+                   .map(Animal::getId)
+                   .collect(Collectors.toList());
+
+        List<Foto> fotosPrincipais = fotoRepository.findPrimeirasFotosByAnimalIdIn(animalIds);
+
+        Map<Long, Foto> fotoMap = fotosPrincipais.stream()
+                        .collect(Collectors.toMap(
+                        foto -> foto.getAnimal().getId(), 
+                        foto -> foto 
+    ));
+
         for (Animal animal : animais) {
-            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), true);
+            Foto fotoPrincipal = fotoMap.get(animal.getId());
+            FotoResponseDTO foto = new FotoResponseDTO(fotoPrincipal, fotoPrincipal.getAnimal());
             foto.setTotalPaginas(totalPaginas);
             fotos.add(foto);
         }
@@ -183,7 +196,6 @@ public class FotoService {
             foto.setTotalPaginas(totalPaginas);
             foto.setFavorito((favoritoId != null)); // Se o id do favorito for nulo, vai ser falso, se não vai ser verdadeiro
             
-            // 🚨 NOVO CAMPO: Seta o ID do Favorito (se existir), senão seta null.
             foto.setFavoritoId(favoritoId); 
             
             dtos.add(foto);

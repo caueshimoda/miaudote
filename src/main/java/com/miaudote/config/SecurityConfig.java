@@ -24,16 +24,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    UsuarioService usuarioService;
+    // Isso tava causando um ciclo de dependência
+    //@Autowired
+    //UsuarioService usuarioService;
+
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+    
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -60,8 +64,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/usuarios/**", "/parceiros/**").permitAll() // Use 'requestMatchers' instead of 'antMatchers'
-                                .anyRequest().authenticated()
+                                //.requestMatchers("/usuarios/**", "/parceiros/**").permitAll() // Use 'requestMatchers' instead of 'antMatchers'
+                                //.anyRequest().authenticated()
                                 .anyRequest().permitAll()
                 );
 
