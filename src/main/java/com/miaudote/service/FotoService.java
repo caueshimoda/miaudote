@@ -167,9 +167,7 @@ public class FotoService {
         
         int totalPaginas = paginas.getTotalPages();
 
-        List<Animal> animaisTodos = paginas.getContent();
-
-        List<Animal> animais = animalRepository.findWithParceiroIn(animaisTodos);
+        List<Animal> animais = paginas.getContent();
 
         List<FotoResponseDTO> dtos = new ArrayList<FotoResponseDTO>();
 
