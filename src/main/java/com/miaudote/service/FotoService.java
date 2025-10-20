@@ -164,9 +164,12 @@ public class FotoService {
         Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_ALL);
 
         Page<Animal> paginas = animalRepository.findAll(pageable);
+        
         int totalPaginas = paginas.getTotalPages();
 
-        List<Animal> animais = paginas.getContent();
+        List<Animal> animaisTodos = paginas.getContent();
+
+        List<Animal> animais = animalRepository.findWithParceiroIn(animaisTodos);
 
         List<FotoResponseDTO> dtos = new ArrayList<FotoResponseDTO>();
 
