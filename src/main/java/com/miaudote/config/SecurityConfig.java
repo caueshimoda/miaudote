@@ -62,6 +62,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/usuarios/**", "/parceiros/**").permitAll() // Use 'requestMatchers' instead of 'antMatchers'
                                 .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 );
 
         // Add the JWT Token filter before the UsernamePasswordAuthenticationFilter

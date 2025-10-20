@@ -3,6 +3,7 @@ package com.miaudote.service;
 import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.dto.UsuarioMapper;
 import com.miaudote.model.Usuario;
+import com.miaudote.model.Validacao;
 import com.miaudote.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.dao.DataIntegrityViolationException;
@@ -41,10 +42,10 @@ public class UsuarioService {
             throw new IllegalArgumentException("Senha inválida! Ela deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e caractere especial.");
         
         if (!usuario.isValidNome())
-            throw new IllegalArgumentException("Nome do Usuário inválido, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+            throw new IllegalArgumentException(String.format("Nome do usuário inválido, deve ter apenas letras e espaços, entre %d e %d caracteres.", Validacao.MIN_NOME, Validacao.MAX_NOME));
 
         if (!usuario.isValidCidade())
-            throw new IllegalArgumentException("Cidade do Usuário inválida, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+            throw new IllegalArgumentException(String.format("Cidade do usuário inválida, deve ter apenas letras e espaços, entre %d e %d caracteres.", Validacao.MIN_NOME, Validacao.MAX_NOME));
 
         if (!usuario.isValidEmail())
             throw new IllegalArgumentException("Email do Usuário inválido.");

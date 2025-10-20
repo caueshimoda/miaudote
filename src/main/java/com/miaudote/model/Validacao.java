@@ -4,12 +4,18 @@ import java.time.LocalDate;
 
 public class Validacao {
 
+    public static final int MAX_TEXTO = 255;
+
+    public static final int MAX_NOME = 60;
+
+    public static final int MIN_NOME = 2;
+
     public static boolean isValidNome(String nome){
         try {
             if (nome == null || nome.trim().isEmpty())
                 return false;
 
-            if (nome.trim().length() < 2 && nome.trim().length() > 60) 
+            if (nome.trim().length() < MIN_NOME && nome.trim().length() > MAX_NOME) 
                 return false;
 
             // Apenas letras e espaços
@@ -144,6 +150,13 @@ public class Validacao {
         }
 
         return true;
+    }
+
+    public static boolean isValidText(String text) {
+        if (text == null) 
+            return true;
+        
+        return text.length() <= MAX_TEXTO;
     }
 
 }

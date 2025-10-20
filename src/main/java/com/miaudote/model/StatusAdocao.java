@@ -27,7 +27,5 @@ public class StatusAdocao {
         return abertas.contains(status);
     
     }
-
     
-
 }

@@ -137,14 +137,10 @@ public class FotoService {
 
         List<FotoResponseDTO> fotos = new ArrayList<>();
 
-        boolean pegarDados = true;
-
         for (Animal animal : animais) {
-            // Só vai pegar os dados do primeiro animal da página
-            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), pegarDados);
+            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), true);
             foto.setTotalPaginas(totalPaginas);
             fotos.add(foto);
-            pegarDados = false;
         }
 
         return fotos;

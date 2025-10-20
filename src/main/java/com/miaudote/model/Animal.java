@@ -82,7 +82,16 @@ public class Animal {
         return getIdadeInicial() >= 0;
     }
 
+    public boolean isValidDescricao(){
+        return Validacao.isValidText(descricao);
+    }
+
+    public boolean isValidObs(){
+        return Validacao.isValidText(obs);
+    }
+
     public boolean isDisponivel() {
         return status.equals(Status.Disponível);
     }
+
 }

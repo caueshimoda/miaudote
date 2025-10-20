@@ -4,6 +4,7 @@ import com.miaudote.dto.AnimalRequest;
 import com.miaudote.dto.AnimalResponseDTO;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
+import com.miaudote.model.Validacao;
 import com.miaudote.repository.ParceiroRepository;
 import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.FotoRepository;
@@ -44,13 +45,19 @@ public class AnimalService {
         animal.setDescricao(request.getDescricao());
 
         if (!animal.isValidEspecie())
-            throw new IllegalArgumentException("Espécie do Animal inválida, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+            throw new IllegalArgumentException(String.format("Espécie do Animal inválida, deve ter apenas letras e espaços, entre %d e %d caracteres.", Validacao.MIN_NOME, Validacao.MAX_NOME));
 
         if (!animal.isValidNome())
-            throw new IllegalArgumentException("Nome do Animal inválido, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+            throw new IllegalArgumentException(String.format("Nome do Animal inválido, deve ter apenas letras e espaços, entre %d e %d caracteres.", Validacao.MIN_NOME, Validacao.MAX_NOME));
 
         if (!animal.isValidIdade())
             throw new IllegalArgumentException("Idade do Animal inválida, não pode ser negativa.");
+        
+        if (!animal.isValidDescricao())
+            throw new IllegalArgumentException(String.format("A descrição do animal não deve exceder %d caracteres.", Validacao.MAX_TEXTO));
+
+        if (!animal.isValidObs())
+            throw new IllegalArgumentException(String.format("A observação do animal não deve exceder %d caracteres.", Validacao.MAX_TEXTO));
         
         Animal animalSalvo = animalRepository.save(animal);
 
@@ -105,13 +112,19 @@ public class AnimalService {
         Optional.ofNullable(novosDados.getObs()).ifPresent(animal::setObs);
 
         if (!animal.isValidEspecie())
-            throw new IllegalArgumentException("Espécie do Animal inválida, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+            throw new IllegalArgumentException(String.format("Espécie do Animal inválida, deve ter apenas letras e espaços, entre %d e %d caracteres.", Validacao.MIN_NOME, Validacao.MAX_NOME));
 
         if (!animal.isValidNome())
-            throw new IllegalArgumentException("Nome do Animal inválido, deve ter apenas letras e espaços, entre 2 e 60 caracteres.");
+            throw new IllegalArgumentException(String.format("Nome do Animal inválido, deve ter apenas letras e espaços, entre %d e %d caracteres.", Validacao.MIN_NOME, Validacao.MAX_NOME));
 
         if (!animal.isValidIdade())
             throw new IllegalArgumentException("Idade do Animal inválida, não pode ser negativa.");
+        
+        if (!animal.isValidDescricao())
+            throw new IllegalArgumentException(String.format("A descrição do animal não deve exceder %d caracteres.", Validacao.MAX_TEXTO));
+
+        if (!animal.isValidObs())
+            throw new IllegalArgumentException(String.format("A observação do animal não deve exceder %d caracteres.", Validacao.MAX_TEXTO));
 
         return animalRepository.save(animal);
     }
