@@ -188,8 +188,21 @@ public class FotoService {
             ));
         }
 
+        List<Long> animalIds = animais.stream()
+                   .map(Animal::getId)
+                   .collect(Collectors.toList());
+
+        List<Foto> fotosPrincipais = fotoRepository.findPrimeirasFotosByAnimalIdIn(animalIds);
+
+        Map<Long, Foto> fotoMap = fotosPrincipais.stream()
+                        .collect(Collectors.toMap(
+                        foto -> foto.getAnimal().getId(), 
+                        foto -> foto 
+        ));
+
         for (Animal animal: animais) {
-            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(animal.getId(), true);
+            Foto fotoPrincipal = fotoMap.get(animal.getId());
+            FotoResponseDTO foto = new FotoResponseDTO(fotoPrincipal, fotoPrincipal.getAnimal());
         
             Long favoritoId = favoritosMap.get(animal.getId()); // Pega o id do favorito relacionado ao id do animal, como mapeado acima (pode ser nulo)
             
@@ -216,9 +229,22 @@ public class FotoService {
 
         List<FotoResponseDTO> fotos = new ArrayList<>();
 
+        List<Long> animalIds = favoritos.stream()
+                   .map(favorito -> favorito.getAnimal().getId())
+                   .collect(Collectors.toList());
+
+        List<Foto> fotosPrincipais = fotoRepository.findPrimeirasFotosByAnimalIdIn(animalIds);
+
+        Map<Long, Foto> fotoMap = fotosPrincipais.stream()
+                        .collect(Collectors.toMap(
+                        foto -> foto.getAnimal().getId(), 
+                        foto -> foto 
+        ));
+
         for (Favorito favorito : favoritos) {
             Long favoritoId = favorito.getId();
-            FotoResponseDTO foto = getPrimeiraFotoDoAnimal(favorito.getAnimal().getId(), true);
+            Foto fotoPrincipal = fotoMap.get(favorito.getAnimal().getId());
+            FotoResponseDTO foto = new FotoResponseDTO(fotoPrincipal, fotoPrincipal.getAnimal());
             foto.setTotalPaginas(totalPaginas);
             foto.setFavoritoId(favoritoId);
             fotos.add(foto);
