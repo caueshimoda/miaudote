@@ -141,6 +141,8 @@ public class FotoService {
                    .map(Animal::getId)
                    .collect(Collectors.toList());
 
+
+        // Isso aqui é pra melhorar a performance, fazendo uma query com todas as ids que estão na lista
         List<Foto> fotosPrincipais = fotoRepository.findPrimeirasFotosByAnimalIdIn(animalIds);
 
         Map<Long, Foto> fotoMap = fotosPrincipais.stream()

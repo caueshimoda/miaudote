@@ -36,8 +36,10 @@ public class AdocaoSolicitadaResponseDTO {
             this.status = "Indefinido"; 
         else if (StatusAdocao.isAberta(adocaoSolicitada.getStatus())) 
             this.status = "Em Aberto"; 
-        else 
+        else if (StatusAdocao.isEncerrada(adocaoSolicitada.getStatus())) 
             this.status = "Encerrada";
+        else
+            this.status = "Cancelada";
     }
 
 }

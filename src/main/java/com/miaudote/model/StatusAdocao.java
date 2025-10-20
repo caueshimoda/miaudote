@@ -19,6 +19,12 @@ public class StatusAdocao {
     
     }
 
+    public static boolean isEncerrada(String status) {
+
+        return status.equals(FINALIZADA_ADOCAO);
+    
+    }
+
     public static boolean isValidStatus(String status) {
 
         List<String> abertas = Arrays.asList(EM_ANDAMENTO, FINALIZADA_ADOCAO,
@@ -27,5 +33,5 @@ public class StatusAdocao {
         return abertas.contains(status);
     
     }
-    
+
 }
