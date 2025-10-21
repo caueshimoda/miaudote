@@ -34,6 +34,10 @@ public class UsuarioService {
 
 
     public Usuario cadastrarUsuario(UsuarioCadastroDTO dto){
+
+        if (usuarioRepository.existsByEmail(dto.getEmail()))
+            throw new IllegalArgumentException("O e-mail já está cadastrado.");
+
         Usuario usuario;
 
         usuario = usuarioMapper.toEntity(dto);

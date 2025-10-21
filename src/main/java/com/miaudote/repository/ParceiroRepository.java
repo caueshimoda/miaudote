@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ParceiroRepository extends JpaRepository<Parceiro, Long> {
 
+    boolean existsByDocumento(String documento);
+
 }

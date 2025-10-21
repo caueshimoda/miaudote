@@ -24,8 +24,13 @@ public class ParceiroService {
 
     @Transactional
     public Parceiro cadastrarParceiro(ParceiroCadastroDTO request) {
-        Usuario savedUsuario = null;
+        
+        if (parceiroRepository.existsByDocumento(request.getDocumento()))
+                throw new IllegalArgumentException("O documento já está cadastrado.");
+        
+                Usuario savedUsuario = null;
         try {
+            
             savedUsuario = usuarioService.cadastrarUsuario(request.getUsuario());
 
             Parceiro parceiro = new Parceiro();
@@ -35,7 +40,7 @@ public class ParceiroService {
             parceiro.setSite(request.getSite());
 
             if (!parceiro.isValidDocumento())
-                throw new IllegalArgumentException("Documento do Parceiro inválido. Deve ser um CPF válido se for protetor, ou um CNPJ válido se for ONG.");
+                throw new IllegalArgumentException("Documento inválido.");
             
                 return parceiroRepository.save(parceiro);
 
