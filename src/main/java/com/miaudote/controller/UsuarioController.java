@@ -2,6 +2,7 @@ package com.miaudote.controller;
 
 import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.dto.UsuarioDTO;
+import com.miaudote.dto.UsuarioLoginDTO;
 import com.miaudote.dto.UsuarioMapper;
 import com.miaudote.jwt.JwtResponse;
 import com.miaudote.jwt.JwtUtil;
@@ -54,15 +55,16 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUsuario(@RequestBody Usuario loginRequest){
         try{
-            Usuario usuario = usuarioService.loginUsuario(
+            UsuarioLoginDTO usuario = usuarioService.loginUsuario(
                     loginRequest.getEmail(),
                     loginRequest.getSenha()
             );
 
+            
             String token = jwtUtils.generateToken(usuario.getEmail());
 
             // Mandamos de volta o token e o id do usuário
-            return new ResponseEntity<>(new JwtResponse(token, usuario.getId()),HttpStatus.OK);
+            return new ResponseEntity<JwtResponse>(new JwtResponse(token, usuario.getId(), usuario.getTipo()), HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

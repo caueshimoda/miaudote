@@ -9,4 +9,6 @@ public interface AdotanteRepository extends JpaRepository<Adotante, Long> {
 
     boolean existsByCpf(String cpf);
 
+    boolean existsById(Long id);
+
 }

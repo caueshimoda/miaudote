@@ -1,10 +1,12 @@
 package com.miaudote.service;
 
 import com.miaudote.dto.UsuarioCadastroDTO;
+import com.miaudote.dto.UsuarioLoginDTO;
 import com.miaudote.dto.UsuarioMapper;
 import com.miaudote.jwt.UsuarioDetailsImpl;
 import com.miaudote.model.Usuario;
 import com.miaudote.model.Validacao;
+import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,12 +30,14 @@ public class UsuarioService implements UserDetailsService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
+    private final AdotanteRepository adotanteRepository;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper, AdotanteRepository adotanteRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioMapper = usuarioMapper;
+        this.adotanteRepository = adotanteRepository;
     }
 
     @Override
@@ -79,7 +83,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
 
-    public Usuario loginUsuario(String email, String senhaDigitada){
+    public UsuarioLoginDTO loginUsuario(String email, String senhaDigitada){
         // busca usuário pelo e-mail
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -88,7 +92,9 @@ public class UsuarioService implements UserDetailsService {
             throw new RuntimeException("Senha inválida");
         }
 
-        return usuario;
+        String tipo = adotanteRepository.existsById(usuario.getId())? "adotante" : "parceiro";
+
+        return new UsuarioLoginDTO(usuario.getId(), usuario.getEmail(), tipo);
     }
 
     public Usuario atualizarUsuario(Long id, UsuarioCadastroDTO novosDados){
