@@ -94,11 +94,11 @@ public class AnimalController {
         }
     }
 
-    @PatchMapping("/{animalId}/parceiro/{parceiroId}")
-    public ResponseEntity<?> atualizarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId,
-                                                  @RequestBody Animal novosDados) {
+    @PatchMapping("/{animalId}")
+    public ResponseEntity<?> atualizarAnimal(@PathVariable Long animalId,
+                                             @RequestBody Animal novosDados) {
         try {
-            Animal animalAtualizado = animalService.atualizarAnimal(animalId, parceiroId, novosDados);
+            Animal animalAtualizado = animalService.atualizarAnimal(animalId, novosDados);
             return new ResponseEntity<>(new AnimalResponseDTO(animalAtualizado), HttpStatus.OK);
 
         } catch (Exception e) {
@@ -107,10 +107,10 @@ public class AnimalController {
         }
     }
 
-    @DeleteMapping("/{animalId}/parceiro/{parceiroId}")
-    public ResponseEntity<Void> deletarAnimal(@PathVariable Long animalId, @PathVariable Long parceiroId) {
+    @DeleteMapping("/{animalId}")
+    public ResponseEntity<Void> deletarAnimal(@PathVariable Long animalId) {
         try {
-            animalService.deletarAnimal(animalId, parceiroId);
+            animalService.deletarAnimal(animalId);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {

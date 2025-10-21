@@ -48,15 +48,20 @@ public class AdocaoSolicitadaService {
 
     public AdocaoSolicitadaResponseDTO cadastrarAdocaoSolicitada(AdocaoSolicitadaRequest request) {
         Adotante adotante = adotanteRepository.findById(request.getAdotanteId())
-                .orElseThrow(() -> new RuntimeException("Adotante não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Adotante não encontrado."));
         Animal animal = animalRepository.findById(request.getAnimalId())
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Animal não encontrado."));
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotante.getId()))
+            throw new AccessDeniedException("O usuário não pode criar solicitações para esse adotante.");
 
         if (!animal.isDisponivel())
-            throw new RuntimeException("Animal indisponível para adoção");
+            throw new RuntimeException("Animal indisponível para adoção.");
 
         if (adocaoSolicitadaRepository.existsByAdotanteAndAnimalAndStatus(adotante, animal, StatusAdocao.EM_ANDAMENTO)) 
-            throw new RuntimeException("Já existe uma solicitação em aberto para esse animal vindo do adotante");
+            throw new RuntimeException("Já existe uma solicitação em aberto para esse animal vindo do adotante.");
 
         // Ao abrir uma solicitação, o animal vira favorito do adotante automaticamente, se já não era
         if (!favoritoRepository.existsByAnimalAndAdotante(animal, adotante)) 
@@ -77,11 +82,26 @@ public class AdocaoSolicitadaService {
         AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Solicitação não encontrado com id: " + id));
 
+        if (adocaoSolicitada.getAnimal() == null || adocaoSolicitada.getAnimal().getParceiro() == null || adocaoSolicitada.getAdotante() == null)
+            throw new RuntimeException("Solicitação de adoção inválida.");
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        boolean naoAutorizado = idUsuarioLogado == null || (!idUsuarioLogado.equals(adocaoSolicitada.getAnimal().getParceiro().getId()) && !idUsuarioLogado.equals(adocaoSolicitada.getAdotante().getId()));
+
+        if (naoAutorizado)
+            throw new AccessDeniedException("O usuário não pode acessar essa solicitação.");
+
         List<FotoResponseDTO> fotos = fotoService.getFotosPorAnimal(adocaoSolicitada.getAnimal().getId());
         return new AdocaoComFotoDTO(adocaoSolicitada, fotos);
     }
 
     public List<AdocaoComFotoDTO> getSolicitacoesPorAdotante(Long adotanteId) {
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotanteId))
+            throw new AccessDeniedException("O usuário não pode acessar as solicitações desse adotante.");
         List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAdotanteId(adotanteId);
 
         List<AdocaoComFotoDTO> dtos = new ArrayList<>();
@@ -98,6 +118,12 @@ public class AdocaoSolicitadaService {
     }
 
     public List<AdocaoComFotoDTO> getSolicitacoesPorParceiro(Long parceiroId) {
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(parceiroId))
+            throw new AccessDeniedException("O usuário não pode acessar as solicitações desse parceiro.");
+
         List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAnimalParceiroId(parceiroId);
 
         List<AdocaoComFotoDTO> dtos = new ArrayList<>();
@@ -117,14 +143,14 @@ public class AdocaoSolicitadaService {
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
 
         if (adocaoSolicitadaExistente.getAnimal() == null || adocaoSolicitadaExistente.getAnimal().getParceiro() == null || adocaoSolicitadaExistente.getAdotante() == null)
-            throw new RuntimeException("Solicitação inválida.");
+            throw new RuntimeException("Solicitação de adoção inválida.");
 
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
         boolean naoAutorizado = idUsuarioLogado == null || (!idUsuarioLogado.equals(adocaoSolicitadaExistente.getAnimal().getParceiro().getId()) && !idUsuarioLogado.equals(adocaoSolicitadaExistente.getAdotante().getId()));
 
         if (naoAutorizado)
-            throw new AccessDeniedException("O usuário logado não pode atualizar essa solicitação.");
+            throw new AccessDeniedException("O usuário não pode atualizar essa solicitação.");
 
         if (!StatusAdocao.isAberta(adocaoSolicitadaExistente.getStatus()))
             throw new RuntimeException("Soliticações finalizadas não podem ser atualizadas.");
@@ -144,13 +170,24 @@ public class AdocaoSolicitadaService {
 
     public void deletarAdocaoSolicitada(Long id){
         AdocaoSolicitada adocaoSolicitada = adocaoSolicitadaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
+
+        if (adocaoSolicitada.getAnimal() == null || adocaoSolicitada.getAnimal().getParceiro() == null || adocaoSolicitada.getAdotante() == null)
+            throw new RuntimeException("Solicitação de adoção inválida.");
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        boolean naoAutorizado = idUsuarioLogado == null || (!idUsuarioLogado.equals(adocaoSolicitada.getAnimal().getParceiro().getId()) && !idUsuarioLogado.equals(adocaoSolicitada.getAdotante().getId()));
+
+        if (naoAutorizado)
+            throw new AccessDeniedException("O usuário não pode excluir essa solicitação.");
+
 
         // Acho que pra essa classe não precisaria disso, mas deixei por precaução
         try {
             adocaoSolicitadaRepository.delete(adocaoSolicitada);
         } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Não é possível excluir: solicitação vinculada a outros registros", e);
+            throw new RuntimeException("Não é possível excluir: solicitação vinculada a outros registros.", e);
         }
     }
    

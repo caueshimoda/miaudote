@@ -64,7 +64,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/usuarios/**", "/parceiros/**").permitAll() 
+                                .requestMatchers("/usuarios/login", "/parceiros/cadastrar", "/adotantes/cadastrar").permitAll() 
                                 .anyRequest().authenticated()
    
                 );

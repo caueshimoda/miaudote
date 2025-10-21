@@ -2,6 +2,7 @@ package com.miaudote.service;
 
 import com.miaudote.dto.AnimalRequest;
 import com.miaudote.dto.AnimalResponseDTO;
+import com.miaudote.jwt.UsuarioLogado;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Parceiro;
 import com.miaudote.model.Validacao;
@@ -9,6 +10,8 @@ import com.miaudote.repository.ParceiroRepository;
 import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.FotoRepository;
 import jakarta.transaction.Transactional;
+
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
@@ -32,6 +35,11 @@ public class AnimalService {
     public AnimalResponseDTO cadastrarAnimal(AnimalRequest request) throws IOException {
         Parceiro parceiro = parceiroRepository.findById(request.getParceiroId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(parceiro.getId()))
+            throw new AccessDeniedException("Usuário não autorizado a cadastrar animais para esse parceiro.");
 
         Animal animal = new Animal();        
         animal.setParceiro(parceiro);
@@ -94,13 +102,17 @@ public class AnimalService {
                 .toList(); 
     }
 
-    public Animal atualizarAnimal(Long animalId, Long parceiroId, Animal novosDados) {
+    public Animal atualizarAnimal(Long animalId, Animal novosDados) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
-        if (!animal.getParceiro().getId().equals(parceiroId)) {
-            throw new RuntimeException("Usuário não autorizado a atualizar esse animal");
-        }
+        if (animal.getParceiro() == null)
+            throw new RuntimeException("O animal não tem um parceiro válido.");
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(animal.getParceiro().getId()))
+            throw new AccessDeniedException("Usuário não autorizado a atualizar esse animal.");
 
         Optional.ofNullable(novosDados.getNome()).ifPresent(animal::setNome);
         Optional.ofNullable(novosDados.getEspecie()).ifPresent(animal::setEspecie);
@@ -129,13 +141,17 @@ public class AnimalService {
         return animalRepository.save(animal);
     }
 
-    public void deletarAnimal(Long animalId, Long parceiroId) {
+    public void deletarAnimal(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
+        
+         if (animal.getParceiro() == null)
+            throw new RuntimeException("O animal não tem um parceiro válido.");
 
-        if (!animal.getParceiro().getId().equals(parceiroId)) {
-            throw new RuntimeException("Usuário não autorizado a excluir esse animal");
-        }
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(animal.getParceiro().getId()))
+            throw new AccessDeniedException("Usuário não autorizado a excluir esse animal.");
 
         animalRepository.delete(animal);
     }

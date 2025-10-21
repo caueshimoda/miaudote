@@ -5,9 +5,11 @@ import com.miaudote.model.Parceiro;
 import com.miaudote.dto.ParceiroCadastroDTO;
 import com.miaudote.dto.ParceiroResponseDTO;
 import com.miaudote.dto.UsuarioCadastroDTO;
+import com.miaudote.jwt.UsuarioLogado;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.ParceiroRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -66,6 +68,11 @@ public class ParceiroService {
         Parceiro parceiroExistente = parceiroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado"));
 
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(parceiroExistente.getId()))
+            throw new AccessDeniedException("O usuário não pode atualizar esse parceiro.");
+
         //todo: criar método separado para o merge de dados novos com os existentes
         UsuarioCadastroDTO novoUsuario = novosDados.getUsuario();
         Optional.ofNullable(novoUsuario)
@@ -84,6 +91,11 @@ public class ParceiroService {
     public void deletarParceiro(Long id){
         Parceiro parceiro = parceiroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado"));
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(parceiro.getId()))
+            throw new AccessDeniedException("O usuário não pode excluir esse parceiro.");
 
         try {
             parceiroRepository.delete(parceiro); 

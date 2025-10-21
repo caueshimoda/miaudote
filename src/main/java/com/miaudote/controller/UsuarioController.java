@@ -61,6 +61,7 @@ public class UsuarioController {
 
             String token = jwtUtils.generateToken(usuario.getEmail());
 
+            // Mandamos de volta o token e o id do usuário
             return new ResponseEntity<>(new JwtResponse(token, usuario.getId()),HttpStatus.OK);
 
         } catch (Exception e) {

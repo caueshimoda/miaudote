@@ -5,9 +5,11 @@ import com.miaudote.model.Adotante;
 import com.miaudote.dto.AdotanteCadastroDTO;
 import com.miaudote.dto.AdotanteResponseDTO;
 import com.miaudote.dto.UsuarioCadastroDTO;
+import com.miaudote.jwt.UsuarioLogado;
 import com.miaudote.model.Usuario;
 import com.miaudote.repository.AdotanteRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -63,8 +65,14 @@ public class AdotanteService {
 
     @Transactional
     public Adotante atualizarAdotante(Long id, AdotanteCadastroDTO novosDados){
+
         Adotante adotanteExistente = adotanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("adotante não encontrado"));
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotanteExistente.getId()))
+            throw new AccessDeniedException("O usuário não pode atualizar esse adotante.");
 
         UsuarioCadastroDTO novoUsuario = novosDados.getUsuario();
         Optional.ofNullable(novoUsuario)
@@ -82,6 +90,11 @@ public class AdotanteService {
     public void deletarAdotante(Long id){
         Adotante adotante = adotanteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Adotante não encontrado"));
+        
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotante.getId()))
+            throw new AccessDeniedException("O usuário não pode excluir esse adotante.");
 
         try {
             adotanteRepository.delete(adotante);
