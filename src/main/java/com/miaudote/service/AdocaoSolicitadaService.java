@@ -113,16 +113,21 @@ public class AdocaoSolicitadaService {
 
     public AdocaoSolicitadaResponseDTO atualizarAdocaoSolicitada(Long id, AdocaoSolicitada novosDados){
 
+        AdocaoSolicitada adocaoSolicitadaExistente = adocaoSolicitadaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada."));
+
+        if (adocaoSolicitadaExistente.getAnimal() == null || adocaoSolicitadaExistente.getAnimal().getParceiro() == null || adocaoSolicitadaExistente.getAdotante() == null)
+            throw new RuntimeException("Solicitação inválida.");
+
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
-        if (idUsuarioLogado == null || !idUsuarioLogado.equals(id))
-            throw new AccessDeniedException("O usuário logado não pode atualizar essa solicitação");
+        boolean naoAutorizado = idUsuarioLogado == null || (!idUsuarioLogado.equals(adocaoSolicitadaExistente.getAnimal().getParceiro().getId()) && !idUsuarioLogado.equals(adocaoSolicitadaExistente.getAdotante().getId()));
 
-        AdocaoSolicitada adocaoSolicitadaExistente = adocaoSolicitadaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        if (naoAutorizado)
+            throw new AccessDeniedException("O usuário logado não pode atualizar essa solicitação.");
 
         if (!StatusAdocao.isAberta(adocaoSolicitadaExistente.getStatus()))
-            throw new RuntimeException("Soliticações finalizadas não podem ser atualizadas");
+            throw new RuntimeException("Soliticações finalizadas não podem ser atualizadas.");
 
         Optional.ofNullable(novosDados.getStatus()).ifPresent(adocaoSolicitadaExistente::setStatus);
 
