@@ -25,7 +25,7 @@ public class AdotanteService {
     @Transactional
     public Adotante cadastrarAdotante(AdotanteCadastroDTO request) {
         if (adotanteRepository.existsByCpf(request.getCpf()))
-            throw new IllegalArgumentException("O CPF já está cadastrado.");
+            throw new IllegalArgumentException("CPF já cadastrado.");
             
         Usuario savedUsuario = null;
         try {
@@ -45,8 +45,6 @@ public class AdotanteService {
             return adotanteRepository.save(adotante);
 
         } catch (Exception e) {
-            System.err.println("Erro ao cadastrar Adotante: " + e.getMessage());
-            e.printStackTrace(); 
 
             if (savedUsuario != null && savedUsuario.getId() != null) {
                 usuarioService.deletarUsuario(savedUsuario.getId());

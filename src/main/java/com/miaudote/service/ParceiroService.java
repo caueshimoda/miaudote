@@ -26,7 +26,7 @@ public class ParceiroService {
     public Parceiro cadastrarParceiro(ParceiroCadastroDTO request) {
         
         if (parceiroRepository.existsByDocumento(request.getDocumento()))
-                throw new IllegalArgumentException("O documento já está cadastrado.");
+                throw new IllegalArgumentException("Documento já cadastrado.");
         
                 Usuario savedUsuario = null;
         try {
@@ -45,7 +45,6 @@ public class ParceiroService {
                 return parceiroRepository.save(parceiro);
 
         } catch (Exception e) {
-            e.printStackTrace(); 
 
             if (savedUsuario != null && savedUsuario.getId() != null) {
                 usuarioService.deletarUsuario(savedUsuario.getId());

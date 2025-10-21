@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -61,6 +62,16 @@ public class JwtUtil {
             System.out.println("JWT claims string is empty: " + e.getMessage());
         }
         return false;
+    }
+
+    public static Long getUserIdFromContext() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        if (principal instanceof UsuarioDetailsImpl) {
+            return ((UsuarioDetailsImpl) principal).getId();
+        } 
+        // Lidar com casos onde o Principal não é do tipo esperado (ex: string "anonymousUser")
+        return null; // ou lançar exceção, dependendo da sua regra
     }
 }
 

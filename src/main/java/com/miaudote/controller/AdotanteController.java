@@ -27,7 +27,7 @@ public class AdotanteController {
 
         } catch (Exception e) {
             e.printStackTrace(); 
-            return ResponseEntity.badRequest().body("Erro ao cadastrar adotante: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }  
 

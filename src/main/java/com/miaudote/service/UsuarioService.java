@@ -2,10 +2,14 @@ package com.miaudote.service;
 
 import com.miaudote.dto.UsuarioCadastroDTO;
 import com.miaudote.dto.UsuarioMapper;
+import com.miaudote.jwt.UsuarioDetailsImpl;
 import com.miaudote.model.Usuario;
 import com.miaudote.model.Validacao;
 import com.miaudote.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     // Welcome back Bruna, your dedication to the Miaudote project has been exceptional.
     // You've taken ownership of the backend building process and established yourself as the tech lead,
@@ -32,11 +36,19 @@ public class UsuarioService {
         this.usuarioMapper = usuarioMapper;
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com email: " + email));
+
+        return UsuarioDetailsImpl.build(usuario); 
+    }
+
 
     public Usuario cadastrarUsuario(UsuarioCadastroDTO dto){
 
         if (usuarioRepository.existsByEmail(dto.getEmail()))
-            throw new IllegalArgumentException("O e-mail já está cadastrado.");
+            throw new IllegalArgumentException("e-mail já cadastrado.");
 
         Usuario usuario;
 

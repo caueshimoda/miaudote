@@ -5,6 +5,7 @@ import com.miaudote.dto.AdocaoSolicitadaRequest;
 import com.miaudote.dto.AdocaoSolicitadaResponseDTO;
 import com.miaudote.dto.FavoritoRequest;
 import com.miaudote.dto.FotoResponseDTO;
+import com.miaudote.jwt.UsuarioLogado;
 import com.miaudote.model.AdocaoSolicitada;
 import com.miaudote.model.Animal;
 import com.miaudote.model.StatusAdocao;
@@ -14,11 +15,11 @@ import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.FavoritoRepository;
 import com.miaudote.repository.AdocaoSolicitadaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,6 +112,12 @@ public class AdocaoSolicitadaService {
     }
 
     public AdocaoSolicitadaResponseDTO atualizarAdocaoSolicitada(Long id, AdocaoSolicitada novosDados){
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(id))
+            throw new AccessDeniedException("O usuário logado não pode atualizar essa solicitação");
+
         AdocaoSolicitada adocaoSolicitadaExistente = adocaoSolicitadaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
 

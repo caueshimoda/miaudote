@@ -37,19 +37,22 @@ public class AuthTokenFilter extends OncePerRequestFilter{
                 String email = jwtUtils.getUsernameFromToken(jwt);
 
                 Usuario usuario = usuarioService.buscarPorEmail(email);
+                
                 if (usuario != null) {
+                    UserDetails userDetails = UsuarioDetailsImpl.build(usuario); 
+
+                    /* 
                     UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                             usuario.getEmail(),
                             usuario.getSenha_hash(),
                             new ArrayList<>()
-                    );
+                    );*/
 
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails,
-                                    null,
-                                    userDetails.getAuthorities()
-                            );
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                    );
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
