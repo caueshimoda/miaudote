@@ -2,6 +2,7 @@ package com.miaudote.service;
 
 import com.miaudote.model.Foto;
 import com.miaudote.dto.FotoResponseDTO;
+import com.miaudote.jwt.UsuarioLogado;
 import com.miaudote.model.Adotante;
 import com.miaudote.model.Animal;
 import com.miaudote.model.Favorito;
@@ -26,6 +27,8 @@ import java.util.Optional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,6 +56,14 @@ public class FotoService {
 
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (animal.getParceiro() == null)
+            throw new RuntimeException("Animal com parceiro inválido.");
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(animal.getParceiro().getId()))
+            throw new AccessDeniedException("Usuário não autorizado a cadastrar fotos para esse animal.");
 
         if (fotoRepository.countByAnimalId(animalId) + arquivos.size() > 5) {
             throw new RuntimeException("Não é possível adicionar essa quantidade de fotos ao animal");
@@ -223,6 +234,11 @@ public class FotoService {
 
     public List<FotoResponseDTO> getFotosFavoritos(Long adotanteId, int pagina) {
 
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotanteId))
+            throw new AccessDeniedException("Usuário não autorizado a acessar favoritos desse adotante.");
+
         Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_ALL);
 
         Page<Favorito> paginas = favoritoRepository.findPaginasByAdotanteId(pageable, adotanteId);
@@ -259,6 +275,17 @@ public class FotoService {
     public void deletarFoto(Long id, Long animalId){
         Foto foto = fotoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Foto não encontrada"));
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (foto.getAnimal() == null)
+            throw new RuntimeException("Foto com animal inválido.");
+
+        if (foto.getAnimal().getParceiro() == null)
+            throw new RuntimeException("Animal com parceiro inválido.");
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(foto.getAnimal().getParceiro().getId()))
+            throw new AccessDeniedException("Usuário não autorizado a excluir fotos desse animal.");
 
         if (fotoRepository.countByAnimalId(animalId) < 2) {
             throw new RuntimeException("Não é possível excluir a foto, o animal precisa ter pelo menos uma");

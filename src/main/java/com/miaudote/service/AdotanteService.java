@@ -72,7 +72,7 @@ public class AdotanteService {
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
         if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotanteExistente.getId()))
-            throw new AccessDeniedException("O usuário não pode atualizar esse adotante.");
+            throw new AccessDeniedException("Usuário não autorizado a atualizar esse adotante.");
 
         UsuarioCadastroDTO novoUsuario = novosDados.getUsuario();
         Optional.ofNullable(novoUsuario)
@@ -94,7 +94,7 @@ public class AdotanteService {
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
         if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotante.getId()))
-            throw new AccessDeniedException("O usuário não pode excluir esse adotante.");
+            throw new AccessDeniedException("Usuário não autorizado a excluir esse adotante.");
 
         try {
             adotanteRepository.delete(adotante);

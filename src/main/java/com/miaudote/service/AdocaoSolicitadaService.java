@@ -90,7 +90,7 @@ public class AdocaoSolicitadaService {
         boolean naoAutorizado = idUsuarioLogado == null || (!idUsuarioLogado.equals(adocaoSolicitada.getAnimal().getParceiro().getId()) && !idUsuarioLogado.equals(adocaoSolicitada.getAdotante().getId()));
 
         if (naoAutorizado)
-            throw new AccessDeniedException("O usuário não pode acessar essa solicitação.");
+            throw new AccessDeniedException("Usuário não autorizado a acessar essa solicitação.");
 
         List<FotoResponseDTO> fotos = fotoService.getFotosPorAnimal(adocaoSolicitada.getAnimal().getId());
         return new AdocaoComFotoDTO(adocaoSolicitada, fotos);
@@ -101,7 +101,7 @@ public class AdocaoSolicitadaService {
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
         if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotanteId))
-            throw new AccessDeniedException("O usuário não pode acessar as solicitações desse adotante.");
+            throw new AccessDeniedException("Usuário não autorizado a acessar as solicitações desse adotante.");
         List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAdotanteId(adotanteId);
 
         List<AdocaoComFotoDTO> dtos = new ArrayList<>();
@@ -122,7 +122,7 @@ public class AdocaoSolicitadaService {
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
         if (idUsuarioLogado == null || !idUsuarioLogado.equals(parceiroId))
-            throw new AccessDeniedException("O usuário não pode acessar as solicitações desse parceiro.");
+            throw new AccessDeniedException("Usuário não autorizado a acessar as solicitações desse parceiro.");
 
         List<AdocaoSolicitada> solicitacoes = adocaoSolicitadaRepository.findByAnimalParceiroId(parceiroId);
 
@@ -150,7 +150,7 @@ public class AdocaoSolicitadaService {
         boolean naoAutorizado = idUsuarioLogado == null || (!idUsuarioLogado.equals(adocaoSolicitadaExistente.getAnimal().getParceiro().getId()) && !idUsuarioLogado.equals(adocaoSolicitadaExistente.getAdotante().getId()));
 
         if (naoAutorizado)
-            throw new AccessDeniedException("O usuário não pode atualizar essa solicitação.");
+            throw new AccessDeniedException("Usuário não autorizado a atualizar essa solicitação.");
 
         if (!StatusAdocao.isAberta(adocaoSolicitadaExistente.getStatus()))
             throw new RuntimeException("Soliticações finalizadas não podem ser atualizadas.");
@@ -180,7 +180,7 @@ public class AdocaoSolicitadaService {
         boolean naoAutorizado = idUsuarioLogado == null || (!idUsuarioLogado.equals(adocaoSolicitada.getAnimal().getParceiro().getId()) && !idUsuarioLogado.equals(adocaoSolicitada.getAdotante().getId()));
 
         if (naoAutorizado)
-            throw new AccessDeniedException("O usuário não pode excluir essa solicitação.");
+            throw new AccessDeniedException("Usuário não autorizado a excluir essa solicitação.");
 
 
         // Acho que pra essa classe não precisaria disso, mas deixei por precaução

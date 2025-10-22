@@ -1,6 +1,7 @@
 package com.miaudote.service;
 
 import com.miaudote.dto.FavoritoResponseDTO;
+import com.miaudote.jwt.UsuarioLogado;
 import com.miaudote.dto.FavoritoRequest;
 import com.miaudote.model.Favorito;
 import com.miaudote.model.Animal;
@@ -9,6 +10,7 @@ import com.miaudote.repository.FavoritoRepository;
 import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -32,6 +34,11 @@ public class FavoritoService {
         Animal animal = animalRepository.findById(request.getAnimalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
 
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotante.getId()))
+            throw new AccessDeniedException("Usuário não autorizado a adicionar favoritos para esse adotante.");
+
         if (favoritoRepository.existsByAnimalAndAdotante(animal, adotante))
             throw new RuntimeException("O adotante já favoritou esse animal");
 
@@ -47,10 +54,24 @@ public class FavoritoService {
      public FavoritoResponseDTO getFavorito(Long id) {
         Favorito favorito = favoritoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Favorito não encontrado com id: " + id));
+
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (favorito.getAdotante() == null)
+            throw new RuntimeException("Favorito com adotante inválido.");
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(favorito.getAdotante().getId()))
+            throw new AccessDeniedException("Usuário não autorizado a acessar os favoritos desse adotante.");
+
         return new FavoritoResponseDTO(favorito);
     }
 
     public List<FavoritoResponseDTO> getFavoritosPorAdotante(Long adotanteId) {
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(adotanteId))
+            throw new AccessDeniedException("Usuário não autorizado a acessar os favoritos desse adotante.");
+
         List<Favorito> favoritos = favoritoRepository.findByAdotanteId(adotanteId);
 
         return favoritos.stream()
@@ -61,6 +82,14 @@ public class FavoritoService {
     public void deletarFavorito(Long id){
         Favorito favorito = favoritoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Favorito não encontrado"));
+        
+        Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
+
+        if (favorito.getAdotante() == null)
+            throw new RuntimeException("Favorito com adotante inválido.");
+
+        if (idUsuarioLogado == null || !idUsuarioLogado.equals(favorito.getAdotante().getId()))
+            throw new AccessDeniedException("Usuário não autorizado a excluir os favoritos desse adotante.");
 
         // Acho que pra essa classe não precisaria disso, mas deixei por precaução
         try {

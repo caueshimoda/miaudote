@@ -58,7 +58,7 @@ public class ParceiroService {
 
     public ParceiroResponseDTO getParceiro(Long id) {
         Parceiro parceiro = parceiroRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Parceiro não encontrado com id: " + id));
+            .orElseThrow(() -> new RuntimeException("Parceiro não encontrado."));
 
         return new ParceiroResponseDTO(parceiro);
     }
@@ -71,7 +71,7 @@ public class ParceiroService {
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
         if (idUsuarioLogado == null || !idUsuarioLogado.equals(parceiroExistente.getId()))
-            throw new AccessDeniedException("O usuário não pode atualizar esse parceiro.");
+            throw new AccessDeniedException("Usuário não autorizado a atualizar esse parceiro.");
 
         //todo: criar método separado para o merge de dados novos com os existentes
         UsuarioCadastroDTO novoUsuario = novosDados.getUsuario();
@@ -95,7 +95,7 @@ public class ParceiroService {
         Long idUsuarioLogado = UsuarioLogado.getIdUsuarioLogado();
 
         if (idUsuarioLogado == null || !idUsuarioLogado.equals(parceiro.getId()))
-            throw new AccessDeniedException("O usuário não pode excluir esse parceiro.");
+            throw new AccessDeniedException("Usuário não autorizado a excluir esse parceiro.");
 
         try {
             parceiroRepository.delete(parceiro); 
