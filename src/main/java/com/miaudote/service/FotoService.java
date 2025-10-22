@@ -176,7 +176,7 @@ public class FotoService {
 
         Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_ALL);
 
-        Page<Animal> paginas = animalRepository.findAll(pageable);
+        Page<Animal> paginas = animalRepository.findPaginasByStatus(pageable, Animal.Status.Disponível.name());
         
         int totalPaginas = paginas.getTotalPages();
 
@@ -241,7 +241,7 @@ public class FotoService {
 
         Pageable pageable = getPageable(pagina, FOTOS_POR_PAGINA_ALL);
 
-        Page<Favorito> paginas = favoritoRepository.findPaginasByAdotanteId(pageable, adotanteId);
+        Page<Favorito> paginas = favoritoRepository.findPaginasByAdotanteIdAndAnimalStatus(pageable, adotanteId, Animal.Status.Disponível.name());
         int totalPaginas = paginas.getTotalPages();
 
         List<Favorito> favoritos = paginas.getContent();
