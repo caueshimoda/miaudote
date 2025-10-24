@@ -33,10 +33,9 @@ public class ParceiroController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getParceiroById(@PathVariable Long id) {
-        ParceiroResponseDTO parceiroDTO = parceiroService.getParceiro(id);
-        
+    public ResponseEntity<?> getParceiroById(@PathVariable Long id) {   
         try {
+            ParceiroResponseDTO parceiroDTO = parceiroService.getParceiro(id);
             return ResponseEntity.ok(parceiroDTO);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -46,7 +45,6 @@ public class ParceiroController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> atualizarParceiro(@PathVariable Long id, @RequestBody ParceiroCadastroDTO parceiro){
-
         try {
 
             Parceiro parceiroAtualizado = parceiroService.atualizarParceiro(id, parceiro);
@@ -60,13 +58,14 @@ public class ParceiroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deletarParceiro(@PathVariable Long id){
+    public ResponseEntity<?> deletarParceiro(@PathVariable Long id){
         try{
             parceiroService.deletarParceiro(id);
             return new ResponseEntity<>(HttpStatus.OK);
 
             } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                e.printStackTrace(); 
+                return ResponseEntity.badRequest().body("Erro ao excluir parceiro: " + e.getMessage());
             }
         }
 

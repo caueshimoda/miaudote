@@ -37,9 +37,8 @@ public class AdocaoSolicitadaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAdocaoSolicitadaById(@PathVariable Long id) {
-        AdocaoComFotoDTO adocaoSolicitadaDTO = adocaoSolicitadaService.getAdocaoSolicitada(id);
-        
         try {
+            AdocaoComFotoDTO adocaoSolicitadaDTO = adocaoSolicitadaService.getAdocaoSolicitada(id);
             return ResponseEntity.ok(adocaoSolicitadaDTO);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -49,10 +48,8 @@ public class AdocaoSolicitadaController {
 
     @GetMapping("/adotante/{id}")
     public ResponseEntity<?> getSolicitacoesByAdotante(@PathVariable Long id) {
-
-        List<AdocaoComFotoDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorAdotante(id);
-        
         try {
+            List<AdocaoComFotoDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorAdotante(id);
             return ResponseEntity.ok(solicitacoes);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -62,9 +59,8 @@ public class AdocaoSolicitadaController {
 
     @GetMapping("/parceiro/{id}")
     public ResponseEntity<?> getSolicitacoesByParceiro(@PathVariable Long id) {
-        List<AdocaoComFotoDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorParceiro(id);
-        
         try {
+            List<AdocaoComFotoDTO> solicitacoes = adocaoSolicitadaService.getSolicitacoesPorParceiro(id);
             return ResponseEntity.ok(solicitacoes);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -89,13 +85,14 @@ public class AdocaoSolicitadaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deletarAdocaoSolicitada(@PathVariable Long id){
+    public ResponseEntity<?> deletarAdocaoSolicitada(@PathVariable Long id){
         try{
             adocaoSolicitadaService.deletarAdocaoSolicitada(id);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao excluir solicitação: " + e.getMessage());
         }
     }
 

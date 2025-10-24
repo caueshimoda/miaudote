@@ -36,9 +36,8 @@ public class FotoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getFoto(@PathVariable Long id) {
-        FotoResponseDTO fotoDTO = fotoService.getFoto(id);
-
         try {
+            FotoResponseDTO fotoDTO = fotoService.getFoto(id);
             return ResponseEntity.ok(fotoDTO);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -48,9 +47,8 @@ public class FotoController {
 
     @GetMapping("/animal/{id}")
     public ResponseEntity<?> getFotoPorAnimal(@PathVariable Long id) {
-        List<FotoResponseDTO> fotos = fotoService.getFotosPorAnimal(id);
-
         try {
+            List<FotoResponseDTO> fotos = fotoService.getFotosPorAnimal(id);
             return ResponseEntity.ok(fotos);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -60,9 +58,8 @@ public class FotoController {
 
     @GetMapping("/first_animal/{id}")
     public ResponseEntity<?> getPrimeiraFotoDoAnimal(@PathVariable Long id) {
-        FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(id, true);
-
         try {
+            FotoResponseDTO foto = fotoService.getPrimeiraFotoDoAnimal(id, true);
             return ResponseEntity.ok(foto);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -72,9 +69,8 @@ public class FotoController {
 
     @GetMapping("/parceiro/{id}/pagina/{pagina}")
     public ResponseEntity<?> getFotosPorParceiro(@PathVariable Long id, @PathVariable int pagina) {
-        List<FotoResponseDTO> fotos = fotoService.getFotosPorParceiro(id, pagina);
-
         try {
+            List<FotoResponseDTO> fotos = fotoService.getFotosPorParceiro(id, pagina);
             return ResponseEntity.ok(fotos);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -84,9 +80,8 @@ public class FotoController {
 
     @GetMapping("/pagina/{pagina}/{id}")
     public ResponseEntity<?> getFotosPorPagina(@PathVariable int pagina, @PathVariable Long id) {
-        List<FotoResponseDTO> fotos = fotoService.getFotosPorPagina(id, pagina);
-
         try {
+            List<FotoResponseDTO> fotos = fotoService.getFotosPorPagina(id, pagina);
             return ResponseEntity.ok(fotos);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -96,9 +91,8 @@ public class FotoController {
 
     @GetMapping("/adotante/{id}/pagina/{pagina}")
     public ResponseEntity<?> getFotosFavoritos(@PathVariable Long id, @PathVariable int pagina) {
-        List<FotoResponseDTO> fotos = fotoService.getFotosFavoritos(id, pagina);
-
         try {
+            List<FotoResponseDTO> fotos = fotoService.getFotosFavoritos(id, pagina);
             return ResponseEntity.ok(fotos);
         }catch (Exception e) {
             e.printStackTrace(); 

@@ -16,7 +16,7 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
     List<Animal> findByParceiroId(Long parceiroId);
 
-    Page<Animal> findPaginasByStatus(Pageable pageable, String status);
+    Page<Animal> findPaginasByStatus(Pageable pageable, Animal.Status status);
 
 
 }

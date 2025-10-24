@@ -34,9 +34,8 @@ public class FavoritoController {
 
      @GetMapping("/{id}")
     public ResponseEntity<?> getFavoritoById(@PathVariable Long id) {
-        FavoritoResponseDTO favoritoDTO = favoritoService.getFavorito(id);
-        
         try {
+            FavoritoResponseDTO favoritoDTO = favoritoService.getFavorito(id);
             return ResponseEntity.ok(favoritoDTO);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -46,9 +45,8 @@ public class FavoritoController {
 
     @GetMapping("/adotante/{id}")
     public ResponseEntity<?> getFavoritosByAdotanteId(@PathVariable Long id) {
-        List<FavoritoResponseDTO> favoritos = favoritoService.getFavoritosPorAdotante(id);
-
         try {
+            List<FavoritoResponseDTO> favoritos = favoritoService.getFavoritosPorAdotante(id);
             return ResponseEntity.ok(favoritos);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -57,13 +55,14 @@ public class FavoritoController {
     } 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deletarFavorito(@PathVariable Long id){
+    public ResponseEntity<?> deletarFavorito(@PathVariable Long id){
         try{
             favoritoService.deletarFavorito(id);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao excluir favorito: " + e.getMessage());
         }
     }
 

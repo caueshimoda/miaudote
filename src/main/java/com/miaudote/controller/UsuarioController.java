@@ -1,7 +1,5 @@
 package com.miaudote.controller;
 
-import com.miaudote.dto.UsuarioCadastroDTO;
-import com.miaudote.dto.UsuarioDTO;
 import com.miaudote.dto.UsuarioLoginDTO;
 import com.miaudote.dto.UsuarioMapper;
 import com.miaudote.jwt.JwtResponse;
@@ -63,7 +61,8 @@ public class UsuarioController {
             return new ResponseEntity<JwtResponse>(new JwtResponse(token, usuario.getId(), usuario.getTipo()), HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao efetuar login: " + e.getMessage());
         }
     }
 

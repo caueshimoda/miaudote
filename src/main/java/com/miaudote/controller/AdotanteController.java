@@ -33,9 +33,8 @@ public class AdotanteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAdotanteById(@PathVariable Long id) {
-        AdotanteResponseDTO adotanteDTO = adotanteService.getAdotante(id);
-        
         try {
+            AdotanteResponseDTO adotanteDTO = adotanteService.getAdotante(id);
             return ResponseEntity.ok(adotanteDTO);
         }catch (Exception e) {
             e.printStackTrace(); 
@@ -58,13 +57,14 @@ public class AdotanteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deletarAdotante(@PathVariable Long id){
+    public ResponseEntity<?> deletarAdotante(@PathVariable Long id){
         try{
             adotanteService.deletarAdotante(id);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao excluir adotante: " + e.getMessage());
         }
     }
 }

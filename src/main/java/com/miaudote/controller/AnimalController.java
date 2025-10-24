@@ -108,13 +108,14 @@ public class AnimalController {
     }
 
     @DeleteMapping("/{animalId}")
-    public ResponseEntity<Void> deletarAnimal(@PathVariable Long animalId) {
+    public ResponseEntity<?> deletarAnimal(@PathVariable Long animalId) {
         try {
             animalService.deletarAnimal(animalId);
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body("Erro ao excluir animal: " + e.getMessage());
         }
     }
 
