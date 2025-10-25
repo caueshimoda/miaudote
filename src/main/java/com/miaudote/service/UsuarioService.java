@@ -31,13 +31,15 @@ public class UsuarioService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
     private final AdotanteRepository adotanteRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper, AdotanteRepository adotanteRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper, AdotanteRepository adotanteRepository, EmailService emailService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioMapper = usuarioMapper;
         this.adotanteRepository = adotanteRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class UsuarioService implements UserDetailsService {
     public Usuario cadastrarUsuario(UsuarioCadastroDTO dto){
 
         if (usuarioRepository.existsByEmail(dto.getEmail()))
-            throw new IllegalArgumentException("e-mail já cadastrado.");
+            throw new IllegalArgumentException("E-mail já cadastrado.");
 
         Usuario usuario;
 
@@ -75,11 +77,19 @@ public class UsuarioService implements UserDetailsService {
 
         if (!usuario.isValidTelefone())
             throw new IllegalArgumentException("Telefone do Usuário inválido.");
-            
+
          // seta a 'senhaHash' com a criptografia de 'senha'
         usuario.setSenha_hash(passwordEncoder.encode(dto.getSenha()));
         usuario.setSenha(null); // seta a senha de texto puro como nula
-        return usuarioRepository.save(usuario);
+
+
+        String respostaEmail = emailService.sendEmail(dto.getEmail());
+
+        if ("success".equals(respostaEmail))
+            return usuarioRepository.save(usuario);
+        else
+            throw new IllegalArgumentException("E-mail não encontrado.");
+
     }
 
 
@@ -153,13 +163,12 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public Usuario buscarPorEmail(String email) {
-        /* esse metodo será utilizado depois que o user ja tiver criado a conta, então o e-mail já passou pela validação inicial,
-            então não senti a necessidade de validar dnv. Aberta a discussão... ou não
-        */
-
         return usuarioRepository.findByEmail(email)
                 .orElse(null);
     }
+
+
+
 
 
 

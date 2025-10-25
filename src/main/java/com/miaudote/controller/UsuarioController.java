@@ -32,19 +32,6 @@ public class UsuarioController {
         this.usuarioMapper = usuarioMapper;
     }
 
-    /* Vou tirar essa rota porque sempre atualizamos usuários através de parceiros e adotantes
-    @PostMapping("/cadastrar")
-    public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioCadastroDTO dto){
-        try {
-            Usuario usuario = usuarioService.cadastrarUsuario(dto);
-            UsuarioDTO respostaDTO = usuarioMapper.toDTO(usuario);
-            return new ResponseEntity<>(respostaDTO, HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            return ResponseEntity.badRequest().body("Erro ao cadastrar usuário: " + e.getMessage());
-        }
-    }*/
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUsuario(@RequestBody Usuario loginRequest){
@@ -66,33 +53,8 @@ public class UsuarioController {
         }
     }
 
-    /* Vou tirar essa rota porque sempre atualizamos usuários através de parceiros e adotantes
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioCadastroDTO usuario){
-        
-        try {
-            Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuario);
-            //todo: e se o usuário retornar com os mesmos dados?
 
-            return new ResponseEntity<>(new UsuarioDTO(usuarioAtualizado), HttpStatus.OK);
 
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            return ResponseEntity.badRequest().body("Erro ao cadastrar usuário: " + e.getMessage());
-        }
-    }*/
-
-    /*Vou tirar essa rota porque sempre deletamos usuários através de parceiros e adotantes
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deletarUsuario(@PathVariable Long id){
-        try{
-            usuarioService.deletarUsuario(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }*/
 
 
 

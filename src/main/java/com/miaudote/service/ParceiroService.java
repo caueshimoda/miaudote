@@ -13,6 +13,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
+
 @Service
 public class ParceiroService {
 
@@ -30,9 +31,9 @@ public class ParceiroService {
         if (parceiroRepository.existsByDocumento(request.getDocumento()))
                 throw new IllegalArgumentException("Documento já cadastrado.");
         
-                Usuario savedUsuario = null;
+        Usuario savedUsuario = null;
+
         try {
-            
             savedUsuario = usuarioService.cadastrarUsuario(request.getUsuario());
 
             Parceiro parceiro = new Parceiro();
@@ -44,7 +45,7 @@ public class ParceiroService {
             if (!parceiro.isValidDocumento())
                 throw new IllegalArgumentException("Documento inválido.");
             
-                return parceiroRepository.save(parceiro);
+            return parceiroRepository.save(parceiro);
 
         } catch (Exception e) {
 

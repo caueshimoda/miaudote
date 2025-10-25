@@ -80,9 +80,6 @@ public class AdotanteService {
                 usuarioService.atualizarUsuario(id, usuario); 
             });
 
-        // Não vamos deixar atualizar documento
-        // Optional.ofNullable(novosDados.getCpf()).ifPresent(adotanteExistente::setCpf);
-
         return adotanteRepository.save(adotanteExistente);
     }
 
