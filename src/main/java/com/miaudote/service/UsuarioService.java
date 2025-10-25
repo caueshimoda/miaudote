@@ -88,7 +88,7 @@ public class UsuarioService implements UserDetailsService {
         if ("success".equals(respostaEmail))
             return usuarioRepository.save(usuario);
         else
-            throw new IllegalArgumentException("E-mail não encontrado.");
+            throw new IllegalArgumentException("E-mail não encontrado. " + respostaEmail);
 
     }
 
