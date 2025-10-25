@@ -13,6 +13,9 @@ import com.miaudote.model.Adotante;
 import com.miaudote.repository.AdotanteRepository;
 import com.miaudote.repository.AnimalRepository;
 import com.miaudote.repository.FavoritoRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.miaudote.repository.AdocaoSolicitadaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
@@ -137,6 +140,7 @@ public class AdocaoSolicitadaService {
         return dtos;
     }
 
+    @Transactional
     public AdocaoSolicitadaResponseDTO atualizarAdocaoSolicitada(Long id, AdocaoSolicitada novosDados){
 
         AdocaoSolicitada adocaoSolicitadaExistente = adocaoSolicitadaRepository.findById(id)
@@ -160,8 +164,26 @@ public class AdocaoSolicitadaService {
         if (!adocaoSolicitadaExistente.isValidStatus()) 
             throw new IllegalArgumentException("Status da adoção inválido.");    
 
-        if (novosDados.getStatus() != null && !StatusAdocao.isAberta(novosDados.getStatus()))
+        // Vamos salvar a data de finalização caso a solicitação tenha sido finalizada
+        if (novosDados.getStatus() != null && !StatusAdocao.isAberta(novosDados.getStatus())){
+
+            // Vamos atualizar o estado do animal para Adotado caso tenha sido finalizada por adoção
+            if (novosDados.getStatus().equals(StatusAdocao.FINALIZADA_ADOCAO)) {
+                if (adocaoSolicitadaExistente.getAnimal() == null) 
+                    throw new RuntimeException("Não há animal associado a essa solicitação.");
+            
+                Animal animal = animalRepository.findById(adocaoSolicitadaExistente.getAnimal().getId())
+                    .orElseThrow(() -> new RuntimeException("Animal não encontrado."));
+                
+                animal.setStatus(Animal.Status.Adotado);
+                animalRepository.save(animal);
+            }  
+            
             adocaoSolicitadaExistente.setDataFinalizacao(LocalDate.now());
+
+        }
+            
+
 
         adocaoSolicitadaRepository.save(adocaoSolicitadaExistente);
 
