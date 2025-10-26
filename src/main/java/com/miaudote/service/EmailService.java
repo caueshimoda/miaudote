@@ -30,12 +30,6 @@ public class EmailService {
                 htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             }
 
-            // Substitui referência à imagem local pela URL pública do Render
-            htmlContent = htmlContent.replace(
-                "cid:Miaudotefinal1.png",
-                "https://miaudote-8av5.onrender.com/img/Miaudotefinal1.png"
-            );
-
             // Monta e envia o e-mail via SendGrid
             Email from = new Email("miaudote.es3@gmail.com", "Equipe MiAudote");
             Email to = new Email(email);
