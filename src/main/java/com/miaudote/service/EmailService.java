@@ -1,51 +1,65 @@
 package com.miaudote.service;
 
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.sendgrid.*;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+     @Value("${SENDGRID_API_KEY}")
+    private String sendGridApiKey;
 
     // criar um controller não é necessário para uma classe simples
 
     public String sendEmail(String email) {
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-            helper.setFrom("miaudote.es3@gmail.com");
-            helper.setTo(email);
-            helper.setSubject("Bem-vindo(a) ao MiAudote!");
-
-            // Lê o HTML do classpath
+            // Lê o conteúdo HTML do template no classpath
+            String htmlContent;
             try (var inputStream = Objects.requireNonNull(
-                    EmailService.class.getResourceAsStream("/templates/email-content.html")
+                    EmailService.class.getResourceAsStream("/templates/email-content.html"),
+                    "Template de e-mail não encontrado em /templates/email-content.html"
             )) {
-                String htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-                helper.setText(htmlContent, true);
+                htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             }
 
-            // Adiciona a imagem inline
-            ClassPathResource image = new ClassPathResource("static/Miaudotefinal1.png");
-            helper.addInline("Miaudotefinal1.png", image);
+            // Substitui referência à imagem local pela URL pública do Render
+            htmlContent = htmlContent.replace(
+                "cid:Miaudotefinal1.png",
+                "https://miaudote-8av5.onrender.com/img/Miaudotefinal1.png"
+            );
 
-            mailSender.send(message);
+            // Monta e envia o e-mail via SendGrid
+            Email from = new Email("miaudote.es3@gmail.com", "Equipe MiAudote");
+            Email to = new Email(email);
+            String subject = "Bem-vindo(a) ao MiAudote!";
+            Content content = new Content("text/html", htmlContent);
+            Mail mail = new Mail(from, subject, to, content);
 
-            return "success";
+            SendGrid sg = new SendGrid(sendGridApiKey);
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
 
+            if (response.getStatusCode() >= 200 && response.getStatusCode() < 300) {
+                return "success";
+            } else {
+                return "Erro: " + response.getStatusCode() + " - " + response.getBody();
+            }
+
+        } catch (IOException e) {
+            return "Erro ao enviar e-mail via SendGrid: " + e.getMessage();
         } catch (Exception e) {
-            return e.getMessage();
-
+            return "Erro geral ao processar envio de e-mail: " + e.getMessage();
         }
 
     }
