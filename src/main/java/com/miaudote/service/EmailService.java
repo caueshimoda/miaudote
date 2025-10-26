@@ -19,7 +19,6 @@ public class EmailService {
 
     // criar um controller não é necessário para uma classe simples
 
-    @RequestMapping("/send-email")
     public String sendEmail(String email) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
