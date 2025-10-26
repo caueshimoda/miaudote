@@ -65,7 +65,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/usuarios/login", "https://miaudote-8av5.onrender.com/img/Miaudotefinal1.png", "/parceiros/cadastrar", "/adotantes/cadastrar").permitAll() 
+                                .requestMatchers("/usuarios/login", "/img/Miaudotefinal1.png", "/parceiros/cadastrar", "/adotantes/cadastrar").permitAll() 
                                 .anyRequest().authenticated()
    
                 );
