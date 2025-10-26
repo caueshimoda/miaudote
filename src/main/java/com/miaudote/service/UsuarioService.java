@@ -82,13 +82,15 @@ public class UsuarioService implements UserDetailsService {
         usuario.setSenha_hash(passwordEncoder.encode(dto.getSenha()));
         usuario.setSenha(null); // seta a senha de texto puro como nula
 
+        Usuario novoUsuario = usuarioRepository.save(usuario);
 
-        String respostaEmail = emailService.sendEmail(dto.getEmail());
+        try {
+            emailService.sendEmail(dto.getEmail()); 
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Falha ao enviar e-mail de confirmação. Cadastro cancelado.", e);
+        }
 
-        if ("success".equals(respostaEmail))
-            return usuarioRepository.save(usuario);
-        else
-            throw new IllegalArgumentException("E-mail não encontrado. " + respostaEmail);
+        return novoUsuario;
 
     }
 
