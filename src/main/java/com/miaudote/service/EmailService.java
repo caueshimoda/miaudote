@@ -31,7 +31,7 @@ public class EmailService {
             }
 
             // Monta e envia o e-mail via SendGrid
-            Email from = new Email("miaudote.es3@gmail.com", "Equipe MiAudote");
+            Email from = new Email("no-reply@mail.miaudote.org", "Equipe MiAudote");
             Email to = new Email(email);
             String subject = "Bem-vindo(a) ao MiAudote!";
             Content content = new Content("text/html", htmlContent);
