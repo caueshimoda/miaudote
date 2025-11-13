@@ -35,8 +35,7 @@ O projeto foi desenvolvido como **trabalho de faculdade**, com o objetivo de apl
 
 ## 🧠 Funcionalidades principais
 
-- Autenticação com JWT (JSON Web Token)
-- Cadastro e autenticação de ONGs e adotantes
+- Cadastro e autenticação (JWT) de ONGs e adotantes
 - Cadastro, listagem, edição e exclusão de animais
 - Upload de até 5 fotos por animal (armazenadas como longblob no banco)
 - Solicitações de adoção com controle de status
@@ -60,14 +59,14 @@ Este repositório corresponde ao **Backend** do projeto *MiAudote*.
 
 Desenvolvido por:
 
-**Cauê Shimoda, Bruna Ogura e Samuel Leite** — responsáveis pelo **Backend**.
+**Cauê Shimoda, Bruna Ogura e Samuel Leite**, responsáveis pelo **Backend**.  
 
-Projeto desenvolvido em equipe por:
-**Leonardo Flores** — responsável pelo Frontend e Banco de Dados.
-**Ayana Hanashiro** — responsável pelo design e documentação.
-**Caio Luiz** — responsável pela documentação.
+Projeto desenvolvido em equipe por:  
+**Leonardo Flores** — responsável pelo **Frontend e Banco de Dados**.  
+**Ayana Hanashiro** — responsável pelo **design e documentação**.  
+**Caio Luiz** — responsável pela **documentação**.  
 
-📚 Curso: Análise e Desenvolvimento de Sistemas (FATEC-SP)
+📚 Curso: Análise e Desenvolvimento de Sistemas (FATEC-SP)  
 🏫 Projeto acadêmico desenvolvido em equipe para fins educacionais.
 
 ---
