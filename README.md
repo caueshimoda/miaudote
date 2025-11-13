@@ -92,7 +92,7 @@ cd miaudote
 # Configurar o banco de dados no arquivo:
 # src/main/resources/application.properties
 
-spring.datasource.url=jdbc:mysql://localhost:3306/miaudote
+spring.datasource.url=URL_BANCO_DE_DADOS
 spring.datasource.username=SEU_USUARIO
 spring.datasource.password=SUA_SENHA
 
